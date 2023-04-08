@@ -9,7 +9,6 @@
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-xmlwriter": "*",
-        "ext-http": "*",
         "akaunting/laravel-money": "^4.0",
         "alexusmai/laravel-file-manager": "3.0.1",
         "barryvdh/laravel-debugbar": "^3.7",
