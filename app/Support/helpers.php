@@ -30,7 +30,7 @@ if (!function_exists('save_image_to_disk')) {
         foreach ($sizes as $nameSize => $size) {
             $img->resize($size,null, function ($constraint) {
                 $constraint->aspectRatio();
-            })->encode('webp', 60);
+            })->encode('webp', 90);
             Storage::put($object->path . $nameSize . '_' . $object->name, $img);
             $img->reset();
         }
