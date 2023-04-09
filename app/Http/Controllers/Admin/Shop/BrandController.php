@@ -81,7 +81,7 @@ class BrandController extends Controller
     public function photoRemove(Brand $brand):RedirectResponse
     {
         $this->service->removePhoto($brand);
-        return redirect()->route('admin.shop.brands.show', compact('brand'))
+        return redirect()->route('admin.shop.brands.edit', compact('brand'))
             ->with('success', 'Лого бренда '. $brand->name . ' успешно удалено');
     }
 }
