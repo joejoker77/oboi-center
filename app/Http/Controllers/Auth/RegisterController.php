@@ -43,7 +43,7 @@ class RegisterController extends Controller
         } else {
             $request->validateWithBag('register', [
                 'name'     => 'required|string|max:255',
-                'email'    => 'required|string|phone:RU|max:12|unique:user_profiles,phone',
+                'email'    => 'required|string|phone:RU|max:16|unique:user_profiles,phone',
                 'password' => 'required|string|min:6|confirmed',
             ]);
             $confirmPhone = true;

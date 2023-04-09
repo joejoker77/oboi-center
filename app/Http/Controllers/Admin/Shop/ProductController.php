@@ -75,6 +75,7 @@ class ProductController extends Controller
             $this->service->update($request, $product);
             return redirect()->route('admin.shop.products.show', $product)->with('success', 'Товар успешно обновлен');
         } catch (\Exception|\DomainException $e) {
+            echo $e->getMessage();
             return redirect()->route('admin.shop.products.edit', $product)->with('error', $e->getMessage());
         }
     }

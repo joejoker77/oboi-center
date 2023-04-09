@@ -586,7 +586,6 @@ class DailyImportService
                     if (!empty($currentProduct->description)) {
                         $request->query->remove('description');
                     }
-
                     app(ProductController::class)->update($request, $currentProduct);
                 } else {
                     if (!empty($product['images'])) {
