@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Admin\Shop;
 
+use Throwable;
 use App\Entities\Shop\Brand;
-use App\UseCases\Admin\Shop\BrandService;
+use Illuminate\Http\Request;
+use App\Traits\WithMediaGallery;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Throwable;
+use App\UseCases\Admin\Shop\BrandService;
 
 class BrandController extends Controller
 {
+
+    use WithMediaGallery;
 
     private $service;
 
