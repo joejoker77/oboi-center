@@ -211,6 +211,7 @@ class Product extends Model
 
     public function setHit():void
     {
+        dd($this);
         $this->update(['hit'=>1]);
     }
 
