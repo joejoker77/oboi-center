@@ -57,7 +57,6 @@ class ProductController extends Controller
             return redirect()->route('admin.shop.products.show', compact('product'))
                 ->with('success', 'Продукт успешно создан');
         } catch (CacheException|Throwable $e) {
-            echo $e->getMessage().PHP_EOL;
             return back()->with('error', 'Во время выполнения запроса, произошла следующая ошибка: '. $e->getMessage());
         }
     }
@@ -76,7 +75,6 @@ class ProductController extends Controller
             $this->service->update($request, $product);
             return redirect()->route('admin.shop.products.show', $product)->with('success', 'Товар успешно обновлен');
         } catch (\Exception|\DomainException $e) {
-            echo $e->getMessage().PHP_EOL;
             return redirect()->route('admin.shop.products.edit', $product)->with('error', $e->getMessage());
         }
     }
