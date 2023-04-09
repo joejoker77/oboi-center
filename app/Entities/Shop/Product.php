@@ -211,22 +211,22 @@ class Product extends Model
 
     public function setHit():void
     {
-        $this->update(['hit'=>true]);
+        $this->update(['hit'=>1]);
     }
 
     public function revokeHit():void
     {
-        $this->update(['hit'=>false]);
+        $this->update(['hit'=>0]);
     }
 
     public function setNew():void
     {
-        $this->update(['new' => true]);
+        $this->update(['new' => 1]);
     }
 
     public function revokeNew():void
     {
-        $this->update(['new'=>false]);
+        $this->update(['new'=>0]);
     }
 
     public function published():void
