@@ -150,6 +150,7 @@ class ProductService
         }
         $products = Product::find($selected);
 
+        /** @var Product $product */
         foreach ($products as $product) {
             switch ($action) {
                 case 'hit': $product->setHit(); $answer = 'Выбранные товары успешно добавлены в хиты продаж';break;
