@@ -87,6 +87,11 @@ class BrandService
         }
     }
 
+    public function removePhoto(Brand $brand):void
+    {
+        $this->removeLogo($brand);
+    }
+
     private function removeLogo(Brand $brand):void
     {
         $logo = $brand->logo;

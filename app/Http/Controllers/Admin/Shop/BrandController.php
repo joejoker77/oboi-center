@@ -14,8 +14,6 @@ use App\UseCases\Admin\Shop\BrandService;
 class BrandController extends Controller
 {
 
-    use WithMediaGallery;
-
     private $service;
 
 
@@ -78,5 +76,12 @@ class BrandController extends Controller
     {
         $brand->delete();
         return redirect()->route('admin.shop.brands.index')->with('success', 'Брэнд, успешно удален.');
+    }
+
+    public function photoRemove(Brand $brand):RedirectResponse
+    {
+        $this->service->removePhoto($brand);
+        return redirect()->route('admin.shop.brands.show', compact('brand'))
+            ->with('success', 'Лого бренда '. $brand->name . ' успешно удалено');
     }
 }
