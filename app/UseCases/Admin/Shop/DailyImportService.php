@@ -577,6 +577,9 @@ class DailyImportService
                             $localImg = '/tmp/'.$info['basename'];
                             copy($urlImage, $localImg);
                             $upImages[] = new UploadedFile($localImg, $info['basename']);
+                            if (file_exists($localImg)) {
+                                unlink($localImg);
+                            }
                         }
                         if (!empty($upImages)) {
                             $request->files->set('photo', $upImages);
@@ -664,15 +667,15 @@ class DailyImportService
                             $localImg = '/tmp/'.$info['basename'];
                             copy($urlImage, $localImg);
                             $upImages[] = new UploadedFile($localImg, $info['basename']);
+                            if (file_exists($localImg)) {
+                                unlink($localImg);
+                            }
                         }
                         if (!empty($upImages)) {
                             $request->files->set('photo', $upImages);
                         }
                     }
                     app(ProductController::class)->store($request);
-                }
-                if (isset($localImg) && file_exists($localImg)) {
-                    unlink($localImg);
                 }
                 echo 'Товар: '. $mainCategory->name . ' ' . $product['sku'] . ' сохранен в базу данных'.PHP_EOL;
             }
