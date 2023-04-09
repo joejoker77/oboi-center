@@ -671,6 +671,9 @@ class DailyImportService
                     }
                     app(ProductController::class)->store($request);
                 }
+                if (isset($localImg)) {
+                    unlink($localImg);
+                }
                 echo 'Товар: '. $mainCategory->name . ' ' . $product['sku'] . ' сохранен в базу данных'.PHP_EOL;
             }
         }
