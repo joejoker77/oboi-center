@@ -62,7 +62,7 @@ class HomeService
 
                 return [
                     'reviews' => $reviews,
-                    'link'    => $this->link
+                    'link'    => 'https://yandex.ru/maps/org/29142558237/reviews/'
                 ];
             } else {
                 return null;
