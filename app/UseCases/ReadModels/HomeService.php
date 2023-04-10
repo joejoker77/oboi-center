@@ -7,7 +7,7 @@ class HomeService
     /**
      * @var string
      */
-    private $link = 'https://yandex.ru/maps/org/29142558237/reviews/';
+    private $link = 'https://yandex.ru/maps-reviews-widget/29142558237?comments';
 
     public function getReviews()
     {
@@ -16,40 +16,47 @@ class HomeService
             $html = $this->getRequestResult($this->link);
             $item = $reviews = [];
 
-            preg_match_all("/reviewResults\":{\"reviews\":(.*)loadedReviewsCount/",$html,$matches);
+            libxml_use_internal_errors(true);
+            $doc = new \DOMDocument();
+            $doc->loadHTML($html);
+            $finder = new \DOMXPath($doc);
 
-            if (isset($matches[1][0])) {
+            $commentsNode = $finder->query("//div[@class='comment']");
+            if ($commentsNode) {
 
-                preg_match_all('/(.*),\"params\"/', $matches[1][0], $matches);
+                foreach ($commentsNode as $key => $commentNode) {
 
-                $jsonArray = $matches[1][0];
+                    $rating    = 5;
+                    $pathHalf  = $commentNode->getNodePath().'/div[2]/ul[1]/li[@_half]';
+                    $pathEmpty = $commentNode->getNodePath().'/div[2]/ul[1]/li[@_empty]';
 
-                $sourceReviews = json_decode(stripslashes($jsonArray), true);
-                $sourceReviews = array_slice($sourceReviews, 0,10);
+                    $ratingNodesHalf  = $finder->query($pathHalf);
+                    $ratingNodesEmpty = $finder->query($pathEmpty);
 
-                foreach ($sourceReviews as $key => $review) {
-
-                    $item['user_icon_class'] = 'user-icon_' . $key;
-
-                    if (!empty(trim($review['author']['name']))) {
-                        $item['user_name'] = trim($review['author']['name']);
+                    if ($ratingNodesHalf->count() > 0) {
+                        $rating = $rating - $ratingNodesHalf->count() * 0.5;
+                    }
+                    if ($ratingNodesEmpty->count() > 0) {
+                        $rating = $rating - $ratingNodesEmpty->count();
                     }
 
-                    if (!empty($review['author']['avatarUrl'])) {
-                        $item['user_icon'] = str_replace('{size}', 'islands-68', $review['author']['avatarUrl']);
-                    } else {
-                        $item['user_icon'] = mb_substr($review['author']['name'], 0, 1);
+                    $item["user_icon_class"] = 'user-icon_'.$key;
+                    $item["user_name"]       = $finder->query("//p[@class='comment__name']", $commentNode)[$key]->nodeValue;
+                    $item["comment_text"]    = $finder->query("//p[@class='comment__text']", $commentNode)[$key]->nodeValue;
+                    $item["date"]            = $finder->query("//p[@class='comment__date']", $commentNode)[$key]->nodeValue;
+                    $item["rating"]          = $rating;
+                    $item["user_role"]       = 'Знаток города';
+
+                    $pathImage = $commentNode->getNodePath().'/div[1]/*[contains(@class, "comment__photo")]';
+                    if ($finder->query($pathImage)[0]->nodeName == 'div') {
+                        $item["user_icon"] = mb_substr($item["user_name"], 0, 1);
+                    }
+                    if ($finder->query($pathImage)[0]->nodeName == 'img') {
+                        $item["user_icon"] = $finder->query($pathImage)[0]->getAttribute('src');
                     }
 
-                    $item['comment_text'] = trim($review['text']);
-                    $item['rating']       = trim($review['rating']);
-                    $timeArray            = explode('T', $review['updatedTime']);
-                    $item['date']         = $timeArray[0];
-
-                    if (!empty($review['author']['professionLevel'])) {
-                        $item['user_role'] = trim($review['author']['professionLevel']);
-                    }
                     $reviews[] = $item;
+
                 }
                 unset($html,$item);
 
