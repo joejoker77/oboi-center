@@ -34,6 +34,11 @@ class CatalogController extends Controller
         $cartAllItems     = $this->cart->getAllItems();
         $category         = $path->category;
         $result           = $this->search->search($category, $request, 20, $request->get('page', 1));
+
+        if ($request->get('page') && $result->products->isEmpty()) {
+            abort(404);
+        }
+
         $products         = $result->products;
         $categoriesCounts = $result->categoriesCounts;
         $query            = $category ? $category->children() : Category::whereIsRoot();
