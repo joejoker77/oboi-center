@@ -1797,6 +1797,7 @@ main-gallery {
         .scroll-content {
             max-height: toRem(318px);
             overflow: hidden;
+            z-index: 0;
         }
         width: 100%;
         &-head {
