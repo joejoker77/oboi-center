@@ -1275,6 +1275,7 @@ product-quantity {
     .scroll-content {
         max-height: toRem(490px);
         padding-right: toRem(20px);
+        z-index: 0;
     }
     p {
         font-size: toRem(16px);
