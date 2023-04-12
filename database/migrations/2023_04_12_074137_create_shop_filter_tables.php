@@ -23,8 +23,8 @@ return new class extends Migration
 
         Schema::create('shop_filter_groups', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('filter_group');
-            $table->foreign('filter_group')->references('id')->on('shop_filter_groups')->onDelete('CASCADE');
+            $table->unsignedBigInteger('filter_id');
+            $table->foreign('filter_id')->references('id')->on('shop_filters')->onDelete('CASCADE');
             $table->string('name');
             $table->json('categories')->nullable();
             $table->json('tags')->nullable();
@@ -40,6 +40,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('shop_filter_groups');
         Schema::dropIfExists('shop_filters');
     }
 };
