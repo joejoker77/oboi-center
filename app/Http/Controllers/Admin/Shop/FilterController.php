@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Admin\Shop;
 
 
-use App\Entities\Shop\Attribute;
-use App\Entities\Shop\Tag;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\Entities\Shop\Tag;
 use Illuminate\Http\Request;
 use App\Entities\Shop\Filter;
 use App\Entities\Shop\Category;
+use App\Entities\Shop\Attribute;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\UseCases\Admin\Shop\FilterService;

@@ -104,8 +104,34 @@
             </div>
         @endif
     @endforeach
+
     @foreach($filter as $groupName => $group)
-        @if($groupName !== 'Цвет' && !isset($group['prices']))
+        @if(!empty($group['categories']))
+            <div class="filter-group-item">
+                <div class="filter-item @if(count($group['categories']) > 3) collapsed @endif">
+                    @if($group['displayHeader'])
+                        <div class="filter-group-heading">
+                            {{ $groupName }}
+                            @if(count($group['categories']) > 3)
+                                <button type="button" class="btn btn-link">Показать все</button>
+                            @endif
+                        </div>
+                    @endif
+                    @foreach($group['categories'] as $category)
+                        <div class="form-check custom-checkbox">
+                            <label for="category-{{$group['id']}}-{{$category->id}}">{{ $category->name }}
+                                <input @checked(request()->get('categories') && in_array($category->id, request()->get('categories'))) id="category-{{$group['id']}}-{{$category->id}}" type="checkbox" class="form-check-input" value="{{$category->id}}" name="categories[]">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    @endforeach
+
+    @foreach($filter as $groupName => $group)
+        @if($groupName !== 'Цвет' && !isset($group['prices']) && !isset($group['categories']))
             <div class="filter-group-item">
                 @if($group['displayHeader'])
                     <div class="filter-group-heading">

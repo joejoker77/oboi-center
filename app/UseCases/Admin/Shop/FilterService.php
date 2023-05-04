@@ -112,7 +112,7 @@ class FilterService
                                 'name' => $requestGroup['name'],
                                 'attributes'     => $requestGroup['attributes'] ?? null,
                                 'tags'           => $requestGroup['tags'] ?? null,
-                                'categories'     => $requestGroup['group_categories'] ?? null,
+                                'categories'     => $requestGroup['categories'] ?? null,
                                 'display_header' => isset($requestGroup['display_head']) ? 1 : 0
                             ]);
                         }

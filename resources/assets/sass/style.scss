@@ -2785,7 +2785,7 @@ main-gallery {
             padding-bottom: toRem(10px);
             border-bottom: 1px solid #ccc;
             overflow: hidden;
-            max-height: toRem(1500px);
+            max-height: toRem(960px);
             transition: max-height 400ms ease;
 
             .filter-values > div {
