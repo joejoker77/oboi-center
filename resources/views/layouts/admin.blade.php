@@ -75,6 +75,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link @if(request()->is('admin/shop/filters*')) active @endif" href="{{ route('admin.shop.filters.index') }}">
+                                    <span data-feather="settings" class="align-text-bottom"></span>
+                                    Настройки фильтров
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('admin.shop.delivery-methods.index') }}" class="nav-link @if(request()->is('admin/shop/delivery-methods*')) active @endif">
                                     <span class="align-text-bottom" data-feather="truck"></span>
                                     Способы доставки

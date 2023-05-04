@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Cart\Cart;
+use App\Http\Requests\Products\FilterResult;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use App\Entities\Shop\Category;
 use App\Http\Router\ProductPath;
 use Illuminate\Contracts\View\View;
@@ -11,6 +14,7 @@ use App\UseCases\ReadModels\SearchService;
 use App\Http\Requests\Products\SearchRequest;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Illuminate\Support\Facades\Session;
 
 class CatalogController extends Controller
 {
@@ -54,4 +58,23 @@ class CatalogController extends Controller
             return view('shop.products.show', compact('category', 'categories', 'product', 'products', 'categoriesCounts', 'cartAllItems'));
         }
     }
+
+    public function filter(Request $request):View
+    {
+        $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+
+        if($pageWasRefreshed ) {
+            $request->query->remove('page');
+        }
+
+        $result         = $this->search->filter($request, 20, $request->get('page', 1));
+        $cartAllItems   = $this->cart->getAllItems();
+        $products       = $result->products;
+        $restTags       = $result->tags;
+        $restCategories = $result->categories;
+        $restAttributes = $result->attributes;
+
+        return view('shop.search.result', compact('cartAllItems', 'restCategories', 'restTags', 'products', 'restAttributes', 'request'));
+    }
+
 }

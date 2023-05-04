@@ -37,6 +37,8 @@ class ProductIndexer
 
     public function index(Product $product):void
     {
+        $tags = $product->tags()->pluck('id')->toArray();
+
         $this->client->index([
             'index' => 'products',
             'id'    => $product->id,
@@ -53,6 +55,7 @@ class ProductIndexer
                     [$product->category_id],
                     $product->category->ancestors()->pluck('id')->toArray()
                 ),
+                'tags'   => $tags,
                 'values' => array_map(function (Value $value) {
                     return [
                         'attribute'    => $value->attribute_id,

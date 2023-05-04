@@ -59,3 +59,7 @@ Breadcrumbs::for('catalog.index', function (Generator $generator, ProductPath $p
         $generator->push($path->product->name, route('catalog.index'));
     }
 });
+Breadcrumbs::for('shop.filter', function (Generator $generator) {
+    $generator->parent('home');
+    $generator->push('Результат поиска', route('shop.filter'));
+});

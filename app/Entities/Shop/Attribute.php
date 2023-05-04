@@ -29,6 +29,8 @@ class Attribute extends Model
 
     public const TYPE_FLOAT = 'float';
 
+    public const TYPE_BOOLEAN = 'boolean';
+
     const MODE_MULTIPLE  = 'multiple';
     const MODE_SIMPLE    = 'simple';
     const MODE_AS_OPTION = 'as_option';
@@ -52,9 +54,10 @@ class Attribute extends Model
     public static function typesList():array
     {
         return [
-            self::TYPE_STRING => 'Строка',
+            self::TYPE_STRING  => 'Строка',
             self::TYPE_INTEGER => 'Число',
-            self::TYPE_FLOAT => 'Дробное число'
+            self::TYPE_FLOAT   => 'Дробное число',
+            self::TYPE_BOOLEAN => 'Логическое'
         ];
     }
 

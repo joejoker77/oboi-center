@@ -26,6 +26,7 @@
         "ckeditor4": "^4.20.1",
         "feather-icons": "^4.29.0",
         "imask": "^6.5.1-alpha.1",
+        "nouislider": "^15.7.0",
         "sortablejs": "^1.15.0",
         "sweetalert2": "^11.4.8",
         "swiper": "^8.4.6",

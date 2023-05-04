@@ -9,11 +9,17 @@
             <div class="col-md-6">
                 <div class="p-3 mb-3 bg-light border rounded-3">
                     <h4>Основные</h4>
-                    <div class="form-floating">
+                    <div class="form-floating mb-3">
                         <input id="name" class="form-control @error('name') is-invalid @enderror"
                                name="name" value="{{ old('name', $tag) }}" type="text" placeholder="Наименование тега" required>
                         <label for="name" class="form-label">Наименование тега</label>
                         @error('name')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-floating">
+                        <input id="slug" class="form-control @error('slug') is-invalid @enderror"
+                               name="slug" value="{{ old('slug', $tag) }}" type="text" placeholder="Псевдоним тега" required>
+                        <label for="slug" class="form-label">Псевдоним тега</label>
+                        @error('slug')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </div>
                 </div>
             </div>

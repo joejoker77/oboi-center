@@ -96,3 +96,21 @@ if (!function_exists('get_order_label')) {
        };
     }
 }
+
+if (!function_exists('get_max_from_string')) {
+    function get_max_from_string(array $values, string $postfix) {
+        $numberValues = array_map(function ($value) use ($postfix) {
+            return trim(str_replace($postfix, '', str_replace('"', '',$value)));
+        }, $values);
+        return max($numberValues);
+    }
+}
+
+if (!function_exists('get_min_from_string')) {
+    function get_min_from_string(array $values, string $postfix) {
+        $numberValues = array_map(function ($value) use ($postfix) {
+            return trim(str_replace($postfix, '', str_replace('"','',$value)));
+        }, $values);
+        return min($numberValues);
+    }
+}

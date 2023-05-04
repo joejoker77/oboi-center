@@ -14,6 +14,9 @@ import videojs from "video.js";
 
 import IMask from "imask";
 
+import * as noUiSlider from 'nouislider/dist/nouislider.min';
+
+
 const buttonGetProfileForm = document.getElementById('getFormProfile'),
     modal                  = document.getElementById('mainModal'),
     modalWindow            = new Modal(modal),
@@ -30,7 +33,9 @@ const buttonGetProfileForm = document.getElementById('getFormProfile'),
     confirmPhoneButton     = document.getElementById('getConfirmPhone'),
     actionAddressButtons   = document.querySelectorAll('[data-js-action=getFromDeliveryAddress], [data-js-action=editDeliveryAddress]'),
     otherAddress           = document.getElementById('otherAddress'),
-    inputPhones            = document.querySelectorAll('#customerPhone, #emailLogin, #emailRegistration');
+    inputPhones            = document.querySelectorAll('#customerPhone, #emailLogin, #emailRegistration'),
+    slidersFilter          = document.querySelectorAll('.slider-styled'),
+    collapseFilterItemBnt  = document.querySelectorAll('.filter-item .btn-link');
 
 if (modal) {
     modal.addEventListener('hide.bs.modal', function() {
@@ -510,15 +515,16 @@ if (productItems) {
         previousRatio  = 0;
 
     document.addEventListener('DOMContentLoaded', function () {
-        let newUrl = window.location.origin+window.location.pathname;
-        window.history.pushState({path:newUrl}, '', newUrl)
+        let newUrl = new URL(window.location.origin+window.location.pathname+location.search);
+        newUrl.searchParams.delete('page');
+        window.history.pushState({path:newUrl.href}, '', newUrl)
     });
 
     const lazyLoadProducts = function () {
         spinner.classList.remove('invisible');
         let link   = new URL(window.location),
             page   = link.searchParams.get('page') ?? 1,
-            newUrl = window.location.origin+window.location.pathname+'?page='+(Number.parseInt(page)+1);
+            newUrl = !target.dataset.url ? window.location.origin+window.location.pathname+'?page='+(Number.parseInt(page)+1): target.dataset.url+'&page='+(Number.parseInt(page)+1);
 
         window.history.pushState({path:newUrl}, '', newUrl);
 
@@ -530,10 +536,20 @@ if (productItems) {
                     productItems.append(newItem);
                 });
                 spinner.classList.add('invisible');
+            } else {
+                newUrl = new URL(window.location.origin+window.location.pathname+location.search);
+                newUrl.searchParams.delete('page');
+                window.history.pushState({path:newUrl.href}, '', newUrl.href);
+                target.remove();
+                if (!spinner.classList.contains('invisible')) {
+                    spinner.classList.add('invisible');
+                }
             }
         }).catch(error => {
-            newUrl = window.location.origin+window.location.pathname;
-            window.history.pushState({path:newUrl}, '', newUrl);
+            console.error(error);
+            newUrl = new URL(window.location.origin+window.location.pathname+location.search);
+            newUrl.searchParams.delete('page');
+            window.history.pushState({path:newUrl.href}, '', newUrl.href);
             target.remove();
             if (!spinner.classList.contains('invisible')) {
                 spinner.classList.add('invisible');
@@ -712,6 +728,93 @@ if (cartDeleteItemBtns.length > 0) {
             }).catch(function (error) {
                 console.error(error);
             })
+        });
+    });
+}
+
+if (slidersFilter.length > 0) {
+
+    const filterForm = document.querySelector('.form-filter'),
+        formatter    = new Intl.NumberFormat('ru-RU', {style:'currency', currency: 'RUB', minimumFractionDigits: 0});
+
+    slidersFilter.forEach(function (slider) {
+        const valuesForSlider = JSON.parse(slider.dataset.steps),
+            inputMin          = slider.closest('.filter-item').querySelector("[js-name=minValue]"),
+            inputMax          = slider.closest('.filter-item').querySelector("[js-name=maxValue]"),
+            minDisplayPrice   = slider.closest('.filter-item').querySelector("[js-name=minValueDisplayPrice]"),
+            maxDisplayPrice   = slider.closest('.filter-item').querySelector("[js-name=maxValueDisplayPrice]"),
+            minDisplay        = slider.closest('.filter-item').querySelector("[js-name=minValueDisplay]"),
+            maxDisplay        = slider.closest('.filter-item').querySelector("[js-name=maxValueDisplay]");
+
+        const format = {
+            to: function(value) {
+                return valuesForSlider[Math.round(value)];
+            },
+            from: function (value) {
+                return valuesForSlider.indexOf(value);
+            }
+        };
+
+        noUiSlider.create(slider, {
+            start: [valuesForSlider[0], valuesForSlider[valuesForSlider.length - 1]],
+            range: { min: 0, max: valuesForSlider.length - 1 },
+            step: 1,
+            tooltips: false,
+            format: format,
+            connect: true
+        });
+
+        if (slider.dataset.factMin && slider.dataset.factMax) {
+            slider.noUiSlider.set([slider.dataset.factMin, slider.dataset.factMax]);
+        }
+
+        slider.noUiSlider.on('update', function (values, handle) {
+
+            if (maxDisplayPrice)
+                maxDisplayPrice.textContent = formatter.format(Number.parseInt(values[1]));
+
+            if (minDisplayPrice)
+                minDisplayPrice.textContent = formatter.format(Number.parseInt(values[0]));
+
+            if (minDisplay)
+                minDisplay.textContent = values[0];
+
+            if (maxDisplay)
+                maxDisplay.textContent = values[1];
+
+            inputMax.value = values[1];
+            inputMin.value = values[0];
+        });
+
+        slider.noUiSlider.on('end', function (values, handle) {
+            filterForm.submit();
+        });
+    });
+
+    const inputs = filterForm.querySelectorAll('input');
+
+    if (inputs.length > 0) {
+        inputs.forEach(function (itemInput) {
+            itemInput.addEventListener('change', function (event) {
+                filterForm.submit();
+            });
+        });
+    }
+}
+
+if(collapseFilterItemBnt.length > 0) {
+    collapseFilterItemBnt.forEach(function (button) {
+        const container = button.closest('.filter-item'),
+            defaultText = button.textContent,
+            altText     = 'Скрыть';
+
+        button.addEventListener('click', function (event) {
+            container.classList.toggle('collapsed');
+            if (container.classList.contains('collapsed')) {
+                button.textContent = defaultText;
+            } else {
+                button.textContent = altText;
+            }
         });
     });
 }

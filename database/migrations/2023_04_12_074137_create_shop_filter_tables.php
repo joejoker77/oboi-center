@@ -17,7 +17,6 @@ return new class extends Migration
         Schema::create('shop_filters', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('visible_in_categories');
             $table->string('position')->default('left');
         });
 
@@ -31,6 +30,13 @@ return new class extends Migration
             $table->json('attributes')->nullable();
             $table->tinyInteger('display_header')->default(0);
         });
+
+        Schema::create('shop_filters_categories', function (Blueprint $table) {
+            $table->unsignedBigInteger('filter_id');
+            $table->foreign('filter_id')->references('id')->on('shop_filters')->onDelete('CASCADE');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('shop_categories')->onDelete('CASCADE');
+        });
     }
 
     /**
@@ -40,6 +46,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('shop_filters_categories');
         Schema::dropIfExists('shop_filter_groups');
         Schema::dropIfExists('shop_filters');
     }

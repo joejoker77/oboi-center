@@ -15,7 +15,8 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
     productTable         = document.getElementById('productTable'),
     createMenuButton     = document.getElementById('jsCreateMenu'),
     editMenuButton       = document.querySelectorAll('.edit-menu'),
-    addNavItems          = document.querySelectorAll('.add-items');
+    addNavItems          = document.querySelectorAll('.add-items'),
+    addGroupItems        = document.getElementById('addFilterGroup');
 
 if (tooltipList.length > 0) {
     tooltipList.forEach(function (tooltip) {
@@ -27,12 +28,64 @@ if (tooltipList.length > 0) {
 
 (() => {
     'use strict'
-
     feather.replace({ 'aria-hidden': 'true' });
-
     const ctx = document.getElementById('myChart');
-    if (ctx) {const myChart = new Chart(ctx, {type: 'line',data: {labels: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],datasets: [{data: [15339,21345,18483,24003,23489,24092,12034],lineTension: 0,backgroundColor: 'transparent',borderColor: '#007bff',borderWidth: 4,pointBackgroundColor: '#007bff'}]},options: {scales: {yAxes: [{ticks: {beginAtZero: false}}]},legend: {display: false}}});}})();
+    if (ctx) {const myChart = new Chart(ctx, {type: 'line',data: {labels: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],datasets: [{data: [15339,21345,18483,24003,23489,24092,12034],lineTension: 0,backgroundColor: 'transparent',borderColor: '#007bff',borderWidth: 4,pointBackgroundColor: '#007bff'}]},options: {scales: {yAxes: [{ticks: {beginAtZero: false}}]},legend: {display: false}}});}
+})();
 
+
+if (addGroupItems) {
+    let newGroupCount = 0;
+    addGroupItems.addEventListener('click', function (event) {
+        axios.post('/admin/shop/filters/add-group').then(function (response) {
+            if (response.status === 200 && response.statusText === 'OK') {
+                const html = new DOMParser().parseFromString(response.data, 'text/html');
+                newGroupCount++;
+                html.querySelector('.accordion-header').id = 'heading-new-'+newGroupCount;
+                const collapseBlock = html.querySelector('.accordion-collapse'),
+                    buttonCollapse  = html.querySelector('.accordion-header button'),
+                    inputName       = html.querySelector("[name='group_name[]']"),
+                    labelName       = inputName.nextElementSibling,
+                    inputCategories = html.querySelector("[name='group_categories[][]']"),
+                    inputTags       = html.querySelector("[name='tags[][]']"),
+                    inputAttributes = html.querySelector("[name='attributes[][]']"),
+                    inputCheckbox   = html.querySelector("[name='display_head[]']"),
+                    labelCheckbox   = inputCheckbox.nextElementSibling,
+                    container       = document.getElementById('accordionGroups');
+
+                inputName.setAttribute('name', 'group_name[new-'+newGroupCount+']');
+                inputName.id = 'groupName-'+newGroupCount;
+                labelName.setAttribute('for', 'groupName-'+newGroupCount);
+
+                inputCategories.setAttribute('name', 'group_categories[new-'+newGroupCount+'][]');
+                inputAttributes.setAttribute('name', 'attributes[new-'+newGroupCount+'][]');
+                inputTags.setAttribute('name', 'tags[new-'+newGroupCount+'][]');
+
+                inputCheckbox.setAttribute('name', 'display_head[new-'+newGroupCount+']');
+                inputCheckbox.id = 'groupDisplayHead-'+newGroupCount;
+                labelCheckbox.setAttribute('for', 'groupDisplayHead-'+newGroupCount);
+
+                collapseBlock.classList.remove('show');
+                collapseBlock.id = 'collapse-new-'+newGroupCount;
+                collapseBlock.setAttribute('aria-labelledby', 'heading-new-'+newGroupCount);
+
+                buttonCollapse.dataset.bsTarget = '#collapse-new-'+newGroupCount;
+                buttonCollapse.setAttribute('aria-expanded', 'false');
+                buttonCollapse.setAttribute('aria-controls', 'collapse-new-'+newGroupCount);
+
+                const choices = html.querySelectorAll('.js-choices');
+                if(choices.length > 0) {
+                    initChoices(choices);
+                }
+
+                container.append(html.querySelector('.accordion-item'));
+            }
+
+        }).catch(function (error) {
+            console.error(error);
+        });
+    });
+}
 
 if (productTable) {
     const searchForm = productTable.querySelector('#searchProducts'),

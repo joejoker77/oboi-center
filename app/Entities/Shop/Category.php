@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Collection $photos
  * @property Collection $files
  * @property Collection $products
+ * @property Collection $filters
  */
 class Category extends Model
 {
@@ -158,6 +159,11 @@ class Category extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function filters():BelongsToMany
+    {
+        return $this->belongsToMany(Filter::class, 'shop_filters_categories', 'category_id', 'filter_id');
     }
 
     public function isPublished(): bool

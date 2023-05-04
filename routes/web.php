@@ -29,6 +29,7 @@ Route::group([
 ], function () {
     Route::get('/tag/{tag}', 'CatalogController@tag')->name('tag');
     Route::get('/brand/{brand}', 'CatalogController@brands')->name('brand');
+    Route::get('/filter', 'CatalogController@filter')->name('filter');
 });
 
 Route::group([
@@ -138,6 +139,10 @@ Route::group(
 
             Route::resource('/delivery-methods', 'DeliveryMethodsController');
             Route::post('/delivery-methods/remove', 'DeliveryMethodsController@set-status')->name('delivery-methods.remove');
+
+            Route::resource('filters', 'FilterController');
+            Route::post('filters/remove-batch', 'FilterController@removeBatch')->name('filters.remove-batch');
+            Route::post('filters/add-group', 'FilterController@addGroup')->name('filters.add-group');
         });
     }
 );

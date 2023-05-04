@@ -21,7 +21,7 @@ class Tag extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name', 'seo_text', 'meta'
+        'name', 'seo_text', 'meta', 'slug'
     ];
 
     protected $casts = [
@@ -35,10 +35,6 @@ class Tag extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
-        });
-
-        static::updating(function ($model) {
             $model->slug = Str::slug($model->name);
         });
     }

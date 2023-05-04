@@ -68,6 +68,9 @@ class InitCommand extends Command
                         'categories' => [
                             'type' => 'integer',
                         ],
+                        'tags' => [
+                            'type' => 'long',
+                        ],
                         'values' => [
                             'type' => 'nested',
                             'properties' => [
@@ -75,7 +78,7 @@ class InitCommand extends Command
                                     'type' => 'integer',
                                 ],
                                 'value_string' => [
-                                    'type' => 'keyword',
+                                    'type' => 'text',
                                 ],
                                 'value_int' => [
                                     'type' => 'integer'
@@ -107,8 +110,8 @@ class InitCommand extends Command
                             ],
                             'trigrams' => [
                                 'type' => 'ngram',
-                                'min_gram' => 4,
-                                'max_gram' => 6,
+                                'min_gram' => 2,
+                                'max_gram' => 5,
                             ],
                         ],
                         'analyzer' => [

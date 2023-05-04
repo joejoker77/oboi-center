@@ -166,6 +166,7 @@
         <div class="col-md-3">
             <aside>
                 <h4>Подбор по параметрам</h4>
+                <x-filter position="left"/>
             </aside>
         </div>
         <div class="col-md-9">
