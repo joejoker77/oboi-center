@@ -249,7 +249,7 @@ select:hover {cursor: pointer}
 
 header {
     position: relative;
-    z-index: 1;
+    z-index: 5;
     box-shadow: 0 0 toRem(4px) toRem(4px) rgba(0,0,0,.15);
 
     .top-menu {
