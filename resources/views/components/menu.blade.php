@@ -1,4 +1,4 @@
-@if($menu->show_title)
+@if($menu && $menu->show_title)
     <{{ $headerTag }} class="{{ $headerClass }}">{{ $menu->title }}</{{ $headerTag }}>
 @endif
 <ul class="{{ $menuClass }}" @if($menu_id) id="{{ $menu_id }}" @endif>
