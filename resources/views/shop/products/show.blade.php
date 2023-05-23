@@ -10,7 +10,11 @@ $quantity = $product->quantity;
     <div class="container" id="productPage">
         <div class="row mb-5">
         @if(!$product->photos->isEmpty())
-            <div class="col-md-6">
+            <div class="col-lg-6">
+                <h1 class="d-flex d-lg-none d-lg-none justify-content-between align-items-baseline">
+                    {{$product->name}}
+                    <span class="sku">Артикул: {{ $product->sku }}</span>
+                </h1>
                 <main-gallery>
                     <div class="swiper full-swiper">
                         <div class="swiper-wrapper">
@@ -46,8 +50,8 @@ $quantity = $product->quantity;
                 </main-gallery>
             </div>
         @endif
-        <div class="col-md-6 product-offer">
-            <h1 class="d-flex justify-content-between align-items-baseline">
+        <div class="col-lg-6 product-offer">
+            <h1 class="d-none d-lg-flex justify-content-between align-items-baseline">
                 {{$product->name}}
                 <span class="sku">Артикул: {{ $product->sku }}</span>
             </h1>
@@ -187,7 +191,7 @@ $quantity = $product->quantity;
         @endif
     @endforeach
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-lg-12">
             <div class="main-props">
                 @if(!empty($dimensions['width']) && !empty($dimensions['height']))
                     <div class="props-item dimensions">
@@ -257,7 +261,7 @@ $quantity = $product->quantity;
         <div class="related-products">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-lg-12">
                         <h2 class="text-center py-3 mb-3">С этим товаром часто покупают</h2>
                         <div class="item-partners @if($product->related->count() < 3) without-swiper @endif">
                             @if($product->related->count() >= 3)

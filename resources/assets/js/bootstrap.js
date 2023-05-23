@@ -13,5 +13,6 @@ window.Modal = Modal;
 window.Collapse = Collapse;
 window.Tooltip = Tooltip;
 window.Tab = Tab;
+window.Dropdown = Dropdown;
 
 

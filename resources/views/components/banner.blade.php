@@ -1,6 +1,6 @@
 @foreach($navItems as $i => $navItem)
     <div class="category-item item-{{ $i }} fadein">
-        <div class="category-image" style="width: 192px;height: auto">
+        <div class="category-image" style="height: auto">
             <img src="{{ $navItem->image }}" width="100%" height="auto">
         </div>
         <div class="category-info card-body">

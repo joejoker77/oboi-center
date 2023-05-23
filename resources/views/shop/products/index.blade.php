@@ -4,7 +4,7 @@
  * @var App\Cart\CartItem[] $cartItems
  */
     $country = null;
-    if (!empty($products)) {
+    if (!$products->isEmpty()) {
         foreach ($products as $product) {
             if ($product->country) {
                 $country = $product->country;
@@ -20,7 +20,12 @@
             <div class="row">
                 @if(!$category->photos->isEmpty())
                     @if ($category->photos->count() > 1)
-                        <div class="col-md-5">
+                        <div class="col-lg-6 col-xxl-5">
+                            <h1 class="d-flex d-lg-none w-100">{{ $category->title ?? $category->name }}
+                                @if(!$category->products->isEmpty())
+                                    <span>{{ $category->products()->first()->brand->name }} @if($country)<span>{{ country_to_flag($country) }} {{ $country }}</span>@endif</span>
+                                @endif
+                            </h1>
                             <main-gallery>
                                 <div class="swiper full-swiper">
                                     <div class="swiper-wrapper">
@@ -72,10 +77,10 @@
                         </div>
                     @endif
                 @endif
-                <div class=@if($category->photos->isEmpty() || $category->photos->count() == 1)"col-md-12"@else"col-md-7"@endif>
+                <div class=@if($category->photos->isEmpty() || $category->photos->count() == 1)"col-lg-12"@else"col-lg-6 col-xxl-7"@endif>
                 <div class="d-flex flex-column justify-content-between h-100">
                     <div class="category-content">
-                        <h1>{{ $category->title ?? $category->name }}
+                        <h1 class=@if(!$category->products->isEmpty())"d-none d-lg-flex w-100"@endif>{{ $category->title ?? $category->name }}
                             @if(!$category->products->isEmpty())
                                 <span>{{ $category->products()->first()->brand->name }} @if($country)<span>{{ country_to_flag($country) }} {{ $country }}</span>@endif</span>
                             @endif
@@ -163,16 +168,27 @@
         </div>
     @endif
     <div class="row products">
-        <div class="col-md-3">
+        <div class="col-lg-3">
+            <h4>
+                Подбор по параметрам
+                <button class="btn btn-danger d-lg-none" id="closeFilter">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </h4>
             <aside>
-                <h4>Подбор по параметрам</h4>
                 <x-filter position="left"/>
             </aside>
         </div>
-        <div class="col-md-9">
+        <div class="col-lg-9">
             @if ($categories)
                 <div class="categories">
                     <h2>@if($category->depth == 1)Коллекции производителя {{ $category->name }} <span class="country">({{ $country }})</span>@elseФабрики@endif</h2>
+                    <div class="d-lg-none pb-3">
+                        <button class="btn btn-blue-dark w-100" id="showFilter">
+                            <span class="material-symbols-outlined">filter_list</span>
+                            Подобрать по параметрам
+                        </button>
+                    </div>
                     <div class="category-items">
                     @foreach (array_chunk($categories, 4) as $chunk)
                         @php /** @var App\Entities\Shop\Category $current */ @endphp
@@ -200,8 +216,14 @@
                     </div>
                 </div>
             @endif
-            @if($products && $category->children->isEmpty())
+            @if(!$products->isEmpty() && $category->children->isEmpty())
                 <h3>Образцы коллекции - {{ $products[0]->category->name }}</h3>
+                    <div class="d-lg-none pb-3">
+                        <button class="btn btn-blue-dark w-100" id="showFilter">
+                            <span class="material-symbols-outlined">filter_list</span>
+                            Подобрать по параметрам
+                        </button>
+                    </div>
                 <div class="product-items">
                     @foreach($products as $key => $product)
                         @php
@@ -229,30 +251,50 @@
                                 </div>
                                 <div class="product-props">
                                     <span class="product-name">{{ $product->name }}</span>
-                                    @if(isset($material))
-                                        <span class="product-materials">Материал:
-                                            <span class="prop-value">{{ $material }}</span>
+                                    <span class="product-price d-flex">
+                                        <strong>Цена:</strong>&nbsp;
+                                        <span class="prop-value">@money($product->price, 'RUB')</span>
+                                    </span>
+                                    @foreach($product->values as $value)
+                                        @if($value->attribute->name == 'Ширина рулона')
+                                            @php $dmns['height'] = $value->value @endphp
+                                        @endif
+                                        @if($value->attribute->name == 'Длина рулона')
+                                            @php $dmns['width'] = $value->value @endphp
+                                        @endif
+                                        @if ($value->attribute->name == "Материал покрытия")
+                                            @php $mat['up'] = $value->value @endphp
+                                        @endif
+                                        @if ($value->attribute->name == "Материал основы")
+                                            @php $mat['down'] = $value->value @endphp
+                                        @endif
+                                    @endforeach
+                                    @if(isset($mat))
+                                        <span class="product-materials d-none d-lg-block">
+                                            <strong>Материал:</strong>
+                                            <span class="prop-value">{{ $mat['up'] }} x {{ $mat['down'] }}</span>
                                         </span>
                                     @endif
-                                    @if(isset($dimensions) and !empty($dimensions['height']) and !empty($dimensions['width']))
-                                        <span class="product-dimensions">Размер:
-                                            <span class="prop-value">{{ $dimensions['height'][0] }} x {{ $dimensions['width'][0] }}</span>
+                                    @if(isset($dmns) and !empty($dmns['height']) and !empty($dmns['width']))
+                                        <span class="product-dimensions d-none d-lg-block">
+                                            <strong>Размер:</strong>
+                                            <span class="prop-value">{{ $dmns['height'] }} x {{ $dmns['width'] }}</span>
                                         </span>
                                     @endif
                                     <product-form>
-                                        <form action="#" id="productForm-{{ $key }}" class="w-100" novalidate>
+                                        <form action="{{ route('cart.add', $product) }}" id="productForm-{{ $product->id }}" class="w-100" novalidate>
                                             @csrf
-                                            <input form="productForm-{{ $key }}" type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input form="productForm-{{ $key }}" type="hidden" name="product_quantity" value="">
+                                            <input form="productForm-{{ $product->id }}" type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input form="productForm-{{ $product->id }}" type="hidden" name="product_quantity" value="">
                                             <product-quantity>
-                                                <label for="elementQuantity-{{ $key }}">Укажите количество</label>
+                                                <label for="elementQuantity-{{ $product->id }}">Укажите количество</label>
                                                 <div class="input-group">
                                                     <button class="minus input-group-text">
                                                         <i class="material-symbols-outlined">remove</i>
                                                     </button>
-                                                    <input form="productForm-{{ $key }}" class="form-control" type="number"
-                                                           id="elementQuantity-{{ $key }}"
-                                                           name="quantity" value="{{ $quantity > 0 ? 1 : 0 }}"
+                                                    <input form="productForm-{{ $product->id }}" class="form-control" type="number"
+                                                           id="elementQuantity-{{ $product->id }}"
+                                                           name="quantity" value="1"
                                                            data-max-quantity="{{ $quantity }}"
                                                            data-order-type="{{ $product->isCanBuy($quantity) ? 'checkout' : 'order' }}"
                                                     >
@@ -262,10 +304,10 @@
                                                 </div>
                                             </product-quantity>
                                             @if(!$product->isCanBuy($quantity))
-                                                <input type="hidden" name="type_order" value="order">
+                                                <input form="productForm-{{ $product->id }}" type="hidden" name="type_order" value="order">
                                                 <button type="submit" class="btn btn-blue-dark w-100">Создать заказ</button>
                                             @else
-                                                <input type="hidden" name="type_order" value="checkout">
+                                                <input form="productForm-{{ $product->id }}" type="hidden" name="type_order" value="checkout">
                                                 <button type="submit" class="btn btn-blue-dark w-100">В корзину</button>
                                             @endif
                                         </form>

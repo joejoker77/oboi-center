@@ -82,6 +82,7 @@ class NavigationService
                 }
 
                 foreach ($items as $item) {
+
                     $route = $item['type'] == 'category' || $item['type'] == 'product' ? 'catalog.index' : 'catalog.'.$item['type'];
                     $title = $item['title'];
                     $path  = $item['type'] == 'separator' || $item['type'] == 'external' ?
@@ -104,7 +105,7 @@ class NavigationService
 
                     $menuItem->saveOrFail();
 
-                    if ($item['parent'] > 0) {
+                    if ((int)$item['parent'] > 0) {
                         $parentItem = NavItem::where('front_id', $item['parent'])
                             ->where('menu_id', $menu->id)->first();
                         $menuItem->parent_id = $parentItem->id;

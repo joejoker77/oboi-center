@@ -20,7 +20,7 @@
                         @php $firstImage = $item->image; $firstImageAlt = $item->title @endphp
                     @endif
                     <div class="head-submenu">
-                        <a class="btn btn-link" href="{{$item->item_path}}"
+                        <a class="btn btn-link @if(request()->is(trim($item->item_path, '/').'*')) active @endif" href="{{$item->item_path}}"
                            @if($item->image) data-image="{{ $item->image }}" @endif
                         >
                             {{$item->link_text ?? $item->title}}

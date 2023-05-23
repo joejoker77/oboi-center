@@ -52,13 +52,13 @@
                                                 <div class="item-content__head">
                                                     {{ $product->name }}
                                                 </div>
-                                                <div class="item-content__price">
+                                                <div class="item-content__price d-none d-sm-block">
                                                     @if($product->compare_at_price)
                                                         <span>@money($product->compare_at_price, 'RUB')</span>
                                                     @endif
                                                     @money($product->price, 'RUB')
                                                 </div>
-                                                <div class="item-content__props">
+                                                <div class="item-content__props d-none d-sm-block">
                                                     @if(!empty($dimensions['width']) && !empty($dimensions['height']))
                                                         <div class="prop-item dimensions">
                                                             <div class="prop-text">

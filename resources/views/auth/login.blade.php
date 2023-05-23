@@ -3,8 +3,8 @@
 @section('content')
     <div class="container mb-5">
         <div class="row">
-            <div class="col d-flex flex-column justify-content-between">
-                <div class="h1">Войти на сайт</div>
+            <div class="col d-flex flex-column justify-content-between mb-5">
+                <div class="h1 text-nowrap">Войти на сайт</div>
                 <form method="POST" action="{{ route('login') }}" class="d-flex flex-column justify-content-between h-100">
                     @csrf
                     <div class="form-floating mb-3">
@@ -36,7 +36,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col">
+            <div class="col mb-5">
                 <div class="h1">Зарегистрироваться</div>
                 @if(!request()->get('confirmPhone'))
                     <form method="POST" action="{{ route('register') }}">

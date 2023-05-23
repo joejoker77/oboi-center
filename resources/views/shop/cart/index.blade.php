@@ -11,7 +11,7 @@
                     <h1 class="cart__header mb-lg-5">Ваши покупки</h1>
                     <div class="cart__content">
                         <div class="cart-items">
-                            <div class="items-head">
+                            <div class="items-head d-none d-lg-block">
                                 <table class="w-100">
                                     <tr>
                                         <td>Наименование</td>
@@ -60,7 +60,7 @@
                                                 <a href="{{ route('catalog.index', ['product_path' => product_path($product->category, $product)]) }}">{{ $product->name }}</a>
                                             </div>
                                         </div>
-                                        <div class="item-content">
+                                        <div class="item-content d-none d-lg-block">
                                             <div class="item-content__price">
                                                 @if($product->compare_at_price)
                                                     <span>@money($product->compare_at_price, 'RUB')</span>
@@ -119,7 +119,8 @@
                                             @money($product->price * $cartItem->getQuantity(), 'RUB')
                                         </div>
                                         <div class="item-actions">
-                                            <span class="delete-item">Удалить</span>
+                                            <span class="delete-item d-none d-lg-inline">Удалить</span>
+                                            <span class="material-symbols-outlined text-danger d-inline d-lg-none">delete</span>
                                         </div>
                                     </div>
                                 @endforeach

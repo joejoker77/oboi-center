@@ -15,6 +15,7 @@ use App\Http\Requests\Products\SearchRequest;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Illuminate\Support\Facades\Session;
+use function PHPUnit\Framework\isEmpty;
 
 class CatalogController extends Controller
 {
@@ -39,7 +40,7 @@ class CatalogController extends Controller
         $category         = $path->category;
         $result           = $this->search->search($category, $request, 20, $request->get('page', 1));
 
-        if ($request->get('page') && $result->products->isEmpty()) {
+        if ($result->products->isEmpty()) {
             abort(404);
         }
 

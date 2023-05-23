@@ -6,6 +6,7 @@
         <div class="back-first"></div>
         <div class="back-second"></div>
         <div class="back-third"></div>
+        <div class="back-fourth d-block d-lg-none"></div>
         <div class="banner-container">
             <div class="banner-head text-center text-white">
                 <h1 class="m-0">Обои для стен</h1>
@@ -17,11 +18,11 @@
     <section class="interior-paint">
         <div class="container">
             <div class="row">
-                <div class="col-5">
+                <div class="col-lg-5">
                     <h2>Интерьерная краска</h2>
                     <p><strong>Обои Центр</strong> - интерьерные краски, вдохновленные природными мотивами и традиционной атмосферой скандинавского уюта, с авторской палитрой цветов. Экологичные и безопасные краски HYGGE Paint высокого класса истираемости можно мыть с применением мыльных растворов. Изготавливают краски на водной основе, с использованием мраморной крошки, что дает краскам долговечность и непревзойденную глубину цвета. Безупречная рецептура с добавками против плесени и грибка, позволяет использовать краски HYGGE Paint во всех типах помещений</p>
                 </div>
-                <div class="col-7">
+                <div class="col-lg-7">
                     <img src="{{ asset('storage/files/home-page/interior-paint.webp') }}" alt="Интерьерная краска HYGGE Paint">
                 </div>
             </div>
@@ -36,7 +37,7 @@
                 @endif
             @endforeach
 
-            <h2 class="text-center">{{ ru_plural($count, ['Новая коллекция', 'Новые коллекции', 'Новых коллекций']) }}</h2>
+            <h2 class="text-center">{{ ru_plural($count, ['новая коллекция', 'новые коллекции', 'новых коллекций']) }}</h2>
 
             <div class="carousel swiper">
                 <div class="swiper-wrapper">
@@ -49,8 +50,8 @@
                                         <img src="{{ asset('/storage/files/home-page/new.webp') }}" alt="Иконка новинки">
                                     </div>
                                     <img src="{{ $collection->getMainImage('medium', 3) }}" alt="Коллекция обоев: {{ $collection->name }}">
+                                    <p><span>коллекция</span><a href="#">{{ $collection->name }}</a></p>
                                 </div>
-                                <p><span>коллекция</span><a href="#">{{ $collection->name }}</a></p>
                             </div>
                         @endif
                     @endforeach
@@ -80,7 +81,7 @@
         <div class="container">
             <div class="row">
                 <h2>На сегодняшний<br>день Обои Центр - это</h2>
-                <div class="col-5">
+                <div class="col-lg-5">
                     <ul>
                         <li>
                             <span class="ico">
@@ -126,7 +127,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-7">
+                <div class="col-lg-7">
                     <p><strong>Обои Центр</strong> - официальный дилер европейских и российских обойных фабрик с многолетним опытом работы на рынке настенных покрытий. Входим в тройку крупнейших игроков рынка России и занимаем лидирующие позиции среди оптовых поставщиков. Поставляем обои и краску по РФ. Мы предлагаем качественный сервис и постоянное наличие товара на складах. Обои Центр - это коллектив профессионалов и комьюнити единомышленников. Мы объединяем экспертов дизайна интерьера и предлагаем лучшие условия сотрудничества. Выбирая нас, вы выбираете партнера с многолетним опытом работы.</p>
                 </div>
             </div>

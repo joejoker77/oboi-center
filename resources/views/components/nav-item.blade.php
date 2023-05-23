@@ -1,7 +1,17 @@
 @props(['items'])
 @foreach($items as $item)
+    @php
+        $classes = 'nav-link';
+        if (request()->is(trim($item->item_path, '/').'*')) {
+            $classes .= ' active';
+        }
+
+        if (!$item->children->isEmpty()) {
+            $classes .= ' dropdown-toggle';
+        }
+    @endphp
     <li class="nav-item @if(!$item->children->isEmpty())dropdown @endif">
-        <a class="nav-link @if(!$item->children->isEmpty())dropdown-toggle @endif"
+        <a class="{{ $classes }}"
            href="{{ $item->item_path }}"
             @if(!$item->children->isEmpty()) data-bs-toggle="dropdown" aria-expanded="false" @endif
             @if($item->image) data-image="{{ $item->image }}" @endif

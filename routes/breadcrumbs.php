@@ -48,7 +48,7 @@ Breadcrumbs::for('catalog.inner_category', function (Generator $generator, Produ
         $generator->parent('home');
     }
     if ($path->category) {
-        $generator->push($path->category->title ?? $path->category->name, route('catalog.index', $path));
+        $generator->push($path->category->name, route('catalog.index', $path));
     }
 });
 

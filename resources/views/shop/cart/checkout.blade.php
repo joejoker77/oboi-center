@@ -14,13 +14,7 @@
         </div>
     @endif
     <div class="container checkout">
-        <div class="row mb-5">
-            @auth @else
-                <h1>
-                    Контактная информация
-                    <span>У вас уже есть аккаунт? <a href="{{ route('login') }}">Вход</a></span>
-                </h1>
-            @endauth
+        <div class="row mb-5 flex-column-reverse flex-lg-row">
             <div class="col-md-9">
                 <form id="orderForm" action="{{ route('cart.create-order') }}" method="post">
                     @csrf
@@ -28,6 +22,10 @@
                         <input type="hidden" name="customer_name" value="{{ $user->name }}">
                         <input type="hidden" name="customer_phone" value="{{ $user->userProfile->phone }}">
                     @else
+                        <h1>
+                            Контактная информация
+                            <span>У вас уже есть аккаунт? <a href="{{ route('login') }}">Вход</a></span>
+                        </h1>
                         <div class="form-floating mb-3">
                             <input type="text" id="customerName" class="form-control @error('customer_name') is-invalid @enderror"
                                    name="customer_name" placeholder="Ваше Имя" required>
@@ -132,7 +130,7 @@
                 </form>
             </div>
             <div class="col-md-3">
-                <ul class="cart-items list-group">
+                <ul class="cart-items list-group mb-5 mb-lg-0">
                     @foreach($cart->getItems() as $item)
                         <li class="cart-item list-group-item">
                             <div class="cart-item__media">
