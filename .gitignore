@@ -21,3 +21,5 @@ yarn-error.log
 Makefile
 backup.sql
 docker-compose.yml
+/certs
+/certs/*
