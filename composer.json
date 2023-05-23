@@ -12,6 +12,7 @@
         "akaunting/laravel-money": "^4.0",
         "alexusmai/laravel-file-manager": "3.0.1",
         "barryvdh/laravel-debugbar": "^3.7",
+        "butschster/meta-tags": "^2.3",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "elasticsearch/elasticsearch": "^8.5",
         "guzzlehttp/guzzle": "^7.2",

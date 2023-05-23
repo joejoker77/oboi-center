@@ -193,6 +193,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\MetaTagsServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SmsServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,

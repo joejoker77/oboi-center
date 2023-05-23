@@ -280,20 +280,18 @@ h1,.h1, h2,.h2, h3,.h3, h4,.h4, h5,.h5, h6,.h6 {
     &:after {
         content: none;
     }
-
-
 }
 
 select:hover {cursor: pointer}
 
 header {
-    z-index: 5;
+    z-index: 6;
     border-bottom: 1px solid #1a5294;
     width: 100%;
     background-color: white;
 
     @include media-breakpoint-up(lg) {
-        position: static;
+        position: relative;
         border: none;
         box-shadow: 0 0 toRem(4px) toRem(4px) rgba(0,0,0,.15);
     }
@@ -1283,7 +1281,7 @@ header {
                 height: 100%;
                 box-shadow: 0 toRem(4px) toRem(45px) rgba(0,0,0,.25);
                 transition: height 400ms ease-in-out;
-                width: fit-content;
+                width: 100%;
                 margin: 0 auto;
                 float: none;
 
