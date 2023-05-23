@@ -15,9 +15,7 @@ class SearchServiceProvider extends ServiceProvider
         $this->app->singleton(Client::class, function (Application $app) {
             $config = $app->make('config')->get('elasticsearch');
             return ClientBuilder::create()
-		->setHosts(['https://localhost:9200'])
-		->setCABundle('/var/www/oboi-center/certs/http_ca.crt')
-		->setBasicAuthentication('elastic', 'oNsCMEpYLRYY6KqzjY8X')
+		->setHosts($config['hosts'])
 		->setRetries($config['retries'])
 		->build();
         });

@@ -23,3 +23,4 @@ backup.sql
 docker-compose.yml
 /certs
 /certs/*
+/app/Providers/SearchServiceProvider.php
