@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\UseCases\Admin\Shop\CartService;
+use Butschster\Head\Contracts\MetaTags\MetaInterface;
 
 class CartController extends Controller
 {
@@ -17,15 +18,20 @@ class CartController extends Controller
 
     private Cart $cart;
 
-    public function __construct(CartService $service, Cart $cart)
+    protected MetaInterface $meta;
+
+    public function __construct(CartService $service, Cart $cart, MetaInterface $meta)
     {
         $this->service = $service;
         $this->cart    = $cart;
+        $this->meta    = $meta;
     }
 
     public function index()
     {
         $cart = $this->cart;
+        $this->meta->setTitle('Корзина пользователя - Обои Центр');
+        $this->meta->setRobots('noindex, nofollow');
 
         return view('shop.cart.index', compact('cart'));
     }

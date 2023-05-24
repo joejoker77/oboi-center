@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Cart\Cart;
-use App\Http\Requests\Products\FilterResult;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Entities\Shop\Category;
 use App\Http\Router\ProductPath;
@@ -12,10 +10,9 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use App\UseCases\ReadModels\SearchService;
 use App\Http\Requests\Products\SearchRequest;
+use Butschster\Head\Contracts\MetaTags\MetaInterface;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
-use Illuminate\Support\Facades\Session;
-use function PHPUnit\Framework\isEmpty;
 
 class CatalogController extends Controller
 {
@@ -24,10 +21,13 @@ class CatalogController extends Controller
 
     private Cart $cart;
 
-    public function __construct(SearchService $search, Cart $cart)
+    protected MetaInterface $meta;
+
+    public function __construct(SearchService $search, Cart $cart, MetaInterface $meta)
     {
         $this->search = $search;
         $this->cart   = $cart;
+        $this->meta   = $meta;
     }
 
     /**
@@ -53,9 +53,17 @@ class CatalogController extends Controller
         });
 
         if (!$path->product) {
+            if ($category && !empty($category->meta)) {
+                $this->meta->setTitle($category->meta['title']);
+                $this->meta->setDescription($category->meta['description']);
+            }
             return view('shop.products.index', compact('category', 'categories', 'categoriesCounts', 'products', 'cartAllItems'));
         } else {
             $product = $path->product;
+            if (!empty($product->meta)) {
+                $this->meta->setTitle($product->meta['title']);
+                $this->meta->setDescription($product->meta['description']);
+            }
             return view('shop.products.show', compact('category', 'categories', 'product', 'products', 'categoriesCounts', 'cartAllItems'));
         }
     }
@@ -74,6 +82,10 @@ class CatalogController extends Controller
         $restTags       = $result->tags;
         $restCategories = $result->categories;
         $restAttributes = $result->attributes;
+
+        $this->meta->setTitle('Результат поиска по фильтру');
+        $this->meta->setDescription('На данной странице отображаются товары к которым применен поисковый фильтр.');
+        $this->meta->setRobots('noindex, nofollow');
 
         return view('shop.search.result', compact('cartAllItems', 'restCategories', 'restTags', 'products', 'restAttributes', 'request'));
     }

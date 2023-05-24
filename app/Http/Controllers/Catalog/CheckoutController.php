@@ -11,6 +11,7 @@ use App\Entities\Shop\DeliveryMethod;
 use Illuminate\Http\RedirectResponse;
 use App\UseCases\Auth\RegisterService;
 use App\Http\Requests\Order\OrderRequest;
+use Butschster\Head\Contracts\MetaTags\MetaInterface;
 
 class CheckoutController extends Controller
 {
@@ -18,11 +19,14 @@ class CheckoutController extends Controller
     private Cart $cart;
     private RegisterService $registerService;
 
-    public function __construct(OrderService $service, Cart $cart, RegisterService $registerService)
+    protected MetaInterface $meta;
+
+    public function __construct(OrderService $service, Cart $cart, RegisterService $registerService, MetaInterface $meta)
     {
        $this->service         = $service;
        $this->cart            = $cart;
        $this->registerService = $registerService;
+       $this->meta            = $meta;
     }
 
     public function index():View|RedirectResponse
@@ -30,6 +34,9 @@ class CheckoutController extends Controller
         $user    = Auth::user();
         $methods = DeliveryMethod::all();
         $cart    = $this->cart;
+
+        $this->meta->setTitle('Оформление заказа - Обои Центр');
+        $this->meta->setRobots('noindex, nofollow');
 
         if ($cart->getAmount() === 0) {
             return back()->with('error', 'Ваша корзина пуста. Нет товаров для оформления заказа');

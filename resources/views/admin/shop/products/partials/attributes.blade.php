@@ -14,27 +14,24 @@
         <div class="col-10 mb-3">
             @error('product.attributes')<div class="is-invalid"></div>@enderror
             <select
-                name="product.attributes[{{ $attribute->id }}]@if($attribute->as_option)[]@endif"
+                name="product.attributes[{{ $attribute->id }}]@if($attribute->as_option || $attribute->mode == \App\Entities\Shop\Attribute::MODE_MULTIPLE)[]@endif"
                 class="js-choices"
                 data-attribute-id="{{ $attribute->id }}"
-                @if($attribute->as_option) multiple @endif
+                @if($attribute->as_option || $attribute->mode == \App\Entities\Shop\Attribute::MODE_MULTIPLE) multiple @endif
                 @if($customTemplate) data-custom-template @endif
             >
                 <option value="">-=Выбрать {{ $attribute->name }}=-</option>
                 @foreach($attribute->variants as $variant)
                     <option value="{{ $variant }}"
                         @foreach($product->values as $val)
-
-                            @selected($val->attribute_id == $attribute->id && $val->value === $variant)
+                            @if($attribute->mode == \App\Entities\Shop\Attribute::MODE_MULTIPLE)
+                                @php $valArray = array_map('trim', explode(',', $val->value)) @endphp
+                                @if($val->attribute_id == $attribute->id && in_array($variant, $valArray)) selected @endif
+                            @else
+                                @selected($val->attribute_id == $attribute->id && $val->value === $variant)
+                            @endif
                         @endforeach
                     >
-                        @if(strpbrk($variant, '|'))
-                            @php
-                                $arrayValue = explode('|', $variant);
-                                $variant    = $arrayValue[0];
-                                $value      = $arrayValue[1];
-                            @endphp
-                        @endif
                         {{ $variant }}
                     </option>
                 @endforeach

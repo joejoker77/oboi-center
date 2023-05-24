@@ -182,7 +182,7 @@
         <div class="col-lg-9">
             @if ($categories)
                 <div class="categories">
-                    <h2>@if($category->depth == 1)Коллекции производителя {{ $category->name }} <span class="country">({{ $country }})</span>@elseФабрики@endif</h2>
+                    <h2>@if($category && $category->depth == 1)Коллекции производителя {{ $category->name }} <span class="country">({{ $country }})</span>@elseФабрики@endif</h2>
                     <div class="d-lg-none pb-3">
                         <button class="btn btn-blue-dark w-100" id="showFilter">
                             <span class="material-symbols-outlined">filter_list</span>
@@ -216,7 +216,7 @@
                     </div>
                 </div>
             @endif
-            @if(!$products->isEmpty() && $category->children->isEmpty())
+            @if(!$products->isEmpty() && $category && $category->children->isEmpty())
                 <h3>Образцы коллекции - {{ $products[0]->category->name }}</h3>
                     <div class="d-lg-none pb-3">
                         <button class="btn btn-blue-dark w-100" id="showFilter">

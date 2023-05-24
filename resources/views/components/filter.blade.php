@@ -1,7 +1,7 @@
 @php /** @var App\Entities\Shop\Filter $filter */ @endphp
 
 @if(request()->get('attributes') || request()->get('tags') || request()->get('categories') || request()->get('colors') || request()->get('price'))
-    <a href="{{route('shop.filter')}}" type="button" class="btn btn-blue-dark w-100 mb-3">Сбросить фильтр</a>
+    <a href="{{route('shop.filter')}}" type="button" class="btn btn-blue-dark w-100 my-3">Сбросить фильтр</a>
 @endif
 <form action="{{ route('shop.filter') }}" method="get" class="form-filter">
     @foreach($filter as $groupName => $group)

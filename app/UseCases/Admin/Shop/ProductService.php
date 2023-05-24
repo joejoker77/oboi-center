@@ -172,14 +172,16 @@ class ProductService
      */
     private function assignAttributes(array $attributes, Product $product):void
     {
+        $attributes = array_filter($attributes);
+
         foreach ($attributes as $id => $options) {
             if ($attribute = Attribute::find($id)) {
 
-                if ($attribute->mode == Attribute::MODE_SIMPLE && count($options) == 1) {
-                    if (!Value::where('attribute_id', $id)->where('product_id', $product->id)->where('value', $options[0])->first()) {
+                if ($attribute->mode == Attribute::MODE_SIMPLE) {
+                    if (!Value::where('attribute_id', $id)->where('product_id', $product->id)->where('value', $options)->first()) {
                         $product->values()->create([
                             'attribute_id' => $id,
-                            'value' => $options[0]
+                            'value' => $options
                         ]);
                     }
                 } elseif ($attribute->mode == Attribute::MODE_MULTIPLE) {

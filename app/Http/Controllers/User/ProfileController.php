@@ -2,30 +2,35 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Entities\User\DeliveryAddress;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use App\Entities\User\DeliveryAddress;
+use App\UseCases\Profile\ProfileService;
+use App\Http\Requests\Profile\ProfileRequest;
 use App\Http\Requests\Profile\DeliveryRequest;
 use App\Http\Requests\Profile\PhoneVerifyRequest;
-use App\Http\Requests\Profile\ProfileRequest;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\UseCases\Profile\ProfileService;
+use Butschster\Head\Contracts\MetaTags\MetaInterface;
 
 class ProfileController extends Controller
 {
     public ProfileService $service;
 
-    public function __construct(ProfileService $service)
+    protected MetaInterface $meta;
+
+    public function __construct(ProfileService $service, MetaInterface $meta)
     {
         $this->service = $service;
+        $this->meta    = $meta;
     }
 
     public function showProfile(): View
     {
         $user = Auth::user();
+        $this->meta->setRobots('nofollow, noindex');
 
         return view('cabinet.profile.index', compact("user"));
     }

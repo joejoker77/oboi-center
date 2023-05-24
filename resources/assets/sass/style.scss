@@ -1988,6 +1988,9 @@ footer {
 product-quantity {
     display: block;
     width: 100%;
+    @include media-breakpoint-up(sm) {
+        max-width: toRem(180px);
+    }
 
     .material-symbols-outlined {
         animation: none!important;
@@ -2245,7 +2248,7 @@ product-quantity {
             h4 {
                 position: fixed;
                 background-color: white;
-                width: calc(100% - 30px);
+                width: calc(100% - 24px);
                 padding-bottom: toRem(8px);
                 display: flex;
                 justify-content: space-between;
@@ -3183,7 +3186,7 @@ main-gallery {
     background-color: transparent;
     visibility: hidden;
     overflow: hidden;
-    z-index: 5;
+    z-index: 6;
     transition: background-color 300ms linear;
 
     .side-cart-scrollbar {

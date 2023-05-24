@@ -3,13 +3,25 @@
 @section('content')
     <div class="container" id="categoryPage">
         <div class="row products">
-            <div class="col-md-3">
+            <h1>Результат поиска</h1>
+            <div class="d-lg-none pb-3">
+                <button class="btn btn-blue-dark w-100" id="showFilter">
+                    <span class="material-symbols-outlined">filter_list</span>
+                    Подобрать по параметрам
+                </button>
+            </div>
+            <div class="col-lg-3">
+                <h4>
+                    Подбор по параметрам
+                    <button class="btn btn-danger d-lg-none" id="closeFilter">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </h4>
                 <aside>
-                    <h4>Подбор по параметрам</h4>
                     <x-filter :request="$request" :restAttributes="$restAttributes" :restCategories="$restCategories" :restTags="$restTags" position="left" />
                 </aside>
             </div>
-            <div class="col-md-9">
+            <div class="col-lg-9">
                 @if($products)
                     <div class="product-items">
                         @php /** @var App\Entities\Shop\Product $product */ @endphp
@@ -39,14 +51,34 @@
                                     </div>
                                     <div class="product-props">
                                         <span class="product-name">{{ $product->name }}</span>
-                                        @if(isset($material))
-                                            <span class="product-materials">Материал:
-                                            <span class="prop-value">{{ $material }}</span>
+                                        <span class="product-price d-flex">
+                                        <strong>Цена:</strong>&nbsp;
+                                        <span class="prop-value">@money($product->price, 'RUB')</span>
+                                    </span>
+                                        @foreach($product->values as $value)
+                                            @if($value->attribute->name == 'Ширина рулона')
+                                                @php $dmns['height'] = $value->value @endphp
+                                            @endif
+                                            @if($value->attribute->name == 'Длина рулона')
+                                                @php $dmns['width'] = $value->value @endphp
+                                            @endif
+                                            @if ($value->attribute->name == "Материал покрытия")
+                                                @php $mat['up'] = $value->value @endphp
+                                            @endif
+                                            @if ($value->attribute->name == "Материал основы")
+                                                @php $mat['down'] = $value->value @endphp
+                                            @endif
+                                        @endforeach
+                                        @if(isset($mat))
+                                            <span class="product-materials d-none d-lg-block">
+                                            <strong>Материал:</strong>
+                                            <span class="prop-value">{{ $mat['up'] }} x {{ $mat['down'] }}</span>
                                         </span>
                                         @endif
-                                        @if(isset($dimensions) and !empty($dimensions['height']) and !empty($dimensions['width']))
-                                            <span class="product-dimensions">Размер:
-                                            <span class="prop-value">{{ $dimensions['height'][0] }} x {{ $dimensions['width'][0] }}</span>
+                                        @if(isset($dmns) and !empty($dmns['height']) and !empty($dmns['width']))
+                                            <span class="product-dimensions d-none d-lg-block">
+                                            <strong>Размер:</strong>
+                                            <span class="prop-value">{{ $dmns['height'] }} x {{ $dmns['width'] }}</span>
                                         </span>
                                         @endif
                                         <product-form>
