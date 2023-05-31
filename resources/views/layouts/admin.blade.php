@@ -88,6 +88,26 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item has-submenu">
+                        <a href="#" class="nav-link @if(request()->is('admin/blog*')) active @endif">
+                            <span class="align-text-bottom" data-feather="shopping-bag"></span>
+                            Блог
+                        </a>
+                        <ul class="submenu collapse @if(request()->is('admin/blog*')) show @endif">
+                            <li class="nav-item">
+                                <a class="nav-link @if(request()->is('admin/blog/categories*')) active @endif" href="{{ route('admin.blog.categories.index') }}">
+                                    <span data-feather="list" class="align-text-bottom"></span>
+                                    Категории
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @if(request()->is('admin/blog/posts*')) active @endif" href="{{ route('admin.blog.posts.index') }}">
+                                    <span data-feather="list" class="align-text-bottom"></span>
+                                    Посты
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.file-manager') }}" class="nav-link @if(request()->is('admin/file-manager')) active @endif">
                             <span class="align-text-bottom" data-feather="folder"></span>
@@ -98,12 +118,6 @@
                         <a href="{{ route('admin.navigations.index') }}" class="nav-link @if(request()->is('admin/navigations')) active @endif">
                             <span class="align-text-bottom" data-feather="list"></span>
                             Навигация по сайту
-                        </a>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <a href="#" class="nav-link">
-                            <span class="align-text-bottom" data-feather="book-open"></span>
-                            Блог
                         </a>
                     </li>
                 </ul>

@@ -53,6 +53,7 @@ class NavItem extends Model
     public static function getType($type):string
     {
         $listTypes = [
+            'post'      => 'Статья',
             'category'  => 'Категория',
             'tag'       => 'Тэг',
             'brand'     => 'Бренд',

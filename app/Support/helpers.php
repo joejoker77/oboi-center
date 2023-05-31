@@ -1,11 +1,14 @@
 <?php
 
+use App\Entities\Blog\Post;
 use App\Entities\Shop\Product;
+use App\Http\Router\PostPath;
 use App\Http\Router\ProductPath;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use App\Entities\Shop\Category;
 use App\Entities\Shop\Status;
+use App\Entities\Blog\Category as BlogCategory;
 
 if (!function_exists('to_boolean')) {
 
@@ -54,6 +57,13 @@ if (!function_exists('product_path')) {
     function product_path(?Category $category, ?Product $product)
     {
         return app()->make(ProductPath::class)->withCategory($category)->withProduct($product);
+    }
+}
+
+if (!function_exists('post_path')) {
+    function post_path(?BlogCategory $category, ?Post $post)
+    {
+        return app()->make(PostPath::class)->withCategory($category)->withPost($post);
     }
 }
 

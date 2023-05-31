@@ -53,6 +53,14 @@ Route::group([
     Route::get('/{product_path?}', 'CatalogController@index')->name('index')->where('product_path', '.+');
 });
 
+Route::group([
+    'prefix'    => 'blog',
+    'as'        => 'blog.',
+    'namespace' => 'App\Http\Controllers\Blog'
+], function () {
+    Route::get('/{post_path?}', 'BlogController@index')->name('index')->where('post_path', '.+');
+});
+
 Route::group(
     [
         'prefix' => 'cabinet',
@@ -143,6 +151,22 @@ Route::group(
             Route::resource('filters', 'FilterController');
             Route::post('filters/remove-batch', 'FilterController@removeBatch')->name('filters.remove-batch');
             Route::post('filters/add-group', 'FilterController@addGroup')->name('filters.add-group');
+        });
+
+        Route::group(['prefix' => 'blog', 'as' => 'blog.', 'namespace' => 'Blog'], function () {
+            Route::resource('categories', 'CategoryController');
+            Route::post('categories/{category}/first', 'CategoryController@first')->name('categories.first');
+            Route::post('categories/{category}/up', 'CategoryController@up')->name('categories.up');
+            Route::post('categories/{category}/down', 'CategoryController@down')->name('categories.down');
+            Route::post('categories/{category}/last', 'CategoryController@last')->name('categories.last');
+            Route::post('categories/{category}/toggle-status', 'CategoryController@toggleStatus')->name('category.toggle.status');
+
+            Route::post('categories/photo/{category}/{photo}/up', 'CategoryController@photoUp')->name('categories.photo.up');
+            Route::post('categories/photo/{category}/{photo}/down', 'CategoryController@photoDown')->name('categories.photo.down');
+            Route::post('categories/photo/{category}/{photo}/remove', 'CategoryController@photoRemove')->name('categories.photo.remove');
+
+            Route::resource('posts', 'PostController');
+            Route::post('posts/set-status', 'ProductController@setStatus')->name('posts.set-status');
         });
     }
 );

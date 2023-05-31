@@ -1085,7 +1085,7 @@ class MenuManage extends HTMLElement
             answerItem.classList.add('answer-item');
             answerItem.dataset.type = item.type;
             answerItem.dataset.id   = item.model_id;
-            answerItem.textContent  = item.name;
+            answerItem.textContent  = item.name ?? item.title;
             answerType.textContent  = item.model;
             answerItem.append(answerType);
 

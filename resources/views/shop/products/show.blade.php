@@ -117,8 +117,9 @@ $quantity = $product->quantity;
                                              data-bs-title="{{ $color->value }}">
                                     @endif
                                             <div class="option-image">
-                                                @php $image = $color->product->photos()->first() @endphp
-                                                <img src="{{ $image->getPhoto('small') }}" alt="{{ $image->alt_tag }}">
+                                                @if ($image = $color->product->photos()->first())
+                                                    <img src="{{ $image->getPhoto('small') }}" alt="{{ $image->alt_tag }}">
+                                                @endif
                                             </div>
                                             <div class="option-value">
                                                 <span>{{ $color->value }}</span>
@@ -270,43 +271,45 @@ $quantity = $product->quantity;
                                         @endif
                                         @php /** @var App\Entities\Shop\Product $related */ @endphp
                                         @foreach($product->related as $related)
-                                            <div class="item-partner @if($product->related->count() >= 3)swiper-slide @endif" >
-                                                <a class="stretched-link" href="{{ route('catalog.index',['product_path' => product_path($related->category, $related)]) }}">
-                                                    <div class="related-media">
-                                                        <img src="{{ $related->photos[0]->getPhoto('large') }}" alt="{{ $related->photos[0]->alt_tag }}">
-                                                    </div>
-                                                    <div class="related-props">
-                                                        <div class="props-text">
-                                                            <div class="h3">{{ $related->name }}</div>
-                                                            <!-- TODO Переделать размеры и материал на связанные продукты -->
-                                                            @if(!empty($dimensions['width']) && !empty($dimensions['height']))
-                                                                <div class="props-item dimensions">
-                                                                    <div class="prop-text">
-                                                                        <strong>Размер рулона</strong> {{ $dimensions['height'] }} x {{ $dimensions['width'] }}
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            @if(!empty($materials['up']) && !empty($materials['down']) )
-                                                                @if ($materials['up'] === $materials['down'])
-                                                                    @php $material = $materials['up'] @endphp
-                                                                @elseif ($materials['up'] == 'Винил' && $materials['down'] == 'Флизелин')
-                                                                    @php $material = 'Винил на флизелине' @endphp
-                                                                @endif
-                                                                @if(isset($material))
-                                                                    <div class="props-item material">
+                                            @if($related->status == App\Entities\Shop\Product::STATUS_ACTIVE)
+                                                <div class="item-partner @if($product->related->count() >= 3)swiper-slide @endif" >
+                                                    <a class="stretched-link" href="{{ route('catalog.index',['product_path' => product_path($related->category, $related)]) }}">
+                                                        <div class="related-media">
+                                                            <img src="{{ $related->photos[0]->getPhoto('large') }}" alt="{{ $related->photos[0]->alt_tag }}">
+                                                        </div>
+                                                        <div class="related-props">
+                                                            <div class="props-text">
+                                                                <div class="h3">{{ $related->name }}</div>
+                                                                <!-- TODO Переделать размеры и материал на связанные продукты -->
+                                                                @if(!empty($dimensions['width']) && !empty($dimensions['height']))
+                                                                    <div class="props-item dimensions">
                                                                         <div class="prop-text">
-                                                                            <strong>Материал</strong> {{ $material }}
+                                                                            <strong>Размер рулона</strong> {{ $dimensions['height'] }} x {{ $dimensions['width'] }}
                                                                         </div>
                                                                     </div>
                                                                 @endif
-                                                            @endif
+                                                                @if(!empty($materials['up']) && !empty($materials['down']) )
+                                                                    @if ($materials['up'] === $materials['down'])
+                                                                        @php $material = $materials['up'] @endphp
+                                                                    @elseif ($materials['up'] == 'Винил' && $materials['down'] == 'Флизелин')
+                                                                        @php $material = 'Винил на флизелине' @endphp
+                                                                    @endif
+                                                                    @if(isset($material))
+                                                                        <div class="props-item material">
+                                                                            <div class="prop-text">
+                                                                                <strong>Материал</strong> {{ $material }}
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                @endif
+                                                            </div>
+                                                            <div class="props-price">
+                                                                @money($related->price, 'RUB')
+                                                            </div>
                                                         </div>
-                                                        <div class="props-price">
-                                                            @money($related->price, 'RUB')
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         @endforeach
                                         @if($product->related->count() >= 3)
                                     </div>

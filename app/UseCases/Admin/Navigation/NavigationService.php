@@ -2,6 +2,7 @@
 
 namespace App\UseCases\Admin\Navigation;
 
+use App\Entities\Blog\Post;
 use Throwable;
 use App\Entities\Shop\Tag;
 use App\Entities\Shop\Brand;
@@ -11,16 +12,19 @@ use App\Entities\Shop\Category;
 use Illuminate\Support\Facades\DB;
 use App\Entities\Site\Navigations\Menu;
 use App\Entities\Site\Navigations\NavItem;
+use App\Entities\Blog\Category as BlogCategory;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class NavigationService
 {
 
     private array $models = [
-        Category::class => ['name' => 'Категория', 'type' => 'category'],
-        Tag::class      => ['name' => 'Тэг', 'type' => 'tag'],
-        Brand::class    => ['name' => 'Бренд', 'type' => 'brand'],
-        Product::class  => ['name' => 'Продукт', 'type' => 'product']
+        Post::class         => ['name' => 'Статья', 'type' => 'post'],
+        Category::class     => ['name' => 'Категория', 'type' => 'category'],
+        BlogCategory::class => ['name' => 'Категория блога', 'type' => 'blog_category'],
+        Tag::class          => ['name' => 'Тэг', 'type' => 'tag'],
+        Brand::class        => ['name' => 'Бренд', 'type' => 'brand'],
+        Product::class      => ['name' => 'Продукт', 'type' => 'product']
     ];
 
 
@@ -83,7 +87,12 @@ class NavigationService
 
                 foreach ($items as $item) {
 
-                    $route = $item['type'] == 'category' || $item['type'] == 'product' ? 'catalog.index' : 'catalog.'.$item['type'];
+                    $route = match ($item['type']) {
+                        'category' || 'product' => 'catalog.index',
+                        'blog_category' || 'post' => 'blog.index',
+                        default => 'catalog.' . $item['type'],
+                    };
+
                     $title = $item['title'];
                     $path  = $item['type'] == 'separator' || $item['type'] == 'external' ?
                         $item['title'] : $this->getPath($item['type'], $route, $item['item_id']);
@@ -135,10 +144,12 @@ class NavigationService
     private function getPath(string $type, string $route, $itemId):string
     {
         return match ($type) {
-            'category' => route($route, ['product_path' => product_path(Category::find($itemId), null)], false),
-            'product'  => route($route,['product_path' => product_path(Product::find($itemId)->category, Product::find($itemId))], false),
-            'tag'      => route($route, Tag::find($itemId)),
-            'brand'    => route($route, Brand::find($itemId)),
+            'post'          => route($route, ['post_path' => post_path(Post::find($itemId)->category, Post::find($itemId))]),
+            'blog_category' => route($route, ['post_path' => post_path(BlogCategory::find($itemId), null)], false),
+            'category'      => route($route, ['product_path' => product_path(Category::find($itemId), null)], false),
+            'product'       => route($route, ['product_path' => product_path(Product::find($itemId)->category, Product::find($itemId))], false),
+            'tag'           => route($route, Tag::find($itemId)),
+            'brand'         => route($route, Brand::find($itemId)),
         };
     }
 
