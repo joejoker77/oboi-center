@@ -85,13 +85,17 @@ class NavigationService
                     throw new \DomainException('Пункты меню пусты!');
                 }
 
+
+
                 foreach ($items as $item) {
 
-                    $route = match ($item['type']) {
-                        'category' || 'product' => 'catalog.index',
-                        'blog_category' || 'post' => 'blog.index',
-                        default => 'catalog.' . $item['type'],
-                    };
+                    $route = null;
+
+                    if ($item['type'] == 'category' || $item['type'] == 'product') {
+                        $route = 'catalog.index';
+                    } else if ($item['type'] == 'blog_category' || $item['type'] == 'post') {
+                        $route = 'blog.index';
+                    }
 
                     $title = $item['title'];
                     $path  = $item['type'] == 'separator' || $item['type'] == 'external' ?

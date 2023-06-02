@@ -6,7 +6,7 @@
     <div class="py-4 d-flex">
         <a href="{{ route('admin.blog.posts.create') }}" class="btn btn-success">Добавить статью</a>
     </div>
-    <table class="table table-bordered table-striped" id="productTable">
+    <table class="table table-bordered table-striped" id="postsTable">
         <thead>
         <tr>
             <th>ID</th>
@@ -38,7 +38,7 @@
                        data-bs-title="Редактировать"
                     >
                         <span data-feather="edit"></span>
-                    </a>|<form method="POST" action="{{ route('admin.blog.posts.set-status') }}" class="list-inline-item mx-1">
+                    </a>|<form method="POST" action="{{ route('admin.blog.posts.set-status', $post) }}" class="list-inline-item mx-1">
                         @csrf
                         <input type="hidden" name="action"
                                value=@if($post->status == $post::STATUS_ACTIVE)"un-published"@elseif($post->status == $post::STATUS_DRAFT)"published"@endif">
@@ -54,7 +54,7 @@
                     <form method="POST" class="list-inline-item js-confirm ms-2"
                           action="{{ route('admin.blog.posts.destroy', $post) }}"
                           data-bs-toggle="tooltip" data-bs-placement="bottom"
-                          data-bs-title="Удалить продукт"
+                          data-bs-title="Удалить статью"
                     >
                         @csrf
                         @method('DELETE')

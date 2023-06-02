@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Photo[] $photos
  *
  * @method Builder active()
- * @method Builder catBuy()
+ * @method Builder canBuy()
  *
  */
 class Product extends Model

@@ -76,8 +76,8 @@ class PostPath implements UrlRoutable
 
         if (
             !empty($chunks) ||
-            ($category && $category->status == Category::STATUS_ACTIVE) ||
-            ($post && $post->status == Post::STATUS_ACTIVE) ||
+            ($category && $category->status == Category::STATUS_DRAFT) ||
+            ($post && $post->status == Post::STATUS_DRAFT) ||
             ($category && $post && $category->id !== $post->category_id)
         ) {
             abort(404);

@@ -50,7 +50,7 @@
                                         <img src="{{ asset('/storage/files/home-page/new.webp') }}" alt="Иконка новинки">
                                     </div>
                                     <img src="{{ $collection->getMainImage('medium', 3) }}" alt="Коллекция обоев: {{ $collection->name }}">
-                                    <p><span>коллекция</span><a href="#">{{ $collection->name }}</a></p>
+                                    <p><span>коллекция</span><a href="{{ route('catalog.index', product_path($collection, null)) }}">{{ $collection->name }}</a></p>
                                 </div>
                             </div>
                         @endif

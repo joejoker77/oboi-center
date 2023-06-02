@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Http\Request;
+use App\Http\Router\PostPath;
 use App\Http\Router\ProductPath;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -31,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             Route::model('product_path', ProductPath::class);
+            Route::model('post_path', PostPath::class);
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));

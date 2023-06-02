@@ -12,7 +12,7 @@
             </a>
 
             <form class="btn btn-primary" method="POST"
-                  action="{{ route('admin.blog.post.set-status', [$post]) }}"
+                  action="{{ route('admin.blog.posts.set-status', [$post]) }}"
                   data-bs-toggle="tooltip" data-bs-placement="bottom"
                   data-bs-title="@if(!$post->isActive()){{"Сделать активным"}}@else{{"Продутк активен"}}@endif"
             >

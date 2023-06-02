@@ -142,4 +142,17 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.blog.categories.index');
     }
+
+    public function toggleStatus(Category $category): RedirectResponse
+    {
+        if ($category->isActive()) {
+            $category->status = Category::STATUS_DRAFT;
+        } else {
+            $category->status = Category::STATUS_ACTIVE;
+        }
+
+        $category->save();
+
+        return back()->with('success', 'Статус категории успешно изменен');
+    }
 }

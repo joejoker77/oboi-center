@@ -36,4 +36,14 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	// config.removeDialogTabs = 'image:advanced;link:advanced';
     config.filebrowserImageBrowseUrl = '/file-manager/ckeditor';
+
+    config.allowedContent = {
+        script: true,
+        $1: {
+            elements: CKEDITOR.dtd,
+            attributes: true,
+            styles: true,
+            classes: true
+        }
+    }
 };

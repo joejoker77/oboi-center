@@ -38,6 +38,35 @@ class PostService
         }
     }
 
+    public function update(PostRequest $request, Post $post): void
+    {
+        DB::beginTransaction();
+        try {
+            $post->update($request->only([
+                'title', 'description', 'content', 'meta', 'category_id', 'status', 'sort'
+            ]), [
+                'title'       => $request['title'],
+                'description' => $request['description'],
+                'content'     => $request['content'],
+                'meta'        => $request['meta'],
+                'category_id' => $request['category_id'],
+                'status'      => $request['status'],
+                'sort'        => $request['sort']
+            ]);
+
+            if ($request->get('post_categories')) {
+                $post->categories()->attach($request->get('post_categories'));
+            }
+
+            $this->checkImages($request, $post);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \DomainException('Сохранение сущности Post завершилось с ошибкой. Подробности: ' . $e->getMessage());
+        }
+    }
+
     private function checkImages(PostRequest $request, Post $post): void
     {
         if ($images = $request->file('photo')) {

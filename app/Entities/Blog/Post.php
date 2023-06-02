@@ -2,6 +2,7 @@
 
 namespace App\Entities\Blog;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use App\Entities\Shop\Photo;
 use App\Traits\WithMediaGallery;
@@ -34,7 +35,7 @@ class Post extends Model
     protected $table = 'blog_posts';
 
     protected $fillable = [
-        'category_id', 'title', 'description', 'content', 'status', 'sort', 'meta'
+        'category_id', 'title', 'description', 'content', 'status', 'sort', 'meta', 'slug'
     ];
 
     protected $casts = [
@@ -68,13 +69,12 @@ class Post extends Model
         parent::boot();
 
         Model::preventLazyLoading();
-
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            $model->slug = Str::slug($model->title);
         });
 
         static::updating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            $model->slug = Str::slug($model->title);
         });
     }
 
@@ -114,6 +114,11 @@ class Post extends Model
         ];
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function isActive():bool
     {
         return $this->status == self::STATUS_ACTIVE;
@@ -132,6 +137,11 @@ class Post extends Model
     public function photos():BelongsToMany
     {
         return $this->belongsToMany(Photo::class, 'blog_posts_photos','post_id', 'photo_id')->orderBy('sort');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
     }
 
 }

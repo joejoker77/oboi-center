@@ -63,7 +63,7 @@
                     >
                         @csrf
                         <button type="submit" class="btn p-0 align-baseline text-primary" style="line-height: 0">
-                            <span data-feather="@if($category->published){{"eye-off"}}@else{{"eye"}}@endif"></span>
+                            <span data-feather="@if($category->isActive()){{"eye-off"}}@else{{"eye"}}@endif"></span>
                         </button>
                     </form>|
                     <form method="POST" class="list-inline-item js-confirm"

@@ -50,9 +50,32 @@ class PostController extends Controller
         }
     }
 
+    public function edit(Post $post):View
+    {
+        $categories = Category::defaultOrder()->withDepth()->get();
+        return view('admin.blog.posts.edit', compact('post','categories'));
+    }
+
+    public function update(PostRequest $request, Post $post): RedirectResponse
+    {
+        try {
+            $this->service->update($request, $post);
+            return redirect()->route('admin.blog.posts.show', $post)->with('success', 'Статья успешно обновлена');
+        } catch (\Exception|\DomainException $e) {
+            echo $e->getMessage();
+            return redirect()->route('admin.blog.posts.edit', $post)->with('error', $e->getMessage());
+        }
+    }
+
     public function show(Post $post):View
     {
         return view('admin.blog.posts.show', compact('post'));
+    }
+
+    public function destroy(Post $post):RedirectResponse
+    {
+        $post->delete();
+        return redirect()->route('admin.blog.posts.index');
     }
 
     /**
@@ -95,13 +118,14 @@ class PostController extends Controller
         }
     }
 
-    public function setStatus(Request $request): RedirectResponse
+    public function setStatus(Post $post): RedirectResponse
     {
-        try {
-            $answer = $this->service->setStatus($request);
-            return back()->with('success', $answer)->withInput();
-        } catch (\DomainException $exception) {
-            return back()->with('error', $exception->getMessage());
+        if ($post->isActive()) {
+            $post->status = Post::STATUS_DRAFT;
+        } else {
+            $post->status = Post::STATUS_ACTIVE;
         }
+        $post->save();
+        return back()->with('success', 'Статус статьи успешно изменен')->withInput();
     }
 }

@@ -248,7 +248,7 @@ $quantity = $product->quantity;
                         <span class="material-symbols-outlined">picture_as_pdf</span>
                         <div class="prop-text">
                             <strong>{{ $product->category->name }}</strong>
-                            @foreach($files as $document)
+                            @foreach($files as $key => $document)
                                 <a href="{{ $document->getFile() }}" target="_blank">Скачать PDF @if($files->count() > 1){{ $key+1 }}@endif</a>
                             @endforeach
                         </div>

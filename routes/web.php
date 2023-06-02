@@ -166,7 +166,7 @@ Route::group(
             Route::post('categories/photo/{category}/{photo}/remove', 'CategoryController@photoRemove')->name('categories.photo.remove');
 
             Route::resource('posts', 'PostController');
-            Route::post('posts/set-status', 'ProductController@setStatus')->name('posts.set-status');
+            Route::post('posts/{post}/set-status', 'PostController@setStatus')->name('posts.set-status');
         });
     }
 );

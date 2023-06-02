@@ -1981,6 +1981,12 @@ footer {
                     }
                 }
             }
+
+            @include media-breakpoint-up(lg) {
+                &:nth-child(1n+5) {
+                    display: none;
+                }
+            }
         }
     }
 }
@@ -2969,7 +2975,7 @@ main-gallery {
                 height: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: flex-start;
                 font-size: toRem(16px);
                 white-space: nowrap;
                 a {

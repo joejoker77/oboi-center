@@ -61,6 +61,9 @@ if (!function_exists('product_path')) {
 }
 
 if (!function_exists('post_path')) {
+    /**
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     function post_path(?BlogCategory $category, ?Post $post)
     {
         return app()->make(PostPath::class)->withCategory($category)->withPost($post);
