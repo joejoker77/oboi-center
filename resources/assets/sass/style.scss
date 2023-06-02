@@ -2398,6 +2398,7 @@ product-quantity {
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            min-height: toRem(120px);
 
             >span {
                 display: block;
