@@ -217,7 +217,7 @@
                 </div>
             @endif
             @if(!$products->isEmpty() && $category && $category->children->isEmpty())
-                <h3>Образцы коллекции - {{ $products[0]->category->name }}</h3>
+                <h3>@if($category->name !== "Клей" && $category->name !== 'клей')Образцы коллекции - @endif {{ $products[0]->category->name }}</h3>
                     <div class="d-lg-none pb-3">
                         <button class="btn btn-blue-dark w-100" id="showFilter">
                             <span class="material-symbols-outlined">filter_list</span>
