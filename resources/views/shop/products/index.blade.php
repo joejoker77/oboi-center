@@ -168,18 +168,8 @@
         </div>
     @endif
     <div class="row products">
-        <div class="col-lg-3">
-            <h4>
-                Подбор по параметрам
-                <button class="btn btn-danger d-lg-none" id="closeFilter">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </h4>
-            <aside>
-                <x-filter position="left"/>
-            </aside>
-        </div>
-        <div class="col-lg-9">
+        <x-filter position="left" currentCategoryId="{{ $category->id }}" />
+        <div class="col-lg-9 mx-auto">
             @if ($categories)
                 <div class="categories">
                     <h2>@if($category && $category->depth == 1)Коллекции производителя {{ $category->name }} <span class="country">({{ $country }})</span>@elseФабрики@endif</h2>
@@ -206,7 +196,7 @@
                                         </div>
                                     </a>
                                     <a class="stretched-link" href="{{ route('catalog.index',array_merge(['product_path' => product_path($current, null)], request()->all())) }}">
-                                        <strong>{{ $current->name }}</strong>
+                                        <strong>{{ $current->title ?? $category->name }}</strong>
                                         <span class="count-products">Доступно {!! ru_plural($categoriesCounts[$current->id] ?? 0, ['позиция', 'позиции', 'позиций']) !!}</span>
                                     </a>
                                 </div>
@@ -217,7 +207,7 @@
                 </div>
             @endif
             @if(!$products->isEmpty() && $category && $category->children->isEmpty())
-                <h3>@if($category->name !== "Клей" && $category->name !== 'клей')Образцы коллекции - @endif {{ $products[0]->category->name }}</h3>
+                <h3>@if($category->name !== "Клей" && $category->name !== 'клей')Образцы коллекции - @endif {{ $category->title ?? $category->name  }}</h3>
                     <div class="d-lg-none pb-3">
                         <button class="btn btn-blue-dark w-100" id="showFilter">
                             <span class="material-symbols-outlined">filter_list</span>

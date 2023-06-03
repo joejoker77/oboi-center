@@ -19,7 +19,7 @@ class Filter extends Component
     private array $restAttributes = [];
     private array $restTags       = [];
     private array $restCategories = [];
-    public function __construct(string $position, Request $request, $restAttributes = null, $restTags = null, $restCategories = null)
+    public function __construct(string $position, Request $request, $restAttributes = null, $restTags = null, $restCategories = null, $currentCategoryId = null)
     {
         if ($restAttributes) {
             $this->restAttributes = $restAttributes;
@@ -33,7 +33,23 @@ class Filter extends Component
             $this->restCategories = $restCategories;
         }
 
-        $this->filter         = FilterEntity::where('position', $position)->with('groups')->first() ?? [];
+        $this->filter = FilterEntity::where('position', $position)->with('groups')->first() ?? [];
+
+        if ($currentCategoryId) {
+            $showFilter = false;
+            $currentCategory = Category::find($currentCategoryId);
+            $allowCats = $this->filter->categories;
+            foreach ($allowCats as $parentCat) {
+                if ($parentCat->descendants->contains($currentCategory)) {
+                    $showFilter = true;
+                }
+            }
+
+            if (!$showFilter) {
+                return null;
+            }
+        }
+
         $this->formFilterData = $this->getFormData($request);
     }
 

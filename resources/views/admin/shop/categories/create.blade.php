@@ -72,16 +72,14 @@
                         @if(!$categories->isEmpty())
                             <div class=@if($attributes->isEmpty())"col-md-12"@else"col-md-6"@endif>
                                 <h4 class="my-3 pb-3 border-bottom">Родительская категория</h4>
-                                <div class="row">
-                                    @error('parent_id')<div class="is-invalid"></div>@enderror
-                                    <select name="parent_id" class="js-choices">
-                                        <option value="">-=Выбрать категорию=-</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category->id }}">{{ html_entity_decode(str_repeat('&mdash;', (int)$category->depth)) }}{{ $category->title ?: $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('parent_id')<span class="invalid-feedback">{{ $message }}</span>@enderror
-                                </div>
+                                @error('parent_id')<div class="is-invalid"></div>@enderror
+                                <select name="parent_id" class="js-choices">
+                                    <option value="">-=Выбрать категорию=-</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ html_entity_decode(str_repeat('&mdash;', (int)$category->depth)) }}{{ $category->title ?: $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('parent_id')<span class="invalid-feedback">{{ $message }}</span>@enderror
                             </div>
                         @endif
                         @if(!$attributes->isEmpty())
