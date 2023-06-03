@@ -196,7 +196,7 @@
                                         </div>
                                     </a>
                                     <a class="stretched-link" href="{{ route('catalog.index',array_merge(['product_path' => product_path($current, null)], request()->all())) }}">
-                                        <strong>{{ $current->title ?? $category->name }}</strong>
+                                        <strong>{{ $current->title ?? $current->name }}</strong>
                                         <span class="count-products">Доступно {!! ru_plural($categoriesCounts[$current->id] ?? 0, ['позиция', 'позиции', 'позиций']) !!}</span>
                                     </a>
                                 </div>
