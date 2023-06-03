@@ -120,7 +120,7 @@
                                         </div>
                                         <div class="item-actions">
                                             <span class="delete-item d-none d-lg-inline">Удалить</span>
-                                            <span class="material-symbols-outlined text-danger d-inline d-lg-none">delete</span>
+                                            <span class="material-symbols-outlined text-danger d-inline d-lg-none delete-item">delete</span>
                                         </div>
                                     </div>
                                 @endforeach

@@ -723,6 +723,7 @@ class ProductForm extends HTMLElement
                     sideCart.append(html.querySelector('.side-cart__wrapper'));
                     sideCart.initCloseButton(sideCart.querySelector('.side-cart__header span'));
                     sideCart.initSwiper();
+                    sideCart.initDeleteItem();
 
                     document.body.classList.add('open-side-cart');
                     sideCart.classList.add('open');
@@ -749,6 +750,7 @@ class SideCart extends HTMLElement
         this.addEventListener('click', this.closeOnOverlay.bind(this));
 
         this.initSwiper();
+        this.initDeleteItem();
     }
 
     open() {
@@ -784,6 +786,38 @@ class SideCart extends HTMLElement
             document.body.classList.remove('open-side-cart');
             button.closest('.side-cart').classList.remove('open');
         });
+    }
+
+    initDeleteItem() {
+
+        const items = this.querySelectorAll('.cart-item');
+
+        if (items.length > 0) {
+            items.forEach(function (item) {
+
+                const deleteButton = item.querySelector('.item-actions span.material-symbols-outlined'),
+                    Id             = item.querySelector('product-quantity').dataset.itemId,
+                    formData       = new FormData();
+
+                formData.append('item_id', Id);
+
+
+                deleteButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    axios.post('/cart/delete-item', formData).then(function (response) {
+                        if (response.data.hasOwnProperty('status') && response.data.status === 'success') {
+                            item.remove();
+                            const cartBadge = document.getElementById('cartLink').querySelector('span');
+                            console.log(cartBadge.textContent);
+                            cartBadge.textContent = (Number.parseInt(cartBadge.textContent) - 1).toString();
+                        }
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
+
+                });
+            });
+        }
     }
 }
 
