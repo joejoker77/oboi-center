@@ -97,7 +97,7 @@ class CategoryController extends Controller
     public function edit(Category $category): View
     {
         $categories = Category::defaultOrder()->withDepth()->get();
-        $attributes = $category->attributes()->doesntHave('categories')->orderBy('sort')->get();
+        $attributes = Attribute::orderBy('sort')->get();;
         return view('admin.shop.categories.edit', compact('category', 'categories', 'attributes'));
     }
 

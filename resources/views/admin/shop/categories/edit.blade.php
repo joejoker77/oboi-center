@@ -9,7 +9,7 @@
             <input type="hidden" name="published" value="{{ $category->published ? 1 : 0 }}">
             <div class="p-3 mb-3 bg-light border rounded-3">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-floating">
                             <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
                                    name="name" value="{{ old('name', $category) }}" placeholder="Название категории" required>
@@ -17,12 +17,20 @@
                             @error('name')<span class="invalid-feedback">{{ $message }}</span>@enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-floating">
                             <input type="text" id="title" name="title" class="form-control @error('title') is-invalid @enderror"
                                    value="{{ old('title', $category) }}" placeholder="Заголовок">
-                            <label for="slug">Заголовок</label>
+                            <label for="title">Заголовок</label>
                             @error('title')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input type="text" id="slug" name="slug" class="form-control @error('slug') is-invalid @enderror"
+                                   value="{{ old('slug', $category) }}" placeholder="Заголовок">
+                            <label for="slug">Псевдоним</label>
+                            @error('slug')<span class="invalid-feedback">{{ $message }}</span>@enderror
                         </div>
                     </div>
                 </div>
@@ -73,14 +81,14 @@
                                 @error('parent_id')<span class="invalid-feedback">{{ $message }}</span>@enderror
                             </div>
                         @endif
-                        @if(count($category->allAttributes()) > 0)
+                        @if(!$attributes->isEmpty())
                             <div class=@if(!$categories->isEmpty())"col-md-6"@else"col-md-12"@endif>
                                 <h4 class="my-3 pb-3 border-bottom">Привязать аттрибуты</h4>
                                 @error('attributes[]')<div class="is-invalid"></div>@enderror
                                 <select name="attributes[]" class="js-choices" multiple>
                                     <option value="">-=Выбрать аттрибуты=-</option>
-                                    @foreach($category->allAttributes() as $attribute)
-                                        <option value="{{ $attribute->id }}" selected>
+                                    @foreach($attributes as $attribute)
+                                        <option value="{{ $attribute->id }}" @selected($category->attributes->contains($attribute))>
                                             {{ $attribute->name }}
                                         </option>
                                     @endforeach

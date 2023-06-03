@@ -84,10 +84,6 @@ class Category extends Model
             $model->slug = Str::slug($model->name);
         });
 
-        static::updating(function ($model) {
-            $model->slug = Str::slug($model->name);
-        });
-
         static::deleting(function ($category) {
             Event::dispatch(ShopCategoryOnDelete::class, $category);
         });
