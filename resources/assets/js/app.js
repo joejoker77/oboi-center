@@ -790,7 +790,8 @@ class SideCart extends HTMLElement
 
     initDeleteItem() {
 
-        const items = this.querySelectorAll('.cart-item');
+        const items   = this.querySelectorAll('.cart-item'),
+            formatter = new Intl.NumberFormat('ru-RU', {style:'currency', currency: 'RUB', minimumFractionDigits: 0});;
 
         if (items.length > 0) {
             items.forEach(function (item) {
@@ -806,14 +807,26 @@ class SideCart extends HTMLElement
                     event.preventDefault();
                     axios.post('/cart/delete-item', formData).then(function (response) {
                         if (response.data.hasOwnProperty('status') && response.data.status === 'success') {
-                            item.remove();
                             const cartBadge = document.getElementById('cartLink').querySelector('span'),
-                                headerHref  = document.querySelector('.side-cart__header > a');
+                                headerHref  = document.querySelector('.side-cart__header > a'),
+                                totalAmount = document.querySelector('.side-cart__footer .total-amount span'),
+                                currentSum  = Number.parseInt(totalAmount.textContent.trim().replace(' ', '').replace(/\u00a0/g, "")),
+                                priceItem   = item.querySelector('.item-actions .subtotal-price'),
+                                sumItem     = Number.parseInt(priceItem.textContent.trim().replace(' ', '').replace(/\u00a0/g, ""));
 
-                            let currentQuantity = Number.parseInt(cartBadge.textContent) - 1;
+
+                            console.log(sumItem);
+                            console.log(currentSum);
+
+                            let currentQuantity = Number.parseInt(cartBadge.textContent) - 1,
+                                currentTotal    = currentSum - sumItem;
 
                             cartBadge.textContent = currentQuantity.toString();
-                            headerHref.textContent = "Ваши покупки (" + currentQuantity.toString() + ")"
+                            headerHref.textContent = "Ваши покупки (" + currentQuantity.toString() + ")";
+
+                            totalAmount.textContent = formatter.format(currentTotal);
+
+                            item.remove();
                         }
                     }).catch(function (error) {
                         console.error(error);
