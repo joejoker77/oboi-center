@@ -807,8 +807,13 @@ class SideCart extends HTMLElement
                     axios.post('/cart/delete-item', formData).then(function (response) {
                         if (response.data.hasOwnProperty('status') && response.data.status === 'success') {
                             item.remove();
-                            const cartBadge = document.getElementById('cartLink').querySelector('span');
-                            cartBadge.textContent = (Number.parseInt(cartBadge.textContent) - 1).toString();
+                            const cartBadge = document.getElementById('cartLink').querySelector('span'),
+                                headerHref  = document.querySelector('.side-cart__header > a');
+
+                            let currentQuantity = Number.parseInt(cartBadge.textContent) - 1;
+
+                            cartBadge.textContent = currentQuantity.toString();
+                            headerHref.textContent = "Ваши покупки (" + currentQuantity.toString() + ")"
                         }
                     }).catch(function (error) {
                         console.error(error);
