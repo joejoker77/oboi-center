@@ -808,7 +808,6 @@ class SideCart extends HTMLElement
                         if (response.data.hasOwnProperty('status') && response.data.status === 'success') {
                             item.remove();
                             const cartBadge = document.getElementById('cartLink').querySelector('span');
-                            console.log(cartBadge.textContent);
                             cartBadge.textContent = (Number.parseInt(cartBadge.textContent) - 1).toString();
                         }
                     }).catch(function (error) {
