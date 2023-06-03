@@ -814,10 +814,6 @@ class SideCart extends HTMLElement
                                 priceItem   = item.querySelector('.item-actions .subtotal-price'),
                                 sumItem     = Number.parseInt(priceItem.textContent.trim().replace(' ', '').replace(/\u00a0/g, ""));
 
-
-                            console.log(sumItem);
-                            console.log(currentSum);
-
                             let currentQuantity = Number.parseInt(cartBadge.textContent) - 1,
                                 currentTotal    = currentSum - sumItem;
 
