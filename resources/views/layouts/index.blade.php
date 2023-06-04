@@ -187,10 +187,6 @@
                     </div>
                     <div class="privacy-policy">
                         <x-menu handler="footerLinks" />
-                        <ul>
-                            <li><a href="#" >Договор оферты</a></li>
-                            <li><a href="#" >Политика конфеденциальности</a></li>
-                        </ul>
                     </div>
                 </div>
                 <div class="col-lg-3">
