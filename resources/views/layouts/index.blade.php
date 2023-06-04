@@ -59,7 +59,8 @@
                                 <div id="contactInfo" class="dropdown-menu">
                                     <div class="phone">
                                         <span>Контактный телефон:</span>
-                                        <a href="tel:+78009000001">8 800 900 00 01</a>
+                                        <a href="tel:+74957205965">495 720 59 65</a>
+                                        <a class="ms-auto" href="tel:+79037205965">903 720 59 65</a>
                                     </div>
                                     <div class="time-work">
                                         <span>Часы работы:</span>
@@ -104,7 +105,7 @@
                     <div class="col">
                         <div class="d-flex w-100">
                             <div class="contact-info d-none d-lg-flex flex-lg-column">
-                                <div class="phone">8 800 900 00 01</div>
+                                <div class="phone"><a href="tel:+74957205965">495 720 59 65</a></div>
                                 <div class="time-work">с 10:00 до 19:00</div>
                             </div>
                             <div class="btn-toolbar control-icons ms-auto">

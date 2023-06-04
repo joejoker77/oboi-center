@@ -420,6 +420,7 @@ header {
             color: black;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
 
             span {
                 font-size: toRem(16px);
@@ -427,6 +428,7 @@ header {
 
             a {
                 font-size: toRem(18px);
+                color: black!important;
             }
         }
     }
@@ -644,6 +646,14 @@ header {
         .phone,
         .time-work {
             color: white;
+
+            a {
+                text-decoration: none;
+                color: white;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
 
         .dropdown-menu {
@@ -656,6 +666,7 @@ header {
                 color: black;
                 display: flex;
                 justify-content: space-between;
+                flex-wrap: wrap;
 
                 span {
                     font-size: toRem(16px);
@@ -2259,6 +2270,7 @@ product-quantity {
                 justify-content: space-between;
                 align-items: center;
                 z-index: 10;
+                top: toRem(125px);
 
                 @include media-breakpoint-up(lg) {
                     position: static;
