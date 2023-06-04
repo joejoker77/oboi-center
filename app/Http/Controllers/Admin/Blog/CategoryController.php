@@ -70,8 +70,12 @@ class CategoryController extends Controller
             }
             return redirect()->route('admin.blog.categories.edit', $category)->with('error', $message);
         }
+    }
 
-
+    public function destroy(Category $category)
+    {
+        $category->delete();
+        return back()->with('success', "Категория удалена");
     }
 
     /**
