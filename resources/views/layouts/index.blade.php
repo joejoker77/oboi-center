@@ -186,6 +186,7 @@
                         <p>© {{ Carbon\Carbon::now()->year }} «Обои Центр» Права защищены.<br>Копирование информации запрещено.</p>
                     </div>
                     <div class="privacy-policy">
+                        <x-menu handler="footerLinks" />
                         <ul>
                             <li><a href="#" >Договор оферты</a></li>
                             <li><a href="#" >Политика конфеденциальности</a></li>
