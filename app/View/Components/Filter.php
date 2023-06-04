@@ -36,11 +36,11 @@ class Filter extends Component
         $this->filter = FilterEntity::where('position', $position)->with('groups')->first() ?? [];
 
         if ($currentCategoryId) {
-            $showFilter = false;
+            $showFilter      = false;
             $currentCategory = Category::find($currentCategoryId);
-            $allowCats = $this->filter->categories;
+            $allowCats       = $this->filter->categories;
             foreach ($allowCats as $parentCat) {
-                if ($parentCat->descendants->contains($currentCategory)) {
+                if ($parentCat->descendants->contains($currentCategory) || $this->filter->categories->contains($currentCategory)) {
                     $showFilter = true;
                 }
             }
