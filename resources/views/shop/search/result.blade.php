@@ -10,18 +10,8 @@
                     Подобрать по параметрам
                 </button>
             </div>
-            <div class="col-lg-3">
-                <h4>
-                    Подбор по параметрам
-                    <button class="btn btn-danger d-lg-none" id="closeFilter">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </h4>
-                <aside>
-                    <x-filter :request="$request" :restAttributes="$restAttributes" :restCategories="$restCategories" :restTags="$restTags" position="left" />
-                </aside>
-            </div>
-            <div class="col-lg-9">
+            <x-filter :request="$request" :restAttributes="$restAttributes" :restCategories="$restCategories" :restTags="$restTags" position="left" />
+            <div class="col-lg-9 mx-auto">
                 @if($products)
                     <div class="product-items">
                         @php /** @var App\Entities\Shop\Product $product */ @endphp
