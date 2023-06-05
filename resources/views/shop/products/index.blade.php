@@ -274,15 +274,15 @@
                                     <product-form>
                                         <form action="{{ route('cart.add', $product) }}" id="productForm-{{ $product->id }}" class="w-100" novalidate>
                                             @csrf
-                                            <input form="productForm-{{ $product->id }}" type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input form="productForm-{{ $product->id }}" type="hidden" name="product_quantity" value="">
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="product_quantity" value="">
                                             <product-quantity>
                                                 <label for="elementQuantity-{{ $product->id }}">Укажите количество</label>
                                                 <div class="input-group">
                                                     <button class="minus input-group-text">
                                                         <i class="material-symbols-outlined">remove</i>
                                                     </button>
-                                                    <input form="productForm-{{ $product->id }}" class="form-control" type="number"
+                                                    <input class="form-control" type="number"
                                                            id="elementQuantity-{{ $product->id }}"
                                                            name="quantity" value="1"
                                                            data-max-quantity="{{ $quantity }}"
@@ -294,10 +294,10 @@
                                                 </div>
                                             </product-quantity>
                                             @if(!$product->isCanBuy($quantity))
-                                                <input form="productForm-{{ $product->id }}" type="hidden" name="type_order" value="order">
+                                                <input type="hidden" name="type_order" value="order">
                                                 <button type="submit" class="btn btn-blue-dark w-100">Создать заказ</button>
                                             @else
-                                                <input form="productForm-{{ $product->id }}" type="hidden" name="type_order" value="checkout">
+                                                <input type="hidden" name="type_order" value="checkout">
                                                 <button type="submit" class="btn btn-blue-dark w-100">В корзину</button>
                                             @endif
                                         </form>

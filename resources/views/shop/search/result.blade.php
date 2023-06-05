@@ -74,15 +74,15 @@
                                         <product-form>
                                             <form action="#" id="productForm-{{ $key }}" class="w-100" novalidate>
                                                 @csrf
-                                                <input form="productForm-{{ $key }}" type="hidden" name="product_id" value="{{ $product->id }}">
-                                                <input form="productForm-{{ $key }}" type="hidden" name="product_quantity" value="">
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <input type="hidden" name="product_quantity" value="">
                                                 <product-quantity>
                                                     <label for="elementQuantity-{{ $key }}">Укажите количество</label>
                                                     <div class="input-group">
                                                         <button class="minus input-group-text">
                                                             <i class="material-symbols-outlined">remove</i>
                                                         </button>
-                                                        <input form="productForm-{{ $key }}" class="form-control" type="number"
+                                                        <input class="form-control" type="number"
                                                                id="elementQuantity-{{ $key }}"
                                                                name="quantity" value="{{ $quantity > 0 ? 1 : 0 }}"
                                                                data-max-quantity="{{ $quantity }}"

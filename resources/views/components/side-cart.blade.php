@@ -99,7 +99,7 @@
                                                         <button class="minus input-group-text">
                                                             <i class="material-symbols-outlined">remove</i>
                                                         </button>
-                                                        <input class="form-control" type="number" id="elementQuantity"
+                                                        <input class="form-control" type="number"
                                                                aria-label="Количество"
                                                                name="quantity" value="{{ $cartItem->getQuantity() }}"
                                                                data-max-quantity="{{ $product->quantity }}"

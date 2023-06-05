@@ -559,6 +559,7 @@ class ProductQuantity extends HTMLElement {
                     sideCart.innerHTML = '';
                     sideCart.append(html.querySelector('.side-cart__wrapper'));
                     sideCart.initCloseButton(sideCart.querySelector('.side-cart__header span'));
+                    sideCart.initDeleteItem();
 
                 } else {
                     console.error(response.data.message);
@@ -791,7 +792,8 @@ class SideCart extends HTMLElement
     initDeleteItem() {
 
         const items   = this.querySelectorAll('.cart-item'),
-            formatter = new Intl.NumberFormat('ru-RU', {style:'currency', currency: 'RUB', minimumFractionDigits: 0});;
+            formatter = new Intl.NumberFormat('ru-RU', {style:'currency', currency: 'RUB', minimumFractionDigits: 0}),
+            self      = this;
 
         if (items.length > 0) {
             items.forEach(function (item) {
@@ -822,7 +824,16 @@ class SideCart extends HTMLElement
 
                             totalAmount.textContent = formatter.format(currentTotal);
 
-                            item.remove();
+                            if (currentTotal === 0) {
+                                headerHref.remove();
+                                const header     = document.querySelector('.side-cart__header');
+                                header.innerHTML = 'Ваша корзина пуста' + '<span class="material-symbols-outlined close">close</span>';
+                                document.querySelector('.side-cart__footer').innerHTML = '';
+                                document.querySelector('.side-cart__content').innerHTML = '';
+                                self.initCloseButton(self.querySelector('.material-symbols-outlined.close'));
+                            } else {
+                                item.remove();
+                            }
                         }
                     }).catch(function (error) {
                         console.error(error);
