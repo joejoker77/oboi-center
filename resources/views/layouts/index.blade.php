@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="time-work">
                                         <span>Часы работы:</span>
-                                        <span>с 10:00 до 19:00</span>
+                                        <span>с 10:00 до 20:00</span>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +196,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="contacts">
-                        <a href="tel:+78006004119" class="phone" title="Позвонить нам">8 (800) 600 41 19</a>
+                        <a href="tel:+74957205965" class="phone" title="Позвонить нам">+7 (495) 720-59-65</a>
                         <a href="mailto:info@oboi-center.pro" class="email" title="Написать на почту">info@oboi-center.pro</a>
                     </div>
 

@@ -4339,3 +4339,10 @@ search-form {
         }
     }
 }
+.search-page {
+    .not-found {
+        font-size: toRem(18px);
+        text-align: center;
+        margin-bottom: toRem(40px);
+    }
+}

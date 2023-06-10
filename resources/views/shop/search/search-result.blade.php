@@ -12,7 +12,7 @@
     @extends('layouts.index')
 
     @section('content')
-        <div class="container pt-2 pt-md-3 pt-lg-5">
+        <div class="container pt-2 pt-md-3 pt-lg-5 search-page">
             <div class="row">
                 <div class="col-12">
                     @if($products)
@@ -161,6 +161,13 @@
                         @endforeach
                     @endif
                     @if($blogCategories || $posts)
+                        </div>
+                    @endif
+                    @if(!$blogCategories && !$posts && !$products && !$categories)
+                        <div class="not-found col-12">
+                            <p>Мы не нашли ни одного продукта по вашему запросу. Но это не значит что у нас его нет в наличии. Рекомендуем вам обратиться к нашим консультантам по телефону:
+                                <a href="tel:+74957205965">+7 (495) 720 59-65</a>. Вам оперативно ответят на все интересующие вас вопросы, по нашей продукции.
+                            </p>
                         </div>
                     @endif
                 </div>
