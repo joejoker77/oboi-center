@@ -30,6 +30,8 @@ Route::group([
     Route::get('/tag/{tag}', 'CatalogController@tag')->name('tag');
     Route::get('/brand/{brand}', 'CatalogController@brands')->name('brand');
     Route::get('/filter', 'CatalogController@filter')->name('filter');
+    Route::get('/search', 'CatalogController@search')->name('search');
+    Route::post('/ajax-search', 'CatalogController@ajaxSearch')->name('ajax-search');
 });
 
 Route::group([

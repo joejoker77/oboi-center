@@ -58,7 +58,7 @@ class Category extends Model
         'small', 'thumb', 'medium', 'large', 'full'
     ];
 
-    public static $searchable = ['name', 'title'];
+    public static $searchable = ['name', 'title', 'description'];
 
     public const IMAGE_PATH = 'files/categories/';
 
@@ -164,7 +164,7 @@ class Category extends Model
 
     public function isPublished(): bool
     {
-        return $this->published;
+        return (bool)$this->published;
     }
 
     /**

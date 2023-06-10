@@ -2,7 +2,7 @@
 
 namespace App\UseCases\ReadModels;
 
-use App\Http\Requests\Products\FilterResult;
+use App\Entities\Blog\Post;
 use Illuminate\Http\Request;
 use App\Entities\Shop\Product;
 use App\Entities\Shop\Category;
@@ -10,7 +10,10 @@ use App\Entities\Shop\Attribute;
 use Elastic\Elasticsearch\Client;
 use Illuminate\Database\Query\Expression;
 use App\Http\Requests\Products\SearchResult;
+use App\Http\Requests\Products\FilterResult;
+use App\Http\Requests\Site\AjaxSearchResult;
 use App\Http\Requests\Products\SearchRequest;
+use App\Entities\Blog\Category as BlogCategory;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
@@ -18,6 +21,13 @@ use Elastic\Elasticsearch\Exception\ServerResponseException;
 class SearchService
 {
     private Client $client;
+
+    private array $models = [
+        Post::class         => ['name' => 'Статья', 'type'          => 'post'],
+        Category::class     => ['name' => 'Категория', 'type'       => 'category'],
+        BlogCategory::class => ['name' => 'Категория блога', 'type' => 'blog_category'],
+        Product::class      => ['name' => 'Продукт', 'type'         => 'product']
+    ];
 
     public function __construct(Client $client)
     {
@@ -177,7 +187,7 @@ class SearchService
         $attributeValues  = array_column(array_column($responseAll['hits']['hits'], '_source'), 'values');
         $tagsValues       = array_column(array_column($responseAll['hits']['hits'], '_source'), 'tags');
         $categoriesValues = array_column(array_column($responseAll['hits']['hits'], '_source'), 'categories');
-//dump($response);
+
         foreach ($attributeValues as $values) {
             array_map(function ($val) use (&$attributes) {
                 if (!array_key_exists($val['attribute'], $attributes)) {
@@ -203,5 +213,49 @@ class SearchService
         }
 
         return new FilterResult($pagination, $categories, $tags, $attributes);
+    }
+
+    public function searchFromString(Request $request, $perPage): AjaxSearchResult
+    {
+        $blogCategories = $categories = $posts = $products = [];
+
+        if (!$query = $request->get('query')) {
+            abort(400);
+        }
+        foreach ($this->models as $model => $modelArray) {
+            $q = $model::query()->with('photos');
+
+            if ($modelArray['type'] == 'category') {
+                $q->with(['products', 'products.photos']);
+            } else if ($modelArray['type'] == 'product') {
+                $q->with(['category', 'values'])->paginate($perPage);
+            }
+
+            $fields = $model::$searchable;
+
+            foreach ($fields as $field) {
+                $q->orWhere($field, 'LIKE', '%'.$query.'%');
+            }
+
+            $results = $q->get();
+
+            foreach ($results as $result) {
+                if($result instanceof BlogCategory) {
+                    $blogCategories[] = $result;
+                } else if ($result instanceof Category) {
+                    $categories[] = $result;
+                } else if ($result instanceof Post) {
+                    $posts [] = $result;
+                } else if ($result instanceof Product) {
+                    $products[] = $result;
+                }
+            }
+        }
+        return new AjaxSearchResult($products, $posts, $blogCategories, $categories);
+    }
+
+    public function getTotalProducts(string $query)
+    {
+        return Product::orWhere('name', 'LIKE', '%'.$query.'%')->orWhere('sku', 'LIKE', '%'.$query.'%')->orWhere('description', 'LIKE', '%'.$query.'%')->count();
     }
 }

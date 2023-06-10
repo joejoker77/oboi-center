@@ -70,14 +70,16 @@
                             </div>
 
                             <x-menu handler="mainMenu" menuClass="main-menu dropdown-menu w-100" template="components.mega-menu" menuId="mainMenu"/>
-                            <form action="#" class="search-form">
-                                @csrf
-                                <input class="form-control" type="text" name="search" id="search" aria-label="search" placeholder="Поиск">
-                                <svg class="search-icon" width="25" height="29" viewBox="0 0 25 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="11.9822" cy="12.5681" r="9" transform="rotate(-105 11.9822 12.5681)" stroke="#a0a0a0"/>
-                                    <line x1="24.3223" y1="23.5249" x2="18.9057" y2="18.7646" stroke="#a0a0a0"/>
-                                </svg>
-                            </form>
+                            <search-form class="w-100 d-block">
+                                <form action="{{ route('shop.search') }}" class="search-form" method="get" id="searchForm">
+                                    @csrf
+                                    <input class="form-control" type="text" name="query" id="search" aria-label="search" placeholder="Поиск" value="{{ request()->get('query') }}">
+                                    <svg class="search-icon" width="25" height="29" viewBox="0 0 25 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="11.9822" cy="12.5681" r="9" transform="rotate(-105 11.9822 12.5681)" stroke="#a0a0a0"/>
+                                        <line x1="24.3223" y1="23.5249" x2="18.9057" y2="18.7646" stroke="#a0a0a0"/>
+                                    </svg>
+                                </form>
+                            </search-form>
                         </div>
                     </div>
                     <div class="col text-center header-logo">
@@ -105,7 +107,10 @@
                     <div class="col">
                         <div class="d-flex w-100">
                             <div class="contact-info d-none d-lg-flex flex-lg-column">
-                                <div class="phone"><a href="tel:+74957205965">495 720 59 65</a></div>
+                                <div class="phone">
+                                    <span class="material-symbols-outlined">phone_in_talk</span>
+                                    <a href="tel:+74957205965">+7 (495) 720-59-65</a>
+                                </div>
                                 <div class="time-work">с 10:00 до 19:00</div>
                             </div>
                             <div class="btn-toolbar control-icons ms-auto">

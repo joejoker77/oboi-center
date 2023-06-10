@@ -1011,3 +1011,100 @@ if (dropButtons.length > 0) {
         });
     });
 }
+
+class SearchForm extends HTMLElement
+{
+    constructor() {
+        super();
+        const inputQuery = this.querySelector('input#search');
+        const allResult  = this.querySelector('.search-icon');
+        this.checkAnswer = false;
+
+        inputQuery.addEventListener('input', this.initInput.bind(this));
+        inputQuery.addEventListener('focus', this.initFocus.bind(this));
+        document.body.addEventListener('click', this.initClose.bind(this));
+        allResult.addEventListener('click', this.showAllResult.bind(this));
+    }
+
+    initFocus = function (event) {
+        event.preventDefault();
+        if (this.querySelector('input#search').classList.contains('has-error')) {
+            this.querySelector('input#search').classList.remove('has-error');
+        }
+        const megaMenuButton = document.querySelector('.btn.btn-catalog');
+        if (megaMenuButton.classList.contains('show')) {
+            const dropdownInstance = Dropdown.getInstance(megaMenuButton);
+            dropdownInstance.hide();
+        }
+    }
+
+    initClose = function (event)
+    {
+        const result = this.querySelector('.search-result-container');
+        if (!event.target.closest('search-form') && result) {
+            this.querySelector('form').reset();
+            result.remove();
+            this.checkAnswer = false;
+        }
+    }
+
+    showAllResult = function (event)
+    {
+        event.preventDefault();
+        const input = this.querySelector('input#search');
+
+        if (input.value === '') {
+            input.classList.add('has-error');
+        } else {
+            window.location.href = '/shop/search?query='+input.value;
+        }
+    }
+
+    initInput = function (event) {
+        event.preventDefault();
+
+        const self = this,
+            result = self.querySelector('.search-result-container');
+
+        if (event.target.value.length > 2) {
+            const formData = new FormData();
+
+            formData.append('query', event.target.value);
+
+            axios.post('/shop/ajax-search', formData).then(function (response) {
+                const answer = new DOMParser().parseFromString(response.data, 'text/html');
+
+                if (!result && !self.checkAnswer) {
+                    self.append(answer.querySelector('.search-result-container'));
+                } else if (result && self.checkAnswer) {
+                    result.innerHTML = answer.querySelector('.search-result-container').innerHTML;
+                }
+
+                new Swiper('.mySwiperSearchContent', {
+                    direction: "vertical",
+                    slidesPerView: "auto",
+                    freeMode: true,
+                    scrollbar: {
+                        el: ".swiper-scrollbar",
+                    },
+                    mousewheel: true,
+                    modules: [Scrollbar, Mousewheel, FreeMode]
+                });
+
+                self.checkAnswer = true;
+
+                const showAllResult = self.querySelector('.show-all button');
+
+                if (showAllResult) {
+                    showAllResult.addEventListener('click', self.showAllResult.bind(self));
+                }
+
+            }).catch(function (error) {
+                console.error(error);
+            })
+        }
+
+    }
+}
+
+customElements.define('search-form', SearchForm);

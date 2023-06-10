@@ -42,7 +42,7 @@ class Post extends Model
         'meta' => 'array'
     ];
 
-    public static $searchable = ['title'];
+    public static $searchable = ['title', 'description', 'content'];
 
 
     const STATUS_DRAFT = 'draft';

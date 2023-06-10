@@ -55,7 +55,7 @@ class Category extends Model
         'small', 'thumb', 'medium', 'large', 'full'
     ];
 
-    public static $searchable = ['name', 'title'];
+    public static $searchable = ['name', 'title', 'description'];
 
     public const IMAGE_PATH = 'files/blog/categories/';
 

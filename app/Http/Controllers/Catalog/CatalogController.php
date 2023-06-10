@@ -8,8 +8,10 @@ use App\Entities\Shop\Category;
 use App\Http\Router\ProductPath;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use App\UseCases\ReadModels\SearchService;
 use App\Http\Requests\Products\SearchRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Butschster\Head\Contracts\MetaTags\MetaInterface;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
@@ -25,9 +27,9 @@ class CatalogController extends Controller
 
     public function __construct(SearchService $search, Cart $cart, MetaInterface $meta)
     {
-        $this->search = $search;
-        $this->cart   = $cart;
-        $this->meta   = $meta;
+        $this->search            = $search;
+        $this->cart              = $cart;
+        $this->meta              = $meta;
     }
 
     /**
@@ -88,6 +90,34 @@ class CatalogController extends Controller
         $this->meta->setRobots('noindex, nofollow');
 
         return view('shop.search.result', compact('cartAllItems', 'restCategories', 'restTags', 'products', 'restAttributes', 'request'));
+    }
+
+    public function ajaxSearch(Request $request): View
+    {
+        $result = $this->search->searchFromString($request, 200);
+        return view('shop.search.ajax-result', compact('result'));
+    }
+
+    public function search(Request $request): View
+    {
+        $products = $total = null;
+        if (!$request->get('query')) {
+            Session::flash('error', 'Пустой параметр запроса');
+            return view('shop.search.search-result');
+        }
+        Session::remove('error');
+        $result = $this->search->searchFromString($request, 20);
+
+        $this->meta->setTitle('Результат поиска');
+        $this->meta->setDescription('На данной странице отображаются товары и статьи найденные по текстовому запросу.');
+        $this->meta->setRobots('noindex, nofollow');
+
+        if (!empty($result->products)) {
+            $total = $this->search->getTotalProducts($request->get('query'));
+            $products = new LengthAwarePaginator($result->products, $total, 20, $request->get('page'), ['path' => '/shop/search']);
+        }
+
+        return view('shop.search.search-result', compact('result', 'products', 'total'));
     }
 
 }

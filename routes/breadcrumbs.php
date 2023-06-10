@@ -84,3 +84,8 @@ Breadcrumbs::for('shop.filter', function (Generator $generator) {
     $generator->parent('home');
     $generator->push('Результат поиска', route('shop.filter'));
 });
+
+Breadcrumbs::for('shop.search', function (Generator $generator) {
+    $generator->parent('home');
+    $generator->push('Результат поиска', route('shop.search'));
+});

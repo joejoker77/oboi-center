@@ -87,7 +87,7 @@ class Product extends Model
         'new' => 'boolean'
     ];
 
-    public static $searchable = ['name', 'sku'];
+    public static $searchable = ['name', 'sku', 'description'];
 
     const STATUS_DRAFT = 'draft';
     const STATUS_ACTIVE = 'active';
