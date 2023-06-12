@@ -3961,6 +3961,11 @@ search-form {
             font-size: toRem(18px);
             text-align: center;
             padding: toRem(50px) 0;
+
+            a {
+                color: black;
+                font-size: toRem(24px);
+            }
         }
 
         .product-items {
@@ -4345,9 +4350,14 @@ search-form {
     }
 }
 .search-page {
-    .not-found {
+    .not-found p {
         font-size: toRem(18px);
         text-align: center;
         margin-bottom: toRem(40px);
+
+        a {
+            color: black;
+            font-size: toRem(24px);
+        }
     }
 }
