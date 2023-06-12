@@ -457,6 +457,7 @@ header {
         position: absolute;
         right: 0;
         top: toRem(4px);
+        align-items: center;
 
         @include media-breakpoint-up(lg) {
             position: static;

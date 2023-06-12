@@ -76,7 +76,7 @@
                             <label for="confirm-token">Введите код подтверждения</label>
                         </div>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-lg btn-primary w-100">Подтвердить номер</button>
+                            <button type="submit" class="btn btn-lg btn-blue-dark w-100">Подтвердить номер</button>
                         </div>
                     </form>
                 @endif
