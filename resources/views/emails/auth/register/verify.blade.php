@@ -1,12 +1,13 @@
 <x-mail::message>
-# Introduction
+# Спасибо!
 
-The body of your message. @if($tmpPassword) Ваш временный пароль: {{ $tmpPassword }} @endif
+Вы только что зарегистрировались на сайте oboi-center.pro. Для подтверждения регистрации, нажмите на кнопку ниже.
+    @if($tmpPassword) Ваш временный пароль: {{ $tmpPassword }}. В качестве логина используйте номер телефона, указанный при регистрации @endif
 
 <x-mail::button :url="$url">
-Button Text
+Подтвердить регистрацию
 </x-mail::button>
 
-Thanks,<br>
+Спасибо,<br>
 {{ config('app.name') }}
 </x-mail::message>
