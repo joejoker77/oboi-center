@@ -498,7 +498,11 @@ header {
 
             &.show {
                 @include media-breakpoint-up(lg) {
-                    transform: translate3d(0, toRem(72px), 0)!important;
+                    transform: none!important;
+                    inset: inherit!important;
+                    top: toRem(88px)!important;
+                    right: 0!important;
+                    min-width: toRem(175px);
                 }
             }
         }
