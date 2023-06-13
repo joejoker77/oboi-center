@@ -148,7 +148,7 @@ Route::group(
             Route::post('products/photo/{product}/{photo}/remove', 'ProductController@photoRemove')->name('products.photo.remove');
 
             Route::resource('/delivery-methods', 'DeliveryMethodsController');
-            Route::post('/delivery-methods/remove', 'DeliveryMethodsController@set-status')->name('delivery-methods.remove');
+            Route::post('/delivery-methods/remove', 'DeliveryMethodsController@remove')->name('delivery-methods.remove');
 
             Route::resource('filters', 'FilterController');
             Route::post('filters/remove-batch', 'FilterController@removeBatch')->name('filters.remove-batch');

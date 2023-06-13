@@ -17,7 +17,7 @@
             </form>
         </div>
     </div>
-    <table class="table table-bordered table-striped" id="productTable">
+    <table class="table table-bordered table-striped" id="deliveryTable">
         <thead>
         <tr>
             <th style="text-align: center">
@@ -44,6 +44,7 @@
             <th>Минимальный вес</th>
             <th>Минимальное количество</th>
             <th>Минимальный объем</th>
+            <th>Действия</th>
         </tr>
         <tr>
             <form action="?" name="search-products" method="GET" id="searchDelivery"></form>
@@ -52,20 +53,21 @@
                 <input form="searchProducts" type="text" name="id" class="form-control" aria-label="Искать по ID" value="{{ request('id') }}">
             </td>
             <td style="max-width: 175px">
-                <input type="text" form="searchProducts" name="name" class="form-control" aria-label="Искать по имени" value="{{ request('name') }}">
+                <input type="text" form="searchDelivery" name="name" class="form-control" aria-label="Искать по имени" value="{{ request('name') }}">
             </td>
             <td style="max-width: 175px">
-                <input type="text" form="searchProducts" name="sku" class="form-control" aria-label="Искать стоимости" value="{{ request('cost') }}">
+                <input type="text" form="searchDelivery" name="cost" class="form-control" aria-label="Искать стоимости" value="{{ request('cost') }}">
             </td>
             <td style="width: 250px">
-                <input type="text" name="min_weight" class="form-control" form="searchProducts" value="{{ request('min_weight') }}">
+                <input type="text" name="min_weight" class="form-control" form="searchDelivery" value="{{ request('min_weight') }}">
             </td>
             <td style="width: 220px">
-                <input type="text" name="min_amount" class="form-control" form="searchProducts" value="{{ request('min_amount') }}">
+                <input type="text" name="min_amount" class="form-control" form="searchDelivery" value="{{ request('min_amount') }}">
             </td>
             <td style="max-width: 50px">
-                <input type="text" name="min_dimensions" class="form-control" form="searchProducts" value="{{ request('min_dimensions') }}">
+                <input type="text" name="min_dimensions" class="form-control" form="searchDelivery" value="{{ request('min_dimensions') }}">
             </td>
+            <td></td>
         </tr>
         </thead>
         <tbody>
@@ -80,6 +82,23 @@
                 <td style="white-space: nowrap">{{ $method->min_weight }} - {{ $method->max_weight }}</td>
                 <td>{{ $method->min_amount }} - {{ $method->max_amount }}</td>
                 <td>{{ $method->min_dimensions }} - {{ $method->max_dimensions }}</td>
+                <td>
+                    <a href="{{ route('admin.shop.delivery-methods.edit', $method) }}" class="list-inline-item mx-1"
+                       id="editCategory" data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       data-bs-title="Редактировать"
+                    >
+                        <span data-feather="edit"></span>
+                    </a>|<form method="POST" class="list-inline-item js-confirm ms-2"
+                               action="{{ route('admin.shop.delivery-methods.destroy', $method) }}"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               data-bs-title="Удалить"
+                    >
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn p-0 align-baseline js-confirm text-danger" type="submit"><span data-feather="trash-2"></span></button>
+                    </form>
+                </td>
             </tr>
         @endforeach
         </tbody>
