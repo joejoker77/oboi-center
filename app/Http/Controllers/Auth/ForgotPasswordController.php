@@ -71,7 +71,7 @@ class ForgotPasswordController extends Controller
                 $userProfile->user->update(['status' => User::STATUS_WAIT, 'password' => bcrypt($password)]);
                 $userProfile->update(['phone_verified' => false]);
                 $this->smsSender->sendSms($userProfile->phone, 'Пароль для входа в личный кабинет: '. $password);
-                return back()->with('success', 'Ваш пароль успешно сброшен. Новый пароль выслан вам в смс сообщении.');
+                return redirect()->route('login')->with('success', 'Ваш пароль успешно сброшен. Новый пароль выслан вам в смс сообщении.');
             }
         }
     }
