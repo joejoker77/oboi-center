@@ -28,32 +28,33 @@ class OrderService
      */
     public function checkout(OrderRequest $request, Cart $cart, RegisterService $registerService): Order
     {
-        $products = [];
-        $user     = Auth::user();
+        $products       = [];
+        $user           = Auth::user();
+        $deliveryMethod = $this->getDelivery($request->get('delivery_id'));
 
         if (!$user && !$request->get('customer_phone')) {
             throw new \DomainException('Пользователь не найден или не указан номер телефона');
-        } elseif(!$user && $this->existsUser($request->get('customer_phone'))) {
-            throw new \DomainException('Пользователь с таким номером уже существует. Пожалуйста, войдите в систему, прежде чем оформлять покупку.');
+        } elseif(!$user && $this->existsUser("+".preg_replace("/[^0-9]/", '',$request->get('customer_phone')))) {
+            throw new \DomainException('Пользователь с таким номером уже существует. Пожалуйста, войдите в систему, прежде чем оформлять покупку. Для входа на сайт используйте свой номер в качестве логина и пароль, высланный вам по смс, либо придуманный вами, если вы регистрировались через форму регистрации. Если вы не помните свой пароль, то можете воспользоваться <a href="/password/reset">страницей сброса пароля</a>');
         }
 
         DB::beginTransaction();
         try {
             $temp_password = Str::random(8);
-            if (!$user) {
+            if (!$user && $request) {
                 $user = $registerService->register(new RegisterRequest([
                     'name'                  => $request->get('customer_name'),
                     'email'                 => $request->get('customer_phone'),
                     'password'              => $temp_password,
                     'password_confirmation' => $temp_password
-                ]), $temp_password, new DeliveryAddress([
+                ]), $temp_password, $deliveryMethod->name != 'Самовывоз' ? new DeliveryAddress([
                     'postal_code' => $request->get('postal_code'),
                     'city'        => $request->get('city'),
                     'street'      => $request->get('street'),
                     'house'       => $request->get('house'),
                     'house_part'  => $request->get('house_part'),
                     'flat'        => $request->get('flat')
-                ]));
+                ]) : null);
             }
 
             $order = Order::create(
@@ -64,7 +65,6 @@ class OrderService
                 $request->get('payment_method')
             );
 
-            $deliveryMethod = $this->getDelivery($request->get('delivery_id'));
             $addressArray   = [
                 'г. '.$request->get('city'),
                 'ул. '.$request->get('street'),

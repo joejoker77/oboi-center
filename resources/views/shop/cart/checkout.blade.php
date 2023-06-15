@@ -35,7 +35,7 @@
                         <div class="form-floating">
                             <input type="text" id="customerPhone" class="form-control @error('customer_phone') is-invalid @enderror"
                                    name="customer_phone" placeholder="Ваш Номер телефона" required>
-                            <label for="customerPame">Ваш Номер Телефона</label>
+                            <label for="customerPhone">Ваш Номер Телефона</label>
                             @error('customer_name')<span class="invalid-feedback">{{ $message }}</span>@enderror
                         </div>
                         <div class="annotation mb-5">

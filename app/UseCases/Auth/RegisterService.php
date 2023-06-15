@@ -36,7 +36,7 @@ class RegisterService
         $registerByEmail = (bool)filter_var($request['email'], FILTER_VALIDATE_EMAIL);
         $login           = "+".preg_replace("/[^0-9]/", '', $request['email']);
 
-        $user            = $registerByEmail ?
+        $user = $registerByEmail ?
             User::register($request['name'], $request['email'], $request['password']) :
             User::register($request['name'], null, $request['password'], $login);
 
@@ -46,14 +46,17 @@ class RegisterService
             $this->mailer->to($user->email)->send(new VerifyMail($user));
         } elseif ($fromOrder) {
             $this->smsSender->sendSms($user->userProfile->phone, 'Пароль для входа в личный кабинет: '. $fromOrder);
-            $user->addresses()->create([
-                'postal_code' => $address->postal_code,
-                'city'        => $address->city,
-                'street'      => $address->street,
-                'house'       => $address->house,
-                'house_part'  => $address->house_part,
-                'flat'        => $address->flat
-            ]);
+            if ($address) {
+                $user->addresses()->create([
+                    'postal_code' => $address->postal_code,
+                    'city'        => $address->city,
+                    'street'      => $address->street,
+                    'house'       => $address->house,
+                    'house_part'  => $address->house_part,
+                    'flat'        => $address->flat
+                ]);
+            }
+
         } else {
             $response = $this->smsSender->send($user->userProfile->phone);
             $result   = json_decode((string)$response->getBody(), true);

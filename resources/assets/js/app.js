@@ -33,10 +33,11 @@ const buttonGetProfileForm = document.getElementById('getFormProfile'),
     confirmPhoneButton     = document.getElementById('getConfirmPhone'),
     actionAddressButtons   = document.querySelectorAll('[data-js-action=getFromDeliveryAddress], [data-js-action=editDeliveryAddress]'),
     otherAddress           = document.getElementById('otherAddress'),
-    inputPhones            = document.querySelectorAll('#customerPhone, #emailLogin, #emailRegistration'),
+    inputPhones            = document.querySelectorAll('#customerPhone, #emailLogin, #emailRegistration, #email'),
     slidersFilter          = document.querySelectorAll('.slider-styled'),
     collapseFilterItemBnt  = document.querySelectorAll('.filter-item .btn-link'),
-    dropButtons            = document.querySelectorAll('[data-bs-toggle=dropdown]');
+    dropButtons            = document.querySelectorAll('[data-bs-toggle=dropdown]'),
+    orderForm              = document.getElementById('orderForm');
 
 if (modal) {
     modal.addEventListener('hide.bs.modal', function() {
@@ -1108,3 +1109,27 @@ class SearchForm extends HTMLElement
 }
 
 customElements.define('search-form', SearchForm);
+
+if (orderForm) {
+    const deliveryMethods = document.getElementById('deliveryMethods'),
+        addressBlock      = document.querySelector('.delivery-address-block'),
+        formData          = new FormData(orderForm);
+
+    if (deliveryMethods) {
+        deliveryMethods.addEventListener('change', function (event) {
+            event.preventDefault();
+            const inputs = addressBlock.querySelectorAll('input');
+            if (event.target.options[event.target.selectedIndex].text === 'Самовывоз') {
+                inputs.forEach(function (input) {
+                    input.removeAttribute('required');
+                });
+                addressBlock.classList.add('d-none');
+            } else {
+                inputs.forEach(function (input) {
+                    input.setAttribute('required', 'required');
+                });
+                addressBlock.classList.remove('d-none');
+            }
+        });
+    }
+}

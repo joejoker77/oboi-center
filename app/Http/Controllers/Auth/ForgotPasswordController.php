@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 
+
 use App\Entities\User\User;
-use App\Entities\User\UserProfile;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\Sms\SmsSender;
 use Illuminate\Http\JsonResponse;
+use App\Entities\User\UserProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
@@ -61,13 +63,16 @@ class ForgotPasswordController extends Controller
                 : $this->sendResetLinkFailedResponse($request, $response);
         } else {
             $this->validatePhone($request);
-            if (!$userProfile = UserProfile::where(['phone' => $request->get('email')])->first()) {
+            $login = "+".preg_replace("/[^0-9]/", '', $request->get('email'));
+            if (!$userProfile = UserProfile::where(['phone' => $login])->first()) {
                 return back()->with('error', 'Пользователь с таким номером телефона не найден');
             } else {
-                dd($userProfile->user);
+                $password = Str::random(8);
+                $userProfile->user->update(['status' => User::STATUS_WAIT, 'password' => bcrypt($password)]);
+                $userProfile->update(['phone_verified' => false]);
+                $this->smsSender->sendSms($userProfile->phone, 'Пароль для входа в личный кабинет: '. $password);
+                return back()->with('success', 'Ваш пароль успешно сброшен. Новый пароль выслан вам в смс сообщении.');
             }
-            //$this->smsSender->sendSms($user->userProfile->phone, 'Пароль для входа в личный кабинет: '. $fromOrder);
-
         }
     }
 
