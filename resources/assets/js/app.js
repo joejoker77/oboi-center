@@ -1113,12 +1113,19 @@ customElements.define('search-form', SearchForm);
 if (orderForm) {
     const deliveryMethods = document.getElementById('deliveryMethods'),
         addressBlock      = document.querySelector('.delivery-address-block'),
-        formData          = new FormData(orderForm);
+        inputs            = addressBlock.querySelectorAll('input');
 
     if (deliveryMethods) {
+
+        if (deliveryMethods.options[deliveryMethods.options.selectedIndex].text === 'Самовывоз') {
+            inputs.forEach(function (input) {
+                input.removeAttribute('required');
+            });
+            addressBlock.classList.add('d-none');
+        }
+
         deliveryMethods.addEventListener('change', function (event) {
             event.preventDefault();
-            const inputs = addressBlock.querySelectorAll('input');
             if (event.target.options[event.target.selectedIndex].text === 'Самовывоз') {
                 inputs.forEach(function (input) {
                     input.removeAttribute('required');
