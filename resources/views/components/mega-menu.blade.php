@@ -14,22 +14,29 @@
         @foreach($navItems as $key => $navItem)
             <div class="tab-pane fade @if($key == 0)active show @endif" id="mainMenuTab-{{$key}}" role="tabpanel"
                  aria-labelledby="menu-tab-{{$key}}" tabindex="0">
-                @php $firstImage = $firstImageAlt = null @endphp
-                @foreach($navItem->children as $keyItem => $item)
-                    @if($keyItem == 0 and $item->image)
-                        @php $firstImage = $item->image; $firstImageAlt = $item->title @endphp
-                    @endif
-                    <div class="head-submenu">
-                        <a class="btn btn-link @if(request()->is(trim($item->item_path, '/').'*')) active @endif" href="{{$item->item_path}}"
-                           @if($item->image) data-image="{{ $item->image }}" @endif
-                        >
-                            {{$item->link_text ?? $item->title}}
-                        </a>
-                        <ul>
-                            <x-nav-item :items="$item->children"/>
-                        </ul>
+                <div class="swiper swiperMegaMenu">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            @php $firstImage = $firstImageAlt = null @endphp
+                            @foreach($navItem->children as $keyItem => $item)
+                                @if($keyItem == 0 and $item->image)
+                                    @php $firstImage = $item->image; $firstImageAlt = $item->title @endphp
+                                @endif
+                                <div class="head-submenu">
+                                    <a class="btn btn-link @if(request()->is(trim($item->item_path, '/').'*')) active @endif" href="{{$item->item_path}}"
+                                       @if($item->image) data-image="{{ $item->image }}" @endif
+                                    >
+                                        {{$item->link_text ?? $item->title}}
+                                    </a>
+                                    <ul>
+                                        <x-nav-item :items="$item->children"/>
+                                    </ul>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                @endforeach
+                    <div class="swiper-scrollbar"></div>
+                </div>
                 @if($firstImage)
                     <div class="menu-image">
                         <img src="{{$firstImage}}" alt="{{ $firstImageAlt }} menu image">

@@ -15,6 +15,7 @@ import videojs from "video.js";
 import IMask from "imask";
 
 import * as noUiSlider from 'nouislider/dist/nouislider.min';
+import swipe from "bootstrap/js/src/util/swipe";
 
 
 const buttonGetProfileForm = document.getElementById('getFormProfile'),
@@ -294,8 +295,10 @@ if (document.querySelector('.reviews-swiper')) {
 }
 
 if (megaMenu) {
-    const image = megaMenu.querySelector('.menu-image img'),
-        links   = megaMenu.querySelectorAll('a');
+    const image    = megaMenu.querySelector('.menu-image img'),
+        links      = megaMenu.querySelectorAll('a'),
+        buttons    = megaMenu.querySelectorAll('button'),
+        swElements = megaMenu.querySelectorAll('.swiperMegaMenu');
 
     if (links.length > 0) {
         links.forEach(function (link) {
@@ -309,8 +312,7 @@ if (megaMenu) {
     }
 
     if(window.matchMedia("(max-width: 768px)").matches) {
-        const buttons    = megaMenu.querySelectorAll('button'),
-            tabs         = megaMenu.querySelectorAll('.tab-pane'),
+        const tabs       = megaMenu.querySelectorAll('.tab-pane'),
             submenuLinks = megaMenu.querySelectorAll('.head-submenu > a');
 
         buttons.forEach(function(button) {
@@ -378,7 +380,21 @@ if (megaMenu) {
                 }
             });
         });
+    } else if (swElements.length > 0) {
+        swElements.forEach(function (sw) {
+            new Swiper(sw, {
+                direction: "vertical",
+                slidesPerView: "auto",
+                freeMode: true,
+                scrollbar: {
+                    el: sw.querySelector('.swiper-scrollbar'),
+                },
+                mousewheel: true,
+                modules: [Scrollbar, Mousewheel, FreeMode]
+            });
+        });
     }
+
 
 }
 
