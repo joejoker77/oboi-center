@@ -1166,28 +1166,31 @@ if (orderForm) {
 
 if (filterBlock && window.matchMedia("(min-width: 992px)").matches) {
     const beginFilter = document.getElementById('beginFilter'),
-        footer = document.querySelector('footer');
+        footer = document.querySelector('footer'),
+        content = document.querySelector('.product-content');
 
     let lastScrollTop = 0;
 
-    document.addEventListener("scroll", function() {
-        let st = window.scrollY || document.documentElement.scrollTop;
-        if (st > lastScrollTop) {
+    if (filterBlock.getBoundingClientRect().height < content.getBoundingClientRect().height) {
+        document.addEventListener("scroll", function() {
+            let st = window.scrollY || document.documentElement.scrollTop;
+            if (st > lastScrollTop) {
 
-            if (footer.getBoundingClientRect().y < window.innerHeight && footer.getBoundingClientRect().y !== 0) {
-                filterBlock.classList.add('bottom');
-            }
+                if (footer.getBoundingClientRect().y < window.innerHeight && footer.getBoundingClientRect().y !== 0) {
+                    filterBlock.classList.add('bottom');
+                }
 
-            if (beginFilter.getBoundingClientRect().y <= 0) {
-                filterBlock.classList.add('sticky');
-            }
+                if (beginFilter.getBoundingClientRect().y <= 0) {
+                    filterBlock.classList.add('sticky');
+                }
 
-        } else if (st < lastScrollTop) {
-            filterBlock.classList.remove('bottom');
-            if (beginFilter.getBoundingClientRect().y >= 0) {
-                filterBlock.classList.remove('sticky');
+            } else if (st < lastScrollTop) {
+                filterBlock.classList.remove('bottom');
+                if (beginFilter.getBoundingClientRect().y >= 0) {
+                    filterBlock.classList.remove('sticky');
+                }
             }
-        }
-        lastScrollTop = st <= 0 ? 0 : st;
-    }, false);
+            lastScrollTop = st <= 0 ? 0 : st;
+        }, false);
+    }
 }
