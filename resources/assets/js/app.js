@@ -38,7 +38,8 @@ const buttonGetProfileForm = document.getElementById('getFormProfile'),
     slidersFilter          = document.querySelectorAll('.slider-styled'),
     collapseFilterItemBnt  = document.querySelectorAll('.filter-item .btn-link'),
     dropButtons            = document.querySelectorAll('[data-bs-toggle=dropdown]'),
-    orderForm              = document.getElementById('orderForm');
+    orderForm              = document.getElementById('orderForm'),
+    filterBlock            = document.querySelector('aside[data-js-filter]');
 
 if (modal) {
     modal.addEventListener('hide.bs.modal', function() {
@@ -653,7 +654,8 @@ if (productItems) {
                 }
             }
         }).catch(error => {
-            console.error(error);
+            document.querySelector('footer').classList.remove('d-none');
+            document.querySelector('aside').classList.add('bottom');
             newUrl = new URL(window.location.origin+window.location.pathname+location.search);
             newUrl.searchParams.delete('page');
             window.history.pushState({path:newUrl.href}, '', newUrl.href);
@@ -672,6 +674,7 @@ if (productItems) {
 
             if (currentY < previousY) {
                 if (currentRatio > previousRatio && isIntersecting) {
+                    document.querySelector('footer').classList.add('d-none');
                     lazyLoadProducts();
                 }
             }
@@ -980,7 +983,7 @@ if(collapseFilterItemBnt.length > 0) {
         });
     });
 
-    if(window.matchMedia("(max-width: 768px)").matches) {
+    if(window.matchMedia("(max-width: 992px)").matches) {
         const showFilterButton = document.getElementById('showFilter'),
             closeFilter        = document.getElementById('closeFilter'),
             filter             = document.querySelector('.row.products .col-lg-3');
@@ -1155,4 +1158,32 @@ if (orderForm) {
             }
         });
     }
+}
+
+if (filterBlock && window.matchMedia("(min-width: 992px)").matches) {
+    const beginFilter = document.getElementById('beginFilter'),
+        footer = document.querySelector('footer');
+
+    let lastScrollTop = 0;
+
+    document.addEventListener("scroll", function() {
+        let st = window.scrollY || document.documentElement.scrollTop;
+        if (st > lastScrollTop) {
+
+            if (footer.getBoundingClientRect().y < window.innerHeight && footer.getBoundingClientRect().y !== 0) {
+                filterBlock.classList.add('bottom');
+            }
+
+            if (beginFilter.getBoundingClientRect().y <= 0) {
+                filterBlock.classList.add('sticky');
+            }
+
+        } else if (st < lastScrollTop) {
+            filterBlock.classList.remove('bottom');
+            if (beginFilter.getBoundingClientRect().y >= 0) {
+                filterBlock.classList.remove('sticky');
+            }
+        }
+        lastScrollTop = st <= 0 ? 0 : st;
+    }, false);
 }

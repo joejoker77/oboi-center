@@ -13,7 +13,7 @@
             <x-filter :request="$request" :restAttributes="$restAttributes" :restCategories="$restCategories" :restTags="$restTags" position="left" />
             <div class="col-lg-9 mx-auto">
                 @if($products)
-                    <div class="product-items">
+                    <div class="product-items product-content">
                         @php /** @var App\Entities\Shop\Product $product */ @endphp
                         @foreach($products as $key => $product)
                             @php

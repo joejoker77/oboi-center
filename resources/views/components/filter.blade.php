@@ -2,7 +2,8 @@
 
 @if(!empty($filter))
     <div class="col-lg-3">
-        <aside>
+        <div id="beginFilter"></div>
+        <aside data-js-filter>
             <h4>
                 Подбор по параметрам
                 <button class="btn btn-danger d-lg-none" id="closeFilter">
@@ -10,7 +11,7 @@
                 </button>
             </h4>
             @if(request()->get('attributes') || request()->get('tags') || request()->get('categories') || request()->get('colors') || request()->get('price'))
-                <a href="{{route('shop.filter')}}" type="button" class="btn btn-blue-dark w-100 my-3">Сбросить фильтр</a>
+                <a href="{{route('shop.filter')}}" type="button" class="btn btn-danger text-white fs-5 w-100 my-3">Сбросить фильтр</a>
             @endif
             <form action="{{ route('shop.filter') }}" method="get" class="form-filter">
                 @foreach($filter as $groupName => $group)
@@ -97,12 +98,12 @@
                                         @php $textColor = $color->slug == 'black' || $color->slug == 'darkblue' ? 'white' : 'black'; @endphp
                                         <div
                                             class="color-item p-1"
-                                            style="border-color: @if($color->slug !== 'white'){{ $color->slug }}@else black @endif"
+                                            style="background: {{ $color->slug }};@if($color->slug == 'white')border:1px solid black @endif"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="bottom"
                                             data-bs-custom-class="custom-tooltip" data-bs-title="{{ $color->name }}"
                                         >
-                                            <label for="color-{{ $color->id }}" style="background: {{ $color->slug }};color: {{ $textColor }};@if($color->slug == 'white')border:2px solid black @endif">
+                                            <label for="color-{{ $color->id }}" style="background: {{ $color->slug }};color: {{ $textColor }};">
                                                 <input id="color-{{ $color->id }}" type="checkbox" name="colors[]" @checked(!empty(request()->get('colors')) && in_array($color->id, request()->get('colors'))) value="{{ $color->id }}" />
                                                 <span class="material-symbols-outlined">done</span>
                                             </label>
@@ -189,10 +190,11 @@
                         </div>
                     @endif
                 @endforeach
+                @if(request()->get('attributes') || request()->get('tags') || request()->get('categories') || request()->get('colors') || request()->get('price'))
+                    <a href="{{route('shop.filter')}}" type="button" class="btn btn-danger text-white fs-5 w-100 mb-3">Сбросить фильтр</a>
+                @endif
             </form>
-            @if(request()->get('attributes') || request()->get('tags') || request()->get('categories') || request()->get('colors') || request()->get('price'))
-                <a href="{{route('shop.filter')}}" type="button" class="btn btn-blue-dark w-100 mb-3">Сбросить фильтр</a>
-            @endif
+            <div id="endFilter"></div>
         </aside>
     </div>
 @endif

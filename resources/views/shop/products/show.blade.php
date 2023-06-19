@@ -96,17 +96,15 @@ $quantity = $product->quantity;
                     @if(!$colors->isEmpty())
                         <div class="option">
                             <div class="option-head">Доступные цвета:</div>
-
                             @if($colors->count() > 10)
                             <div class="swiper scroll-content">
                                 <div class="swiper-wrapper">
                             @endif
-
                             <div class="option-items @if($colors->count() > 10)swiper-slide @endif">
                                 @foreach($colors as $color)
                                     @if($color->product->id != $product->id)
                                         <a class="option-item"
-                                           href="{{ route('catalog.index',['product_path' => product_path($product->category, $color->product)]) }}"
+                                           href="{{ route('catalog.index',['product_path' => product_path($color->product->category, $color->product)]) }}"
                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
                                            data-bs-custom-class="custom-tooltip" data-bs-title="{{ $color->value }}"
                                         >

@@ -320,7 +320,7 @@ class Product extends Model
 
         return Value::where('attribute_id',function($query) {
             $query->select('id')->from('shop_attributes')->where('name', 'Цвет');
-        })->whereIn('product_id', $varIds)->with(['product'])->get();
+        })->whereIn('product_id', $varIds)->with(['product', 'product.category'])->get();
     }
 
     // Relationships

@@ -6,7 +6,9 @@
         <div class="category-info card-body">
             <span class="abbr">{{ substr($navItem->title, 0, 2) }}</span>
             <span class="text">{{ $navItem->title }}</span>
-            <a href="{{ $navItem->item_path }}" class="btn btn-link stretched-link" style="z-index: 3"></a>
+            <a href="{{ $navItem->item_path }}" class="btn btn-link stretched-link" style="z-index: 3">
+                <div class="small-text">{{ $navItem->title }}</div>
+            </a>
         </div>
     </div>
 @endforeach

@@ -171,7 +171,7 @@
         <x-filter position="left" currentCategoryId="{{ $category->id }}" />
         <div class="col-lg-9 mx-auto">
             @if ($categories)
-                <div class="categories">
+                <div class="categories product-content">
                     <h2>@if($category && $category->depth == 1)Коллекции производителя {{ $category->name }} <span class="country">({{ $country }})</span>@elseФабрики@endif</h2>
                     <div class="d-lg-none pb-3">
                         <button class="btn btn-blue-dark w-100" id="showFilter">
@@ -214,7 +214,7 @@
                             Подобрать по параметрам
                         </button>
                     </div>
-                <div class="product-items">
+                <div class="product-items product-content">
                     @foreach($products as $key => $product)
                         @php
                             $quantity = $product->quantity;
