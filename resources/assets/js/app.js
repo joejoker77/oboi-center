@@ -652,8 +652,12 @@ if (productItems) {
                 if (!spinner.classList.contains('invisible')) {
                     spinner.classList.add('invisible');
                 }
+                if (document.querySelector('footer').classList.contains('d-none')) {
+                    document.querySelector('footer').classList.remove('d-none');
+                }
             }
         }).catch(error => {
+            console.error(error);
             document.querySelector('footer').classList.remove('d-none');
             document.querySelector('aside').classList.add('bottom');
             newUrl = new URL(window.location.origin+window.location.pathname+location.search);
