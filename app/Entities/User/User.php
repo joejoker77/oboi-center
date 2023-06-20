@@ -22,6 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property UserProfile $userProfile
  * @property DeliveryAddress[] $addresses
  * @property Order[] $orders
+ * @property UserWishlist[] $favorites
  */
 class User extends Authenticatable
 {
@@ -118,5 +119,10 @@ class User extends Authenticatable
     public function orders():HasMany
     {
         return $this->hasMany(Order::class, 'user_id', 'id')->with(['orderItems']);
+    }
+
+    public function favorites():HasMany
+    {
+        return $this->hasMany(UserWishlist::class, 'user_id', 'id');
     }
 }

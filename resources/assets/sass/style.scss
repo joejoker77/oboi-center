@@ -516,7 +516,7 @@ header {
             }
         }
 
-        #cartLink {
+        #cartLink, #wishlistLink {
             position: relative;
             padding: toRem(6px) toRem(12px) toRem(6px) toRem(6px);
 
@@ -2485,11 +2485,13 @@ product-quantity {
                 height: toRem(150px);
                 object-fit: cover;
                 padding: toRem(6px) 0 0 toRem(6px);
+                position: relative;
             }
 
             .badge {
                 top: toRem(-7px);
                 right: toRem(-10px);
+                z-index: 1;
             }
 
             &:before {
@@ -2502,7 +2504,7 @@ product-quantity {
                 border: toRem(2px) solid white;
                 border-image: linear-gradient(to right top, #09103b, white, #09103b);
                 border-image-slice: 1;
-                z-index: -1;
+                z-index: 0;
                 box-sizing: content-box;
                 background: linear-gradient(to right top, #dcd4c3, transparent, #dcd4c3);
             }
@@ -2517,6 +2519,7 @@ product-quantity {
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 1;
         }
 
         .stretched-link {
@@ -2600,7 +2603,7 @@ product-quantity {
             width: auto;
             height: auto;
             color: #1a5294;
-            z-index: 0;
+            z-index: 1;
             animation: none!important;
             top: toRem(-7px);
             right: toRem(-10px);
@@ -2628,6 +2631,38 @@ product-quantity {
             label {
                 margin-bottom: toRem(8px);
                 text-align: center;
+            }
+
+            &.favorite {
+                background: transparent;
+                display: block;
+                right: auto;
+                left: toRem(10px);
+                top: toRem(10px);
+                height: toRem(30px);
+                padding: 0;
+                border: none;
+
+                button[type=submit] {
+                    width: toRem(30px);
+                    height: toRem(30px);
+                    padding: 0;
+                    border: none;
+                    text-align: center;
+                    background: transparent;
+
+                }
+
+                .material-symbols-outlined {
+                    font-size: toRem(30px);
+                    font-weight: 400;
+                    color: #dc3545;
+                    width: toRem(30px);
+                    height: toRem(30px);
+                    &.selected {
+                        font-variation-settings: 'FILL' 1;
+                    }
+                }
             }
         }
 

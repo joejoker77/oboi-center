@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Cart\Cart;
+use App\Entities\Shop\Product;
+use App\Entities\User\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Entities\Shop\Category;
 use App\Http\Router\ProductPath;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\UseCases\ReadModels\SearchService;
 use App\Http\Requests\Products\SearchRequest;
@@ -118,6 +122,40 @@ class CatalogController extends Controller
         }
 
         return view('shop.search.search-result', compact('result', 'products', 'total'));
+    }
+
+    public function addFavorite(Request $request, Product $product):RedirectResponse
+    {
+        /** @var User|null $user */
+        if (!$user = Auth::user()) {
+            return back()->with('error', 'Пользователь не найден!');
+        }
+        try {
+            $user->favorites()->create([
+                'product_id' => $product->id
+            ]);
+        } catch (\Exception $e) {
+            $message = stripos($e->getMessage(), 'Duplicate entry') ? 'Данный продукт уже находится у вас в избранном!':$e->getMessage();
+            return back()->with('error', $message);
+        }
+
+        return back()->with('success', $product->name . ' успешно добавлен в избранное!');
+    }
+
+    public function removeFavorite(Request $request, Product $product):RedirectResponse
+    {
+        /** @var User|null $user */
+        if (!$user = Auth::user()) {
+            return back()->with('error', 'Пользователь не найден!');
+        }
+        try {
+            $favorite = $user->favorites()->where(['product_id' => $product->id]);
+            $favorite->delete();
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', $product->name . ' успешно удален из избранного!');
     }
 
 }

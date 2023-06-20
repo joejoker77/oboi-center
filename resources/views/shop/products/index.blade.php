@@ -3,6 +3,7 @@
  * @var App\Entities\Shop\Category $category
  * @var App\Cart\CartItem[] $cartItems
  */
+ use Illuminate\Support\Facades\Auth;
     $country = null;
     if (!$products->isEmpty()) {
         foreach ($products as $product) {
@@ -12,7 +13,11 @@
             }
         }
     }
+    $userFavorites = [];
 @endphp
+@if(Auth::user())
+    @php $userFavorites = Auth::user()->favorites->pluck('product_id')->toArray(); @endphp
+@endif
 @extends('layouts.index')
 @section('content')
     <div class="container" id="categoryPage">
@@ -238,6 +243,23 @@
                                     @else
                                         <span class="material-symbols-outlined">no_photography</span>
                                     @endif
+                                    @auth
+                                        @if(in_array($product->id, $userFavorites))
+                                                <form class="favorite" action="{{ route('shop.remove-favorite', $product) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit">
+                                                        <span class="material-symbols-outlined selected" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Удалить из избранного">favorite</span>
+                                                    </button>
+                                                </form>
+                                        @else
+                                                <form class="favorite" action="{{ route('shop.add-favorite', $product) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit">
+                                                        <span class="material-symbols-outlined" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Добавить в избранное">favorite</span>
+                                                    </button>
+                                                </form>
+                                        @endif
+                                    @endauth
                                 </div>
                                 <div class="product-props">
                                     <span class="product-name">{{ $product->name }}</span>

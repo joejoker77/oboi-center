@@ -3,8 +3,15 @@
  * @var App\Cart\CartItem[] $cartAllItems
  * @var App\Entities\Shop\Product $product
  */
+
+use Illuminate\Support\Facades\Auth;
+
 $quantity = $product->quantity;
+$userFavorites = [];
 @endphp
+@if(Auth::user())
+    @php $userFavorites = Auth::user()->favorites->pluck('product_id')->toArray(); @endphp
+@endif
 @extends('layouts.index')
 @section('content')
     <div class="container" id="productPage">
@@ -171,6 +178,23 @@ $quantity = $product->quantity;
                     </form>
                 </product-form>
             @endif
+            @auth
+                @if(in_array($product->id, $userFavorites))
+                    <form class="favorite mt-3" action="{{ route('shop.remove-favorite', $product) }}" method="post">
+                        @csrf
+                        <button type="submit" class="btn btn-lg btn-danger w-100 d-flex text-white align-items-center justify-content-center">
+                            <span class="material-symbols-outlined selected">favorite</span>&nbsp;&nbsp;Удалить из избранного
+                        </button>
+                    </form>
+                @else
+                    <form class="favorite mt-3" action="{{ route('shop.add-favorite', $product) }}" method="post">
+                        @csrf
+                        <button type="submit" class="btn btn-lg btn-danger w-100 d-flex text-white align-items-center justify-content-center">
+                            <span class="material-symbols-outlined">favorite</span>&nbsp;&nbsp;Добавить в избранное
+                        </button>
+                    </form>
+                @endif
+            @endauth
             </div>
         </div>
 

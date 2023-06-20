@@ -15,7 +15,6 @@ import videojs from "video.js";
 import IMask from "imask";
 
 import * as noUiSlider from 'nouislider/dist/nouislider.min';
-import swipe from "bootstrap/js/src/util/swipe";
 
 
 const buttonGetProfileForm = document.getElementById('getFormProfile'),
@@ -39,28 +38,14 @@ const buttonGetProfileForm = document.getElementById('getFormProfile'),
     collapseFilterItemBnt  = document.querySelectorAll('.filter-item .btn-link'),
     dropButtons            = document.querySelectorAll('[data-bs-toggle=dropdown]'),
     orderForm              = document.getElementById('orderForm'),
-    filterBlock            = document.querySelector('aside[data-js-filter]');
+    filterBlock            = document.querySelector('aside[data-js-filter]'),
+    wishlistLink           = document.getElementById('wishlistLink');
 
 if (modal) {
     modal.addEventListener('hide.bs.modal', function() {
         this.querySelector('.modal-title').textContent = '';
         this.querySelector('.modal-body').innerHTML = '';
     });
-}
-
-function removeHash () {
-    let scrollV, scrollH, loc = window.location;
-    if ("pushState" in history)
-        history.pushState("", document.title, loc.pathname + loc.search);
-    else {
-        scrollV = document.body.scrollTop;
-        scrollH = document.body.scrollLeft;
-
-        loc.hash = "";
-
-        document.body.scrollTop = scrollV;
-        document.body.scrollLeft = scrollH;
-    }
 }
 
 if (inputPhones.length > 0) {
@@ -107,24 +92,6 @@ if(otherAddress) {
     }
 }
 
-if (window.location.hash) {
-    const tab = document.getElementById(window.location.hash.replace('#', ''));
-    if (tab) {
-        removeHash();
-        const tabs = tab.closest('.nav.nav-pills'),
-            allTabs = tabs.querySelectorAll('li button');
-
-        allTabs.forEach(trigger => {
-            const tabTrigger = new Tab(trigger);
-
-            trigger.addEventListener('click', event => {
-                event.preventDefault();
-                tabTrigger.show();
-            })
-        });
-        window.Tab.getInstance(tab).show();
-    }
-}
 
 if (actionAddressButtons.length > 0) {
     actionAddressButtons.forEach(function (addButton) {
@@ -642,6 +609,12 @@ if (productItems) {
             if (newItems.length > 0) {
                 newItems.forEach(newItem => {
                     productItems.append(newItem);
+                    const tooltips = newItem.querySelectorAll('[data-bs-toggle="tooltip"]');
+                    if (tooltips.length > 0) {
+                        tooltips.forEach(function (tooltip) {
+                            new Tooltip(tooltip);
+                        });
+                    }
                 });
                 spinner.classList.add('invisible');
             } else {
@@ -689,7 +662,9 @@ if (productItems) {
 
     const observer = new IntersectionObserver(callback, options);
 
-    observer.observe(target);
+    if (target) {
+        observer.observe(target);
+    }
 }
 
 if (relatedProducts) {
@@ -1194,3 +1169,19 @@ if (filterBlock && window.matchMedia("(min-width: 992px)").matches) {
         }, false);
     }
 }
+if (window.location.pathname === "/cabinet/profile" && window.location.hash !== '') {
+    const tabs = document.querySelectorAll('#profileTabs button');
+    tabs.forEach(triggerEl => {
+        const tabTrigger = new Tab(triggerEl);
+
+        if (window.location.hash === tabTrigger._getConfig().target) {
+            tabTrigger.show();
+        }
+
+        triggerEl.addEventListener('click', event => {
+            event.preventDefault();
+            tabTrigger.show();
+        });
+    });
+}
+

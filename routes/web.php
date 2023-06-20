@@ -32,6 +32,8 @@ Route::group([
     Route::get('/filter', 'CatalogController@filter')->name('filter');
     Route::get('/search', 'CatalogController@search')->name('search');
     Route::post('/ajax-search', 'CatalogController@ajaxSearch')->name('ajax-search');
+    Route::post('/add-favorite/{product}', 'CatalogController@addFavorite')->name('add-favorite');
+    Route::post('/remove-favorite/{product}', 'CatalogController@removeFavorite')->name('remove-favorite');
 });
 
 Route::group([
