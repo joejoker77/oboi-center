@@ -2339,6 +2339,7 @@ product-quantity {
         margin-top: 0;
         margin-bottom: toRem(20px);
         padding-top: 0;
+        position: relative;
 
         @include media-breakpoint-up(lg) {
             margin-top: toRem(60px);
@@ -2428,7 +2429,8 @@ product-quantity {
 
                     &.bottom {
                         top: auto;
-                        bottom: toRem(668px);
+                        bottom: 0;
+                        position: absolute;
                     }
 
                     #endFilter {
@@ -2549,6 +2551,7 @@ product-quantity {
             .stretched-link {
                 max-height: toRem(150px);
                 box-shadow: 0 toRem(8px) toRem(8px) rgba(0,0,0,.15);
+                z-index: 1;
             }
         }
         > a {
