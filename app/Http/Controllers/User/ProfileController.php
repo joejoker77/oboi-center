@@ -4,12 +4,16 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Entities\User\Subscriber;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Entities\User\DeliveryAddress;
+use Illuminate\Support\Facades\Redirect;
 use App\UseCases\Profile\ProfileService;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Profile\ProfileRequest;
 use App\Http\Requests\Profile\DeliveryRequest;
 use App\Http\Requests\Profile\PhoneVerifyRequest;
@@ -31,8 +35,9 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $this->meta->setRobots('nofollow, noindex');
+        $subscriber = Subscriber::where(['subscriber' => $user->email])->first();
 
-        return view('cabinet.profile.index', compact("user"));
+        return view('cabinet.profile.index', compact("user", 'subscriber'));
     }
 
     public function edit()
@@ -113,5 +118,37 @@ class ProfileController extends Controller
     {
         $address->delete();
         return back()->withFragment('#addresses-tab')->with('success', 'Адрес успешно удален');
+    }
+
+    public function subscribe(Request $request):RedirectResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'subscriber' => 'required|email|unique:subscribers,subscriber'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::to(URL::previous().'#subscribeNews')->withErrors($validator);
+        }
+
+        try {
+            Subscriber::create($request->all());
+            return back()->with('success', 'Вы успешно подписались на нашу рассылку новостей');
+        } catch (\Exception $exception) {
+            return Redirect::to(URL::previous().'#subscribeNews')->with('error', $exception->getMessage());
+        }
+    }
+
+    public function unSubscribe(Request $request): RedirectResponse
+    {
+        if (!$subscriber = Subscriber::where(['subscriber' => $request->get('subscriber')])->first()) {
+            return back()->with('error', 'Пользователь с таким E-mail, не найден в подписке на новости');
+        }
+
+        try {
+            $subscriber->delete();
+            return back()->with('success', 'Вы успешно отписались от нашей рассылки');
+        } catch (\Exception $exception) {
+            return back()->with('error', $exception->getMessage());
+        }
     }
 }

@@ -22,6 +22,9 @@ Route::post('/verify-phone', [RegisterController::class, 'verifyPhone'])->name('
 Route::post('/verify-exists-phone', [ProfileController::class, 'verifyPhone'])->name('profile.verify-phone');
 Auth::routes();
 
+Route::post('/subscribe-news', [ProfileController::class, 'subscribe'])->name('subscribe');
+Route::post('/unsubscribe-news', [ProfileController::class, 'unSubscribe'])->name('un-subscribe')->middleware(['auth', 'can:verify-user']);
+
 Route::group([
     'prefix' => 'shop',
     'as' => 'shop.',

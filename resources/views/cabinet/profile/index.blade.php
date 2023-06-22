@@ -81,13 +81,32 @@ use App\Entities\Shop\Product;
                                 </td>
                             </tr>
                             <tr>
-                                <th>Двухфакторная аутентификация</th>
-                                <td>@if($user->userProfile->phone_auth)
-                                        Включена
+                                <th>Подписка на новости</th>
+                                <td>
+                                    @if($subscriber)
+                                        <form action="{{ route('un-subscribe') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="subscriber" value="{{ $user->email }}">
+                                            <button class="btn btn-blue-dark" type="submit">Отписаться от рассылки</button>
+                                        </form>
                                     @else
-                                        Выключена
-                                    @endif</td>
+                                        <form action="{{ route('subscribe') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="subscriber" value="{{ $user->email }}">
+                                            <button class="btn btn-blue-dark" type="submit">Подписаться на рассылку новостей</button>
+                                        </form>
+                                    @endif
+                                </td>
                             </tr>
+
+{{--                            <tr>--}}
+{{--                                <th>Двухфакторная аутентификация</th>--}}
+{{--                                <td>@if($user->userProfile->phone_auth)--}}
+{{--                                        Включена--}}
+{{--                                    @else--}}
+{{--                                        Выключена--}}
+{{--                                    @endif</td>--}}
+{{--                            </tr>--}}
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-end">

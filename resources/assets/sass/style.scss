@@ -66,6 +66,13 @@
     from{transform: perspective(400px) rotateY(0deg)}
     to{transform: perspective(400px) rotateY(360deg)}
 }
+@keyframes hideAlert {
+    to {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+}
 
 html {
     height: 100%;
@@ -171,6 +178,14 @@ blockquote {
 .alert {
     position: relative;
     z-index: 1;
+
+    &.position-absolute {
+        top: toRem(142px);
+        text-align: center;
+        opacity: .85;
+        animation: hideAlert 0s ease-in 5s;
+        animation-fill-mode: forwards;
+    }
 }
 
 .modal {
@@ -1180,7 +1195,7 @@ header {
 }
 
 .main~#content {
-    padding-top: calc(100vh - toRem(130px));
+    padding-top: calc(100vh - toRem(146px));
 }
 
 .interior-paint {
