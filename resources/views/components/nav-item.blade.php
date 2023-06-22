@@ -15,7 +15,7 @@
            href="{{ $item->item_path }}"
             @if(!$item->children->isEmpty()) data-bs-toggle="dropdown" aria-expanded="false" @endif
             @if($item->image) data-image="{{ $item->image }}" @endif
-            @if($items->entity_type == 'external') target="_blank" @endif
+            @if($item->entity_type == 'external') target="_blank" @endif
         >
             {{ $item->link_text ?? $item->title }}
         </a>
