@@ -1,5 +1,4 @@
 @props(['items'])
-@dd($items)
 @foreach($items as $item)
     @php
         $classes = 'nav-link';
