@@ -4541,3 +4541,34 @@ search-form {
         }
     }
 }
+#scrollUp {
+    background: linear-gradient(317deg, #09103b 13%, #27257c 116%);
+    z-index: 9999;
+    width: toRem(30px);
+    height: toRem(30px);
+    border-radius: 50%;
+    overflow: hidden;
+    bottom: 15%;
+    right: toRem(50px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 400ms ease;
+
+    &.show {
+        opacity: 1;
+    }
+
+    @include media-breakpoint-up(lg) {
+        width: 50px;
+        height: 50px;
+    }
+    .material-symbols-outlined {
+        transform: rotate(180deg);
+        color: white;
+    }
+}

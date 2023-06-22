@@ -339,6 +339,10 @@
         </div>
     </div>
 </div>
+
+<div id="scrollUp" class="position-fixed">
+    <span class="material-symbols-outlined">stat_minus_3</span>
+</div>
 <!-- Scripts -->
 <script src="{{ mix('js/app.js', 'build') }}"></script>
 @yield('scripts')

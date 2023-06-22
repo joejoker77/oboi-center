@@ -39,7 +39,7 @@ const buttonGetProfileForm = document.getElementById('getFormProfile'),
     dropButtons            = document.querySelectorAll('[data-bs-toggle=dropdown]'),
     orderForm              = document.getElementById('orderForm'),
     filterBlock            = document.querySelector('aside[data-js-filter]'),
-    wishlistLink           = document.getElementById('wishlistLink');
+    scrollUpButton         = document.getElementById('scrollUp');
 
 if (modal) {
     modal.addEventListener('hide.bs.modal', function() {
@@ -1182,6 +1182,22 @@ if (window.location.pathname === "/cabinet/profile" && window.location.hash !== 
             event.preventDefault();
             tabTrigger.show();
         });
+    });
+}
+
+if (scrollUpButton) {
+    scrollUpButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        window.scrollTo(0, 0);
+    });
+
+    document.addEventListener('scroll', function (event) {
+        if (window.scrollY >= 1000) {
+            scrollUpButton.classList.add('show');
+        } else {
+            scrollUpButton.classList.remove('show');
+        }
     });
 }
 
