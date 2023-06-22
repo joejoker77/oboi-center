@@ -80,25 +80,26 @@ use App\Entities\Shop\Product;
                                     </p>
                                 </td>
                             </tr>
-                            <tr>
-                                <th>Подписка на новости</th>
-                                <td>
-                                    @if($subscriber)
-                                        <form action="{{ route('un-subscribe') }}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="subscriber" value="{{ $user->email }}">
-                                            <button class="btn btn-blue-dark" type="submit">Отписаться от рассылки</button>
-                                        </form>
-                                    @else
-                                        <form action="{{ route('subscribe') }}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="subscriber" value="{{ $user->email }}">
-                                            <button class="btn btn-blue-dark" type="submit">Подписаться на рассылку новостей</button>
-                                        </form>
-                                    @endif
-                                </td>
-                            </tr>
-
+                            @if($user->email)
+                                <tr>
+                                    <th>Подписка на новости</th>
+                                    <td>
+                                        @if($subscriber)
+                                            <form action="{{ route('un-subscribe') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="subscriber" value="{{ $user->email }}">
+                                                <button class="btn btn-blue-dark" type="submit">Отписаться от рассылки</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('subscribe') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="subscriber" value="{{ $user->email }}">
+                                                <button class="btn btn-blue-dark" type="submit">Подписаться на рассылку новостей</button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endif
 {{--                            <tr>--}}
 {{--                                <th>Двухфакторная аутентификация</th>--}}
 {{--                                <td>@if($user->userProfile->phone_auth)--}}
