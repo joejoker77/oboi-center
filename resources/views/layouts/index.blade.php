@@ -1,5 +1,8 @@
-<?php /** @var App\Entities\User\User $user */ ?>
-    <!doctype html>
+<?php
+/** @var App\Entities\User\User $user */
+$geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
+?>
+<!doctype html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -22,8 +25,8 @@
 <div class="page-wrapper">
     <header @if(Route::current()->getName() === 'home') class="main" @endif>
         <div class="container-fluid">
-            <div class="row d-none d-lg-flex">
-                <div class="col">Ваш город: Москва</div>
+            <div class="row d-none d-lg-flex align-items-center">
+                <div class="col">Ваш город: {{ $geo->city }}</div>
                 <div class="col">
                     <nav class="navbar navbar-expand py-0 top-menu">
                         <x-menu handler="topMenu" menuClass="navbar-nav ms-auto"/>

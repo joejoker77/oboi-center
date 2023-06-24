@@ -117,6 +117,9 @@ Route::group(
         Route::post('photos/get-variant-photos', 'PhotoController@getVariantPhotos')->name('photos.get-variant-photos');
         Route::post('photos/update-variant-photo', 'PhotoController@updateVariantPhoto')->name('photos.update-variant-photo');
 
+        Route::resource('users', 'UsersController');
+        Route::post('users/multi-action', 'UsersController@multiActions')->name('users.multi-action');
+
 
         Route::group(['prefix' => 'shop', 'as' => 'shop.', 'namespace' => 'Shop'], function () {
             Route::resource('categories', 'CategoryController');
@@ -158,6 +161,8 @@ Route::group(
             Route::resource('filters', 'FilterController');
             Route::post('filters/remove-batch', 'FilterController@removeBatch')->name('filters.remove-batch');
             Route::post('filters/add-group', 'FilterController@addGroup')->name('filters.add-group');
+
+            Route::resource('orders', 'OrderController');
         });
 
         Route::group(['prefix' => 'blog', 'as' => 'blog.', 'namespace' => 'Blog'], function () {

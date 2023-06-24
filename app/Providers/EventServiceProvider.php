@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\ShopCategoryOnDelete;
+use App\Events\NewOrder;
 use App\Listeners\ConvertImages;
+use App\Listeners\NewOrderCreated;
+use App\Events\ShopCategoryOnDelete;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\ClearShopCategoryFiles;
 use Alexusmai\LaravelFileManager\Events\FilesUploaded;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         FilesUploaded::class => [
             ConvertImages::class,
         ],
+        NewOrder::class => [
+            NewOrderCreated::class
+        ]
     ];
 
     /**
