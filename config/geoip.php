@@ -55,14 +55,14 @@ return [
             'class' => \Torann\GeoIP\Services\MaxMindDatabase::class,
             'database_path' => storage_path('app/geoip.mmdb'),
             'update_url' => sprintf('https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=%s&suffix=tar.gz', env('MAXMIND_LICENSE_KEY')),
-            'locales' => ['en'],
+            'locales' => ['ru'],
         ],
 
         'maxmind_api' => [
             'class' => \Torann\GeoIP\Services\MaxMindWebService::class,
             'user_id' => env('MAXMIND_USER_ID'),
             'license_key' => env('MAXMIND_LICENSE_KEY'),
-            'locales' => ['en'],
+            'locales' => ['ru'],
         ],
 
         'ipapi' => [
@@ -70,7 +70,7 @@ return [
             'secure' => true,
             'key' => env('IPAPI_KEY'),
             'continent_path' => storage_path('app/continents.json'),
-            'lang' => 'en',
+            'lang' => 'ru',
         ],
 
         'ipgeolocation' => [
@@ -78,7 +78,7 @@ return [
             'secure' => true,
             'key' => env('IPGEOLOCATION_KEY'),
             'continent_path' => storage_path('app/continents.json'),
-            'lang' => 'en',
+            'lang' => 'ru',
         ],
 
         'ipdata' => [
@@ -91,7 +91,7 @@ return [
             'class'  => \Torann\GeoIP\Services\IPFinder::class,
             'key'    => env('IPFINDER_API_KEY'),
             'secure' => true,
-            'locales' => ['en'],
+            'locales' => ['ru'],
         ],
 
     ],
