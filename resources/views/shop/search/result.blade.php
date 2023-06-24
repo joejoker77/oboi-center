@@ -62,7 +62,9 @@
                                         @if(isset($mat))
                                             <span class="product-materials d-none d-lg-block">
                                             <strong>Материал:</strong>
-                                            <span class="prop-value">{{ $mat['up'] }} x {{ $mat['down'] }}</span>
+                                            <span class="prop-value">
+                                                @if(!empty($mat['up']) && !empty($mat['down'])){{ $mat['up'] }} x {{ $mat['down'] }}@elseif(!empty($mat['up'])){{ $mat['up'] }}@elseif(!empty($mat['down'])){{ $mat['down'] }}@endif
+                                            </span>
                                         </span>
                                         @endif
                                         @if(isset($dmns) and !empty($dmns['height']) and !empty($dmns['width']))

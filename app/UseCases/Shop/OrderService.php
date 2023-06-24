@@ -1,6 +1,6 @@
 <?php
-
 namespace App\UseCases\Shop;
+
 
 use Throwable;
 use App\Cart\Cart;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Entities\Shop\DeliveryMethod;
 use App\Entities\User\DeliveryAddress;
 use App\UseCases\Auth\RegisterService;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\Order\OrderRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -31,6 +32,7 @@ class OrderService
         $products       = [];
         $user           = Auth::user();
         $deliveryMethod = $this->getDelivery($request->get('delivery_id'));
+        $customerIpData = geoip()->getLocation(Request::ip());
 
         if (!$user && !$request->get('customer_phone')) {
             throw new \DomainException('Пользователь не найден или не указан номер телефона');
@@ -62,7 +64,8 @@ class OrderService
                 new CustomerData($request->get('customer_phone'), $request->get('customer_name')),
                 $cart->getCost()->getTotal(),
                 $request->get('note') ?? null,
-                $request->get('payment_method')
+                $request->get('payment_method'),
+                $customerIpData->city
             );
 
             $addressArray   = [

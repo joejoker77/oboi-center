@@ -199,7 +199,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Orchestra\Parser\XmlServiceProvider::class,
         App\Providers\SearchServiceProvider::class,
-        App\Providers\CartProvider::class
+        App\Providers\CartProvider::class,
+        Torann\GeoIP\GeoIPServiceProvider::class
 
     ],
 
@@ -217,7 +218,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'XmlParser' => \Orchestra\Parser\Xml\Facade::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'GeoIP' => Torann\GeoIP\Facades\GeoIP::class
     ])->toArray(),
 
     'surgaz_daily' => env("SURGAZ_LOGIN").":".env("SURGAZ_PASSWORD").'@'.env("SURGAZ_URL_DAILY", ""),

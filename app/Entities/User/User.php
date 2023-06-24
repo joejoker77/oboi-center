@@ -9,6 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use function Symfony\Component\String\s;
 
 /**
  * @property int $id
@@ -68,6 +69,21 @@ class User extends Authenticatable
             'role'                      => UserProfile::ROLE_USER
         ]);
         return $user;
+    }
+
+    public static function statusesList():array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Активный',
+            self::STATUS_WAIT   => 'Ожидает Активации'
+        ];
+    }
+
+    public static function getBadgeStatus($status):array
+    {
+        return $status == self::STATUS_ACTIVE ?
+            ['name' => 'Активный', 'class' => 'bg-success'] :
+            ['name' => 'Ожидает активации', 'class' => 'bg-secondary'];
     }
 
     public function isVerifyEmail():bool

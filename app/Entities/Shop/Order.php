@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property integer $payment_id
  * @property string $delivery_name
  * @property integer $delivery_cost
+ * @property string $customer_ip
  *
  * @property OrderItem[] $orderItems
  * @property User $user
@@ -41,7 +42,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'delivery_id', 'payment_method', 'cost', 'note', 'current_status', 'cancel_reason', 'statuses', 'customer_phone', 'customer_name',
-        'delivery_index', 'delivery_address', 'payment_id'
+        'delivery_index', 'delivery_address', 'payment_id', 'customer_ip'
     ];
 
     protected $casts = [
@@ -49,7 +50,7 @@ class Order extends Model
     ];
 
 
-    public static function create($userId, CustomerData $customerData, $cost, $note, $paymentMethod):self
+    public static function create($userId, CustomerData $customerData, $cost, $note, $paymentMethod, $customer_ip):self
     {
         $order                 = new static();
         $order->user_id        = $userId;
@@ -58,6 +59,7 @@ class Order extends Model
         $order->cost           = $cost;
         $order->note           = $note;
         $order->payment_method = $paymentMethod;
+        $order->customer_ip    = $customer_ip;
 
         $order->addStatus(Status::NEW);
 
@@ -70,6 +72,23 @@ class Order extends Model
             self::PAYMENT_CASH => 'Оплата наличными',
             self::PAYMENT_CARD => 'Оплата онлайн'
         ];
+    }
+
+    public function statusesList():array
+    {
+        return [
+            Status::NEW => 'Новый',
+            Status::CANCELLED => 'Отменен',
+            Status::SENT      => 'В обработке',
+            Status::PAID      => 'Оплачен',
+            Status::COMPLETED => 'Завершен',
+            Status::CANCELLED_BY_CUSTOMER => 'Отменен пользователем'
+        ];
+    }
+
+    public function getStatus($status):string
+    {
+        return $this->statusesList()[$status];
     }
 
     public function setDeliveryInfo(DeliveryMethod $method, DeliveryData $deliveryData): void

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use function Symfony\Component\String\s;
 
 /**
  * @property int $user_id
@@ -44,10 +45,20 @@ class UserProfile extends Model
     public static function roleList(): array
     {
         return [
-            self::ROLE_USER => 'User',
-            self::ROLE_ADMIN => 'Administrator',
-            self::ROLE_MODERATOR => 'Moderator'
+            self::ROLE_USER      => 'Покупатель',
+            self::ROLE_ADMIN     => 'Администратор',
+            self::ROLE_MODERATOR => 'Модератор'
         ];
+    }
+
+    public static function getCurrentRole($role):array
+    {
+        $class = match ($role) {
+            self::ROLE_ADMIN => 'bg-danger',
+            self::ROLE_MODERATOR => 'bg-warning',
+            default => 'bg-info',
+        };
+        return ['name' => self::roleList()[$role], 'class' => $class];
     }
 
     public function edit(string $last_name, string $phone)
