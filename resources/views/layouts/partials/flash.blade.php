@@ -16,6 +16,12 @@
     </div>
 @endif
 
+@if (session('warning'))
+    <div class="alert alert-warning @if(Route::current()->getName() == 'home')position-absolute container @endif" @if(Route::current()->getName() == 'home')js-autofade="true" @endif>
+        {!! session('warning') !!}
+    </div>
+@endif
+
 @if (session('info'))
     <div class="alert alert-info @if(Route::current()->getName() == 'home')position-absolute container @endif" @if(Route::current()->getName() == 'home')js-autofade="true" @endif>
         {!! session('info') !!}

@@ -53,7 +53,7 @@ class CheckoutController extends Controller
             if (!$user) {
                 return redirect()->route('login')->with('success', 'Ваш заказ создан. Если хотите оплатить заказ онлайн или посмотреть детали заказа, пожалуйста авторизуйтесь. На указанный вами телефон, мы выслали SMS с временным паролем.');
             } else {
-                return redirect()->route('cabinet.profile.index')->withFragment('#orders-tab')->with('success', 'Ваш заказ успешно создан. Наш менеджер свяжется с вами в ближайшее время, для уточнения деталей заказа.');
+                return redirect()->route('cabinet.profile.index')->withFragment('#orders-tab-pane')->with('success', 'Ваш заказ успешно создан. Наш менеджер свяжется с вами в ближайшее время, для уточнения деталей заказа.');
             }
 
         } catch (\Throwable $e) {

@@ -15,6 +15,7 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
     productTable         = document.getElementById('productTable'),
     deliveryTable        = document.getElementById('deliveryTable'),
     usersTable           = document.getElementById('userTable'),
+    orderTable           = document.getElementById('orderTable'),
     createMenuButton     = document.getElementById('jsCreateMenu'),
     editMenuButton       = document.querySelectorAll('.edit-menu'),
     addNavItems          = document.querySelectorAll('.add-items'),
@@ -147,6 +148,33 @@ if (usersTable) {
     const searchForm  = usersTable.querySelector('#searchUsers'),
         selectAll     = usersTable.querySelector('[name=select-all]'),
         allCheckboxes = usersTable.querySelectorAll('[name="selected[]"]');
+
+    selectAll.addEventListener('change', function (event) {
+        allCheckboxes.forEach(function (checkbox) {
+            checkbox.checked = event.target.checked;
+        });
+    });
+
+    Array.from(searchForm.elements).forEach(function (element) {
+        if (element.type === 'select-one' || element.type === 'checkbox') {
+            element.addEventListener('change', function () {
+                searchForm.submit();
+            });
+        }
+        if (element.type === 'text') {
+            element.addEventListener('keyup', function (event) {
+                if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+                    searchForm.submit();
+                }
+            })
+        }
+    });
+}
+
+if (orderTable) {
+    const searchForm  = orderTable.querySelector('#searchOrders'),
+        selectAll     = orderTable.querySelector('[name=select-all]'),
+        allCheckboxes = orderTable.querySelectorAll('[name="selected[]"]');
 
     selectAll.addEventListener('change', function (event) {
         allCheckboxes.forEach(function (checkbox) {

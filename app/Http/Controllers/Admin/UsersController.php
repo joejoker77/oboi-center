@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Entities\User\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Entities\User\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class UsersController extends Controller
 {
@@ -19,16 +21,67 @@ class UsersController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function create()
+    {
+        abort(404);
+    }
 
+    public function show(User $user):View
+    {
+        return view('admin.users.show', compact('user'));
+    }
 
+    public function edit(User $user):View
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user):RedirectResponse
+    {
+        if ($request->get('status') && $request->get('status') !== $user->status) {
+            $user->update($request->only('status'));
+        }
+        if ($request->get('role') && $request->get('role') !== $user->userProfile->role) {
+            $user->userProfile->update($request->only('role'));
+        }
+        return redirect()->route('admin.users.index')->with('success', 'Данные пользователя отредактированы.');
+    }
+
+    public function destroy(User $user):RedirectResponse
+    {
+        $user->delete();
+        return redirect()->route('admin.users.index')->with('success', 'Пользователь удален');
+    }
+
+    public function multiDelete(Request $request)
+    {
+        if (!empty($request->get('selected'))) {
+
+            if (in_array(Auth::user()->id, $request->get('selected'))) {
+                return back()->with('warning', 'Внимание, вы удаляете свою собственную учетную запись.');
+            }
+
+            foreach ($request->get('selected') as $userId) {
+                $user = User::find($userId);
+                $user->delete();
+            }
+
+            return back()->with('success', 'Все выбранные пользователи были удалены');
+        } else {
+            return back()->with('warning', 'Внимание! Не выбран ни один пользователь');
+        }
+    }
 
     private function queryParams(Request $request, $query)
     {
         if (!empty($value = $request->get('id'))) {
             $query->where('id', $value);
         }
-        if (!empty($value = $request->get('name'))) {
-            $query->where('name', $value);
+        if (!empty($value = $request->get('user'))) {
+            $users = User::where('name', $value)->pluck('id')->toArray();
+            if (!empty($users)) {
+                $query->whereIn('user_id', $users);
+            }
         }
         if (!empty($value = $request->get('last_name'))) {
             $query->where('last_name', $value);

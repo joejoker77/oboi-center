@@ -260,10 +260,15 @@ blockquote {
 
     svg {
         vertical-align: text-top;
+        pointer-events: none;
         circle {
             fill: white;
         }
     }
+
+    span {
+        pointer-events: none;
+    };
 
     .material-symbols-outlined.close {
         display: none;

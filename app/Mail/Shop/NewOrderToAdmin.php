@@ -45,10 +45,9 @@ class NewOrderToAdmin extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.auth.register.verify',
+            markdown: 'emails.shop.new-order',
             with: [
-                'url' => route('register.verify', $this->user->verify_token),
-                'tmpPassword' => $this->user->tmpPassword
+                'url' => route('admin.shop.orders.show', $this->order)
             ]
         );
     }

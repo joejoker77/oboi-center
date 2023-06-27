@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Entities\Shop\Order;
 use App\Services\Sms\SmsSender;
+use App\Mail\Shop\NewOrderToAdmin;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -33,8 +34,7 @@ class NewOrderCreated implements ShouldQueue
      */
     public function handle(Order $order):void
     {
-
-
-        $this->mailer->to(env('MAIL_FROM_ADDRESS'))->send(new VerifyMail($user));
+        $this->mailer->to(env('MAIL_FROM_ADDRESS'))->send(new NewOrderToAdmin($order));
+        $this->smsSender->sendSms(env('SMS_ADMIN_NUMBER'), 'На сайте "Обои Центр, был создан новый заказ. Требуется внимание менеджера"');
     }
 }
