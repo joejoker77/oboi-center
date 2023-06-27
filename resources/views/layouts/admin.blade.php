@@ -115,6 +115,12 @@
                         </ul>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('admin.navigations.index') }}" class="nav-link @if(request()->is('admin/navigations')) active @endif">
+                            <span class="align-text-bottom" data-feather="list"></span>
+                            Навигация по сайту
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('admin.users.index') }}" class="nav-link @if(request()->is('admin/users*')) active @endif">
                             <span class="align-text-bottom" data-feather="users"></span>
                             Пользователи
@@ -124,12 +130,6 @@
                         <a href="{{ route('admin.file-manager') }}" class="nav-link @if(request()->is('admin/file-manager')) active @endif">
                             <span class="align-text-bottom" data-feather="folder"></span>
                             Файловый менеджер
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.navigations.index') }}" class="nav-link @if(request()->is('admin/navigations')) active @endif">
-                            <span class="align-text-bottom" data-feather="list"></span>
-                            Навигация по сайту
                         </a>
                     </li>
                 </ul>

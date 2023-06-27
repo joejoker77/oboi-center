@@ -68,21 +68,22 @@ class OrderService
                 $customerIpData->city
             );
 
-            $addressArray   = [
-                'г. '.$request->get('city'),
-                'ул. '.$request->get('street'),
-                'д. '.$request->get('house'),
+            $addressArray = [
+                $request->get('city') ? 'г. '.$request->get('city') : null,
+                $request->get('street') ? 'ул. '.$request->get('street') : null,
+                $request->get('house') ? 'д. '.$request->get('house') : null,
                 $request->get('house_part') ? 'корпус/литера'. $request->get('house_part') : null,
                 $request->get('flat') ? 'кв. '. $request->get('flat') : null
             ];
 
-            $order->setDeliveryInfo(
+            $order->setDeliveryInfo (
                 $deliveryMethod,
                 new DeliveryData(
                     $request->get('postal_code'),
                     implode(', ',array_filter($addressArray))
                 )
             );
+
             $order->saveOrFail();
 
             $items = array_map(function (CartItem $item) use (&$products, $order) {

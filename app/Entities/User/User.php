@@ -19,6 +19,8 @@ use function Symfony\Component\String\s;
  * @property string $status
  * @property string $verify_token
  * @property string|null email_verified_at
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @property UserProfile $userProfile
  * @property DeliveryAddress[] $addresses

@@ -268,6 +268,17 @@ if (megaMenu) {
         buttons    = megaMenu.querySelectorAll('button'),
         swElements = megaMenu.querySelectorAll('.swiperMegaMenu');
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const triggerMegaMenu = document.querySelector('[data-bs-target="#mainMenu"]'),
+            megaMenuInstance  = new Dropdown(triggerMegaMenu);
+
+        this.addEventListener('click', function (event) {
+            if (!event.target.closest('#mainMenu') && event.target !== triggerMegaMenu) {
+                megaMenuInstance.hide();
+            }
+        });
+    });
+
     if (links.length > 0) {
         links.forEach(function (link) {
             const imageSrc = link.dataset.image;
@@ -362,8 +373,6 @@ if (megaMenu) {
             });
         });
     }
-
-
 }
 
 class MainGallery extends HTMLElement

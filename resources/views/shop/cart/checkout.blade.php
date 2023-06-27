@@ -20,7 +20,18 @@
                     @csrf
                     @if($user)
                         <input type="hidden" name="customer_name" value="{{ $user->name }}">
-                        <input type="hidden" name="customer_phone" value="{{ $user->userProfile->phone }}">
+                        @if($user->userProfile->phone)
+                            <input type="hidden" name="customer_phone" value="{{ $user->userProfile->phone }}">
+                        @else
+                            <h1>Контактная информация</h1>
+                            <div class="form-floating mb-3">
+                                <input type="text" id="customerPhone" class="form-control @error('customer_phone') is-invalid @enderror"
+                                       name="customer_phone" placeholder="Ваш Номер телефона" required>
+                                <label for="customerPhone">Ваш Номер Телефона</label>
+                                @error('customer_name')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                            </div>
+                        @endif
+
                     @else
                         <h1>
                             Контактная информация

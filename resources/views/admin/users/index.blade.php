@@ -5,7 +5,7 @@
     <h1 class="py-4">Пользователи</h1>
     <div class="d-flex flex-column">
         <div class="ms-auto">
-            <form class="p-0 mb-3" method="POST" id="formActions" action="{{ route('admin.users.multi-action') }}">
+            <form class="p-0 mb-3" method="POST" id="formActions" action="{{ route('admin.users.multi-delete') }}">
                 @csrf
                 <div class="btn-group" role="group" aria-label="control buttons">
                     <button type="submit" name="action" value="remove" class="btn btn-lg btn-danger js-confirm" data-confirm="multi" style="line-height: 0"
@@ -118,7 +118,21 @@
                         </span>
                     </td>
                     <td>
-
+                        <a href="{{ route('admin.users.edit', $user) }}" class="list-inline-item mx-1"
+                           id="editCategory" data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           data-bs-title="Редактировать"
+                        >
+                            <span data-feather="edit"></span>
+                        </a>|<form method="POST" class="list-inline-item js-confirm ms-2"
+                              action="{{ route('admin.users.destroy', $user) }}"
+                              data-bs-toggle="tooltip" data-bs-placement="bottom"
+                              data-bs-title="Удалить пользователя"
+                        >
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn p-0 align-baseline js-confirm text-danger" type="submit"><span data-feather="trash-2"></span></button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
