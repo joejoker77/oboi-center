@@ -73,8 +73,10 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
                             <div id="contactInfo" class="dropdown-menu">
                                 <div class="phone">
                                     <span>Контактный телефон:</span>
-                                    <a href="tel:+74957205965">495 720 59 65</a>
-                                    <a class="ms-auto" href="tel:+79037205965">903 720 59 65</a>
+                                    <div class="d-flex flex-column">
+                                        <a href="tel:+74957205965">+7(495)720-59-65</a>
+                                        <a class="ms-auto" href="tel:+79037205965">+7(903)720-59-65</a>
+                                    </div>
                                 </div>
                                 <div class="time-work">
                                     <span>Часы работы:</span>

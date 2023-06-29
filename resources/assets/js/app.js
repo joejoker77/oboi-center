@@ -641,7 +641,9 @@ if (productItems) {
         }).catch(error => {
             console.error(error);
             document.querySelector('footer').classList.remove('d-none');
-            document.querySelector('aside').classList.add('bottom');
+            if (document.querySelector('aside')) {
+                document.querySelector('aside').classList.add('bottom');
+            }
             newUrl = new URL(window.location.origin+window.location.pathname+location.search);
             newUrl.searchParams.delete('page');
             window.history.pushState({path:newUrl.href}, '', newUrl.href);

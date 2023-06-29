@@ -362,6 +362,7 @@ header {
             font-size: 1rem;
             --bs-navbar-nav-link-padding-x: 0;
             --bs-nav-link-padding-y: 0.688rem;
+            white-space: nowrap;
         }
     }
 
@@ -431,10 +432,10 @@ header {
         white-space: nowrap;
 
         a {
-            text-decoration: none;
+            text-decoration: underline;
             color: black;
             &:hover {
-                text-decoration: underline;
+                text-decoration: none;
             }
         }
 
@@ -692,10 +693,10 @@ header {
             color: white;
 
             a {
-                text-decoration: none;
+                text-decoration: underline;
                 color: white;
                 &:hover {
-                    text-decoration: underline;
+                    text-decoration: none;
                 }
             }
         }
@@ -2802,7 +2803,7 @@ main-gallery {
                 right: toRem(15px);
                 left: auto;
                 &:after {
-                    content: "\00BB";
+                    content: "»";
                 }
             }
 
@@ -2810,7 +2811,7 @@ main-gallery {
                 left: toRem(15px);
                 right: auto;
                 &:after {
-                    content: "\00AB";
+                    content: "«";
                 }
             }
             &-disabled {
