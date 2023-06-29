@@ -148,8 +148,13 @@ Route::group(
             Route::post('products/get-attributes-form', 'ProductController@getAttributesForm')->name('products.get-attributes-form');
             Route::post('products/get-variants-form', 'ProductController@getVariantsForm')->name('products.get-variants-form');
             Route::post('products/set-active', 'ProductController@setActive')->name('product.set-active');
-
             Route::post('products/set-status', "ProductController@setStatus")->name('products.set-status');
+
+            Route::post('products/search-variant', 'ProductController@searchVariant')->name('products.search-variant');
+            Route::post('products/delete-variant', 'ProductController@deleteVariant')->name('products.delete-variant');
+            Route::post('products/add-variant', 'ProductController@addVariant')->name('products.add-variant');
+            Route::post('products/delete-relation', 'ProductController@deleteRelation')->name('products.delete-relation');
+            Route::post('products/add-relation', 'ProductController@addRelation')->name('products.addRelation');
 
             Route::post('products/photo/{product}/{photo}/up', 'ProductController@photoUp')->name('products.photo.up');
             Route::post('products/photo/{product}/{photo}/down', 'ProductController@photoDown')->name('products.photo.down');

@@ -3,11 +3,11 @@
 namespace App\UseCases\Admin\Shop;
 
 
+use Throwable;
 use App\Entities\Shop\Value;
 use Illuminate\Http\Request;
-use Throwable;
 use App\Entities\Shop\Product;
-use App\Entities\Shop\Variant;
+// use App\Entities\Shop\Variant;
 use App\Entities\Shop\Attribute;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Admin\Shop\ProductRequest;
@@ -216,88 +216,106 @@ class ProductService
         }
     }
 
-    /**
-     * @param ProductRequest $request
-     * @param Product $product
-     * @return void
-     */
-    private function createVariants(ProductRequest $request, Product $product): void
+    public function searchVariant(string $query) : array
     {
-        $arrays = [];
-        $keys   = [];
-        $requestValues = $request->get('product_attributes');
-        foreach ($requestValues as $id => $value) {
-            $attribute = Attribute::find($id);
-            if (is_array($value) && $attribute->as_option) {
-                $arrays[] = $value;
-                $keys[]   = $id;
-            }
+        $result = [];
+        $q      = Product::query();
+
+        foreach (Product::$searchable as $field) {
+            $q->orWhere($field, 'LIKE', '%'.$query.'%');
         }
-        if (count($arrays) < 2) {
-            return;
-        }
-        $variants = $this->generateVariants($arrays);
+        $results = $q->select(['id', 'name'])->take(10)->get();
 
-        foreach ($variants as $i => $variant) {
-            if (count($variant) > 1) {
-                $variants[$i] = array_combine($keys, $variant);
-                $name = implode('/', $variant);
-            } else {
-                $name = $variant[0];
+        if (!$results->isEmpty()) {
+            foreach ($results as $answerItem) {
+                $result[] = ['name' => $answerItem->name, 'id' => $answerItem->id];
             }
-            foreach ($variants[$i] as $var) {
-                if (strpbrk($var,'|')) {
-                    $varArray = explode('|', $var);
-                    $name = str_replace('|'.$varArray[1], '', $name);
-                }
-            }
-            /** @var Variant $productVariant */
-            $productVariant = $product->variants()->create([
-                'name'     => $name,
-                'sku'      => null,
-                'price'    => $product->price,
-                'weight'   => $product->weight,
-                'quantity' => 0
-            ]);
-            foreach ($variants[$i] as $id => $value) {
-                $productVariant->values()->create([
-                    'attribute_id' => $id,
-                    'value'        => $value
-                ]);
-            }
-        }
-    }
-
-    private function generateVariants($arrays, $N=-1, $count=FALSE, $weight=FALSE): array
-    {
-        if ($N == -1) {
-            $arrays = array_values($arrays);
-            $count = count($arrays);
-            $weight = array_fill(-1, $count+1, 1);
-            $Q = 1;
-            foreach ($arrays as $i=>$array) {
-                $size = count($array);
-                $Q = $Q * $size;
-                $weight[$i] = $weight[$i-1] * $size;
-            }
-
-            $result = [];
-            for ($n=0; $n<$Q; $n++)
-                $result[] = $this->generateVariants($arrays, $n, $count, $weight);
-
-        } else {
-            $StateArr = array_fill(0, $count, 0);
-
-            for ($i=$count-1; $i>=0; $i--)
-            {
-                $StateArr[$i] = floor($N/$weight[$i-1]);
-                $N = $N - $StateArr[$i] * $weight[$i-1];
-            }
-
-            $result = [];
-            for ($i=0; $i<$count; $i++)
-                $result[$i] = $arrays[$i][$StateArr[$i]];
         }
         return $result;
     }
+
+//    /**
+//     * @param ProductRequest $request
+//     * @param Product $product
+//     * @return void
+//     */
+//    private function createVariants(ProductRequest $request, Product $product): void
+//    {
+//        $arrays = [];
+//        $keys   = [];
+//        $requestValues = $request->get('product_attributes');
+//        foreach ($requestValues as $id => $value) {
+//            $attribute = Attribute::find($id);
+//            if (is_array($value) && $attribute->as_option) {
+//                $arrays[] = $value;
+//                $keys[]   = $id;
+//            }
+//        }
+//        if (count($arrays) < 2) {
+//            return;
+//        }
+//        $variants = $this->generateVariants($arrays);
+//
+//        foreach ($variants as $i => $variant) {
+//            if (count($variant) > 1) {
+//                $variants[$i] = array_combine($keys, $variant);
+//                $name = implode('/', $variant);
+//            } else {
+//                $name = $variant[0];
+//            }
+//            foreach ($variants[$i] as $var) {
+//                if (strpbrk($var,'|')) {
+//                    $varArray = explode('|', $var);
+//                    $name = str_replace('|'.$varArray[1], '', $name);
+//                }
+//            }
+//            /** @var Variant $productVariant */
+//            $productVariant = $product->variants()->create([
+//                'name'     => $name,
+//                'sku'      => null,
+//                'price'    => $product->price,
+//                'weight'   => $product->weight,
+//                'quantity' => 0
+//            ]);
+//            foreach ($variants[$i] as $id => $value) {
+//                $productVariant->values()->create([
+//                    'attribute_id' => $id,
+//                    'value'        => $value
+//                ]);
+//            }
+//        }
+//    }
+//
+//    private function generateVariants($arrays, $N=-1, $count=FALSE, $weight=FALSE): array
+//    {
+//        if ($N == -1) {
+//            $arrays = array_values($arrays);
+//            $count = count($arrays);
+//            $weight = array_fill(-1, $count+1, 1);
+//            $Q = 1;
+//            foreach ($arrays as $i=>$array) {
+//                $size = count($array);
+//                $Q = $Q * $size;
+//                $weight[$i] = $weight[$i-1] * $size;
+//            }
+//
+//            $result = [];
+//            for ($n=0; $n<$Q; $n++)
+//                $result[] = $this->generateVariants($arrays, $n, $count, $weight);
+//
+//        } else {
+//            $StateArr = array_fill(0, $count, 0);
+//
+//            for ($i=$count-1; $i>=0; $i--)
+//            {
+//                $StateArr[$i] = floor($N/$weight[$i-1]);
+//                $N = $N - $StateArr[$i] * $weight[$i-1];
+//            }
+//
+//            $result = [];
+//            for ($i=0; $i<$count; $i++)
+//                $result[$i] = $arrays[$i][$StateArr[$i]];
+//        }
+//        return $result;
+//    }
 }

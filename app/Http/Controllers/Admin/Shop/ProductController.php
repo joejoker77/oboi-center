@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Doctrine\DBAL\Cache\CacheException;
+use Illuminate\Support\Facades\Session;
 use App\UseCases\Admin\Shop\ProductService;
 use App\Http\Requests\Admin\Shop\ProductRequest;
 
@@ -157,6 +158,62 @@ class ProductController extends Controller
             return back()->with('success', $answer)->withInput();
         } catch (\DomainException $exception) {
             return back()->with('error', $exception->getMessage());
+        }
+    }
+
+    public function searchVariant(Request $request):JsonResponse
+    {
+        $answer = $this->service->searchVariant($request->get('query'));
+        return response()->json($answer);
+    }
+
+    public function deleteVariant(Request $request):RedirectResponse|JsonResponse
+    {
+        try {
+            /** @var Product $product */
+            $product = Product::find($request->get('current_product'));
+            $product->variants()->detach($request->get('variant_id'));
+            Session::flash('success', 'Вариант успешно удален');
+            return response()->json('success');
+        } catch (\Exception $exception) {
+            return response()->json(['error'=> $exception->getMessage()]);
+        }
+    }
+
+    public function addVariant(Request $request):RedirectResponse
+    {
+        try {
+            /** @var Product $product */
+            $product = Product::find($request->get('current_product'));
+            $product->variants()->attach($request->get('variant_id'));
+            return redirect()->route('admin.shop.products.edit', compact('product'))->with('success', 'Вариант успешно добавлен к продукту');
+        } catch (\Exception $exception) {
+            return redirect()->route('admin.shop.products.edit', compact('product'))->with('error', $exception->getMessage());
+        }
+    }
+
+    public function deleteRelation(Request $request): JsonResponse
+    {
+        try {
+            /** @var Product $product */
+            $product = Product::find($request->get('current_product'));
+            $product->related()->detach($request->get('variant_id'));
+            Session::flash('success', 'Связанный продукт успешно удален');
+            return response()->json('success');
+        } catch (\Exception $exception) {
+            return response()->json(['error'=> $exception->getMessage()]);
+        }
+    }
+
+    public function addRelation(Request $request): RedirectResponse
+    {
+        try {
+            /** @var Product $product */
+            $product = Product::find($request->get('current_product'));
+            $product->related()->attach($request->get('variant_id'));
+            return redirect()->route('admin.shop.products.edit', compact('product'))->with('success', 'Связанный продукт успешно добавлен к текущему');
+        } catch (\Exception $exception) {
+            return redirect()->route('admin.shop.products.edit', compact('product'))->with('error', $exception->getMessage());
         }
     }
 }
