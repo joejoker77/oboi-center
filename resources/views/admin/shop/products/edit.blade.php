@@ -100,12 +100,12 @@
                         @include('admin.shop.products.partials.attributes', ['attributes' => $product->category->allAttributes(), 'product' => $product])
                     </div>
                 @endif
-                @if(!$product->variants->isEmpty())
-                    <div class="p-3 mb-3 bg-light border rounded-3">
-                        <h4 class="my-3 pb-3 border-bottom">Варианты продукта</h4>
-                        @include('admin.shop.products.partials.variants', ['variants' => $product->variants])
-                    </div>
-                @endif
+                <div class="p-3 mb-3 bg-light border rounded-3">
+                    @include('admin.shop.products.partials.variants', ['variants' => $product->variants, 'type' => 'variants'])
+                </div>
+                <div class="p-3 mb-3 bg-light border rounded-3">
+                    @include('admin.shop.products.partials.variants', ['variants' => $product->related, 'type' => 'related'])
+                </div>
             </div>
             <div class="col-md-3 adding-forms">
                 @if(!$categories->isEmpty())

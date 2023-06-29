@@ -85,8 +85,6 @@ class NavigationService
                     throw new \DomainException('Пункты меню пусты!');
                 }
 
-
-
                 foreach ($items as $item) {
 
                     $route = null;

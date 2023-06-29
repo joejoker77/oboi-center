@@ -100,9 +100,6 @@
                         <div class="col-12">
                             <h6>Варианты</h6>
                             <div class="variants-container"></div>
-                            <a class="float-end js-add-variant" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Добавить вариант">
-                                <i data-feather="plus-circle"></i>
-                            </a>
                         </div>
                     </div>
                 </div>

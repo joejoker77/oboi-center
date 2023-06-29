@@ -654,197 +654,349 @@ class VariantsList extends HTMLElement
     constructor() {
         super();
         this.variants        = this.querySelectorAll('.variant');
+        this.addVariantBtn   = this.querySelector('.js-addVariant');
+        this.deleteButtons   = this.querySelectorAll('[js-deleteVariant]');
+        this.type            = this.dataset.type;
+
         this.modalElement    = document.getElementById('mainModal');
         this.modal           = new Modal(this.modalElement);
         this.getModal        = function () {return this.modal}
         this.getModalElement = function () {return this.modalElement}
+        this.getType         = function () {return this.type}
 
         this.modalElement.addEventListener('hide.bs.modal', function () {
             this.querySelector('.modal-dialog').classList.remove('modal-fullscreen');
             this.querySelector('.modal-body').innerHTML = '';
+            this.querySelector('.modal-title').textContent = '';
             this.classList.remove('dark');
         });
 
-        this.init(this.variants);
+        this.addVariantBtn.addEventListener('click', this.addVariant.bind(this));
+        this.deleteVariants(this.deleteButtons);
+
+        // this.init(this.variants);
     }
 
-    addImage(event) {
-        const formData = new FormData(),
-            self       = this;
+    deleteVariants(buttons) {
+        if (buttons.length > 0) {
+            const type = this.getType();
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const variantId = event.target.getAttribute('js-deleteVariant'),
+                        formData    = new FormData,
+                        url         = type === 'variants' ? '/admin/shop/products/delete-variant' : '/admin/shop/products/delete-relation';
 
-        formData.append('id', event.target.dataset.variantId);
-
-        axios.post('/admin/photos/get-variant-photos', formData).then(function (response) {
-
-            if (response.status === 200 && response.statusText === 'OK') {
-                const answer = response.data;
-                if (typeof answer.error !== 'undefined') {
-                    console.error(answer.error);
-                    return null;
-                }
-
-                self.getModalElement().classList.add('dark');
-                self.getModalElement().querySelector('.modal-body').innerHTML = answer;
-                self.getModalElement().querySelector('.modal-dialog').classList.add('modal-fullscreen');
-                feather.replace({ 'aria-hidden': 'true' })
-                self.getModal().show();
-
-                self.variantId = document.getElementById('modalGallery').dataset.variantId;
-
-                const thumbs      = self.getModalElement().querySelectorAll('.thumb-photo'),
-                    forms         = self.getModalElement().querySelectorAll('.photo-form'),
-                    mainPhotos    = self.getModalElement().querySelectorAll('.main-photo'),
-                    uploadButtons = self.getModalElement().querySelectorAll('[name="add-photos[]"]');
-
-                if (uploadButtons.length > 0) {
-                    uploadButtons.forEach(function (fileInput) {
-                        fileInput.addEventListener('change', self.changeImage.bind(self));
+                    formData.append('variant_id', variantId);
+                    formData.append('current_product', event.target.dataset.currentProduct);
+                    axios.post(url, formData).then(function (response) {
+                        console.log();
+                        if (response.data === 'success') {
+                            window.location.reload();
+                        }
+                    }).catch(function (error) {
+                        console.error(error);
                     });
-                }
-                toggleGallery(thumbs, forms, mainPhotos);
-                submitForms([document.getElementById('variantForm-'+self.variantId)], true);
-            }
-
-        }).catch(function (error) {
-            console.error(error);
-        });
-    }
-
-    manageVariant(event) {
-        console.log(event.target);
-    }
-
-    changeImage(event) {
-        const files     = event.currentTarget.files,
-            insertPoint = this.getModalElement().querySelector('.button-item'),
-            newItems    = this.getModalElement().querySelectorAll('.thumb-item.new'),
-            self        = this;
-
-        if (newItems.length > 0) {
-            newItems.forEach(function (item) {
-                item.remove();
+                });
             });
         }
+    }
 
-        Array.from(files).forEach(function (file, index) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const image = new Image(),mainImage = new Image(),wrapperImage = document.createElement('div'),
-                    imageItem = document.createElement('div'),label = document.createElement('label'),
-                    spanValue = document.createElement('span'),newInput = document.createElement('input'),
-                    mainPhoto = document.createElement("div"),photoForm = document.createElement('div'),
-                    hiddenInput = document.createElement('input'),formFloating = document.createElement('div'),
-                    formFloating2 = document.createElement('div'),inputTextarea = document.createElement('textarea'),
-                    inputAltTag = document.createElement('input'),labelInput = document.createElement('label'),
-                    labelTextarea = document.createElement('label'),formText = document.createElement('div'),
-                    submitButton  = document.createElement('button');
+    selectVariant(event) {
+        event.preventDefault();
+        const form      = event.target.closest('form'),
+            inputHidden = document.createElement('input'),
+            tokenMeta   = document.querySelector('meta[name="csrf-token"]');
 
-                submitButton.type = 'submit';
-                submitButton.setAttribute('form', 'variantForm-'+self.variantId);
-                submitButton.classList.add('btn', 'btn-success', 'w-100');
-                submitButton.innerText = 'Сохранить';
+        inputHidden.type  = 'hidden';
+        inputHidden.name  =  '_token';
+        inputHidden.value = tokenMeta.content;
 
-                formText.classList.add('form-text');
+        form.prepend(inputHidden);
 
-                labelInput.classList.add('form-label');
-                labelInput.setAttribute('for', 'newAltTag-'+index.toString());
-                labelInput.innerText = 'Alt атрибут';
+        form.querySelector('input#variantId').value = event.target.dataset.productId;
+        event.target.closest('.result-items').remove();
+    }
 
-                labelTextarea.setAttribute('for', 'newDescription-'+index.toString());
-                labelTextarea.innerText   = 'Описание изображения';
+    searchVariant(event) {
+        event.preventDefault();
+        if (event.target.value.length > 2) {
+            const query  = event.target.value,
+                formData = new FormData,
+                self     = this;
 
-                inputAltTag.setAttribute('form', 'variantForm-'+self.variantId);
-                inputAltTag.classList.add('form-control');
-                inputAltTag.id          = 'newAltTag-'+index.toString();
-                inputAltTag.name        = 'alt_tag['+ file.name +']';
-                inputAltTag.type        = 'text';
-                inputAltTag.placeholder = 'Alt атрибут';
+            formData.append('query', query);
 
-                inputTextarea.setAttribute('form', 'variantForm-'+self.variantId);
-                inputTextarea.classList.add('form-control');
-                inputTextarea.id          = 'newDescription-'+index.toString();
-                inputTextarea.name        = 'description['+ file.name +']';
-                inputTextarea.placeholder = 'Описание изображения';
+            axios.post('/admin/shop/products/search-variant', formData).then(function (response) {
 
-                formFloating.classList.add('form-floating', 'mb-3');
-                formFloating2.classList.add('form-floating', 'mb-3');
+                const answer    = response.data,
+                    container   = document.createElement('div'),
+                    destination = document.querySelector('.modal-body form .result-items') ?? document.querySelector('.modal-body form > div');
 
-                hiddenInput.setAttribute('form', 'variantForm-'+self.variantId);
-                hiddenInput.type  = 'hidden';
-                hiddenInput.name  = 'id[]';
-                hiddenInput.value = index.toString();
+                container.classList.add('result-items','mb-3');
 
-                photoForm.id = 'new-photo_'+index;
-                photoForm.classList.add('photo-form');
-                photoForm.dataset.photoId = 'new-photo-'+index.toString();
+                if (Array.isArray(answer) && answer.length > 0) {
 
-                formFloating.append(inputAltTag);
-                formFloating.append(labelInput);
-                formFloating2.append(inputTextarea);
-                formFloating2.append(labelTextarea);
-                formText.append(submitButton);
-                photoForm.append(hiddenInput);
-                photoForm.append(formFloating);
-                photoForm.append(formFloating2);
-                photoForm.append(formText);
+                    answer.map(function (element) {
+                        const item = document.createElement('div');
+                        item.classList.add('result-item');
+                        item.textContent       = element.name;
+                        item.dataset.productId = element.id;
+                        container.append(item);
+                        item.addEventListener('click', self.selectVariant.bind(self));
+                    });
 
-                document.getElementById('leftSide').append(photoForm);
+                    if (document.querySelector('.modal-body form .result-items')) {
+                        destination.innerHTML = '';
+                        Array.from(container.querySelectorAll('.result-item')).map(function (itm) {
+                            destination.append(itm);
+                        });
+                    }  else {
+                        destination.after(container);
+                    }
 
-                image.src = e.target.result.toString();
-                mainImage.src = e.target.result.toString();
-
-                mainPhoto.classList.add('main-photo');
-                mainPhoto.dataset.photoId = 'new-photo-'+index;
-
-                imageItem.classList.add('thumb-item', 'new');
-                imageItem.dataset.photoId = 'new-photo-'+index;
-
-                wrapperImage.classList.add('thumb-photo');
-                wrapperImage.append(image);
-
-                label.classList.add('variant-image-checkbox');
-                spanValue.classList.add('value');
-
-                newInput.type  = 'checkbox';
-                newInput.name  = 'variantsPhoto[]';
-                newInput.value = file.name;
-
-                label.append(newInput);
-                label.append(spanValue);
-
-                mainPhoto.append(mainImage);
-
-                imageItem.append(wrapperImage);
-                imageItem.append(label);
-                insertPoint.insertAdjacentElement('beforebegin', imageItem);
-                document.getElementById('variantForm-' + self.variantId).insertAdjacentElement('beforebegin', mainPhoto);
-
-                if (index+1 === files.length) {
-                    const forms = self.getModalElement().querySelectorAll('.photo-form'),
-                        mainPhotos = self.getModalElement().querySelectorAll('.main-photo'),
-                        thumbs     = self.getModalElement().querySelectorAll('.thumb-photo');
-                    toggleGallery(thumbs, forms, mainPhotos);
-                    submitForms([document.getElementById('variantForm-'+self.variantId)], true);
+                } else if (Array.isArray(answer) && answer.length === 0) {
+                    container.innerHTML = '<p class="text-center my-4">По запросу ничего не найдено!</p>';
+                    if (document.querySelector('.modal-body form .result-items')) {
+                        destination.innerHTML = container.innerHTML;
+                    }  else {
+                        destination.after(container);
+                    }
                 }
-            };
-            reader.readAsDataURL(files[index]);
-        });
-    }
 
-    init(variants) {
-        if (variants.length === 0) {
-            console.error('Варианты не найдены');
-            return null;
+            }).catch(function (error) {
+                console.error(error);
+            })
+        } else if (document.querySelector('.modal-body form .result-items')) {
+            document.querySelector('.modal-body form .result-items').remove();
         }
-        const self = this;
-        variants.forEach(function (variant) {
-            const addImage    = variant.querySelector('.js-variantImg'),
-                manageButtons = variant.querySelector('.js-variantManage');
-
-            addImage.addEventListener('click', self.addImage.bind(self));
-            manageButtons.addEventListener('click', self.manageVariant.bind(self));
-        });
     }
+
+    addVariant(event) {
+        event.preventDefault();
+        const form      = document.createElement('form'),
+            inputText   = document.createElement('input'),
+            inputHidden = document.createElement('input'),
+            label       = document.createElement('label'),
+            wrapper     = document.createElement('div'),
+            submitBtn   = document.createElement('button'),
+            type        = this.getType();
+
+        form.action = type === 'variants' ? '/admin/shop/products/add-variant' : '/admin/shop/products/add-relation';
+        form.method = 'post';
+
+        inputHidden.name  = 'current_product';
+        inputHidden.type  = 'hidden';
+        inputHidden.value = this.dataset.productId
+
+        inputText.name        = 'variant_id';
+        inputText.type        = 'text';
+        inputText.id          = 'variantId';
+        inputText.placeholder = 'Поиск продукта';
+        inputText.classList.add('form-control');
+
+        label.setAttribute('for', 'variantId');
+        label.textContent = 'Поиск продукта';
+
+        submitBtn.type = 'submit';
+        submitBtn.textContent = 'Сохранить';
+        submitBtn.classList.add('btn', 'btn-success', 'w-100')
+
+        wrapper.classList.add('form-floating','mb-3');
+
+        wrapper.append(inputText);
+        wrapper.append(label);
+
+        form.append(inputHidden);
+        form.append(wrapper);
+        form.append(submitBtn);
+
+        this.getModalElement().querySelector('.modal-body').append(form);
+        this.getModalElement().querySelector('.modal-title').textContent = 'Поиск варианта (начните набирать текст)';
+        this.getModal().show();
+
+        inputText.addEventListener('keyup', this.searchVariant.bind(this));
+    }
+
+
+
+    // addImage(event) {
+    //     const formData = new FormData(),
+    //         self       = this;
+    //
+    //     formData.append('id', event.target.dataset.variantId);
+    //
+    //     axios.post('/admin/photos/get-variant-photos', formData).then(function (response) {
+    //
+    //         if (response.status === 200 && response.statusText === 'OK') {
+    //             const answer = response.data;
+    //             if (typeof answer.error !== 'undefined') {
+    //                 console.error(answer.error);
+    //                 return null;
+    //             }
+    //
+    //             self.getModalElement().classList.add('dark');
+    //             self.getModalElement().querySelector('.modal-body').innerHTML = answer;
+    //             self.getModalElement().querySelector('.modal-dialog').classList.add('modal-fullscreen');
+    //             feather.replace({ 'aria-hidden': 'true' })
+    //             self.getModal().show();
+    //
+    //             self.variantId = document.getElementById('modalGallery').dataset.variantId;
+    //
+    //             const thumbs      = self.getModalElement().querySelectorAll('.thumb-photo'),
+    //                 forms         = self.getModalElement().querySelectorAll('.photo-form'),
+    //                 mainPhotos    = self.getModalElement().querySelectorAll('.main-photo'),
+    //                 uploadButtons = self.getModalElement().querySelectorAll('[name="add-photos[]"]');
+    //
+    //             if (uploadButtons.length > 0) {
+    //                 uploadButtons.forEach(function (fileInput) {
+    //                     fileInput.addEventListener('change', self.changeImage.bind(self));
+    //                 });
+    //             }
+    //             toggleGallery(thumbs, forms, mainPhotos);
+    //             submitForms([document.getElementById('variantForm-'+self.variantId)], true);
+    //         }
+    //
+    //     }).catch(function (error) {
+    //         console.error(error);
+    //     });
+    // }
+    //
+    // manageVariant(event) {
+    //     console.log(event.target);
+    // }
+    //
+    // changeImage(event) {
+    //     const files     = event.currentTarget.files,
+    //         insertPoint = this.getModalElement().querySelector('.button-item'),
+    //         newItems    = this.getModalElement().querySelectorAll('.thumb-item.new'),
+    //         self        = this;
+    //
+    //     if (newItems.length > 0) {
+    //         newItems.forEach(function (item) {
+    //             item.remove();
+    //         });
+    //     }
+    //
+    //     Array.from(files).forEach(function (file, index) {
+    //         const reader = new FileReader();
+    //         reader.onload = (e) => {
+    //             const image = new Image(),mainImage = new Image(),wrapperImage = document.createElement('div'),
+    //                 imageItem = document.createElement('div'),label = document.createElement('label'),
+    //                 spanValue = document.createElement('span'),newInput = document.createElement('input'),
+    //                 mainPhoto = document.createElement("div"),photoForm = document.createElement('div'),
+    //                 hiddenInput = document.createElement('input'),formFloating = document.createElement('div'),
+    //                 formFloating2 = document.createElement('div'),inputTextarea = document.createElement('textarea'),
+    //                 inputAltTag = document.createElement('input'),labelInput = document.createElement('label'),
+    //                 labelTextarea = document.createElement('label'),formText = document.createElement('div'),
+    //                 submitButton  = document.createElement('button');
+    //
+    //             submitButton.type = 'submit';
+    //             submitButton.setAttribute('form', 'variantForm-'+self.variantId);
+    //             submitButton.classList.add('btn', 'btn-success', 'w-100');
+    //             submitButton.innerText = 'Сохранить';
+    //
+    //             formText.classList.add('form-text');
+    //
+    //             labelInput.classList.add('form-label');
+    //             labelInput.setAttribute('for', 'newAltTag-'+index.toString());
+    //             labelInput.innerText = 'Alt атрибут';
+    //
+    //             labelTextarea.setAttribute('for', 'newDescription-'+index.toString());
+    //             labelTextarea.innerText   = 'Описание изображения';
+    //
+    //             inputAltTag.setAttribute('form', 'variantForm-'+self.variantId);
+    //             inputAltTag.classList.add('form-control');
+    //             inputAltTag.id          = 'newAltTag-'+index.toString();
+    //             inputAltTag.name        = 'alt_tag['+ file.name +']';
+    //             inputAltTag.type        = 'text';
+    //             inputAltTag.placeholder = 'Alt атрибут';
+    //
+    //             inputTextarea.setAttribute('form', 'variantForm-'+self.variantId);
+    //             inputTextarea.classList.add('form-control');
+    //             inputTextarea.id          = 'newDescription-'+index.toString();
+    //             inputTextarea.name        = 'description['+ file.name +']';
+    //             inputTextarea.placeholder = 'Описание изображения';
+    //
+    //             formFloating.classList.add('form-floating', 'mb-3');
+    //             formFloating2.classList.add('form-floating', 'mb-3');
+    //
+    //             hiddenInput.setAttribute('form', 'variantForm-'+self.variantId);
+    //             hiddenInput.type  = 'hidden';
+    //             hiddenInput.name  = 'id[]';
+    //             hiddenInput.value = index.toString();
+    //
+    //             photoForm.id = 'new-photo_'+index;
+    //             photoForm.classList.add('photo-form');
+    //             photoForm.dataset.photoId = 'new-photo-'+index.toString();
+    //
+    //             formFloating.append(inputAltTag);
+    //             formFloating.append(labelInput);
+    //             formFloating2.append(inputTextarea);
+    //             formFloating2.append(labelTextarea);
+    //             formText.append(submitButton);
+    //             photoForm.append(hiddenInput);
+    //             photoForm.append(formFloating);
+    //             photoForm.append(formFloating2);
+    //             photoForm.append(formText);
+    //
+    //             document.getElementById('leftSide').append(photoForm);
+    //
+    //             image.src = e.target.result.toString();
+    //             mainImage.src = e.target.result.toString();
+    //
+    //             mainPhoto.classList.add('main-photo');
+    //             mainPhoto.dataset.photoId = 'new-photo-'+index;
+    //
+    //             imageItem.classList.add('thumb-item', 'new');
+    //             imageItem.dataset.photoId = 'new-photo-'+index;
+    //
+    //             wrapperImage.classList.add('thumb-photo');
+    //             wrapperImage.append(image);
+    //
+    //             label.classList.add('variant-image-checkbox');
+    //             spanValue.classList.add('value');
+    //
+    //             newInput.type  = 'checkbox';
+    //             newInput.name  = 'variantsPhoto[]';
+    //             newInput.value = file.name;
+    //
+    //             label.append(newInput);
+    //             label.append(spanValue);
+    //
+    //             mainPhoto.append(mainImage);
+    //
+    //             imageItem.append(wrapperImage);
+    //             imageItem.append(label);
+    //             insertPoint.insertAdjacentElement('beforebegin', imageItem);
+    //             document.getElementById('variantForm-' + self.variantId).insertAdjacentElement('beforebegin', mainPhoto);
+    //
+    //             if (index+1 === files.length) {
+    //                 const forms = self.getModalElement().querySelectorAll('.photo-form'),
+    //                     mainPhotos = self.getModalElement().querySelectorAll('.main-photo'),
+    //                     thumbs     = self.getModalElement().querySelectorAll('.thumb-photo');
+    //                 toggleGallery(thumbs, forms, mainPhotos);
+    //                 submitForms([document.getElementById('variantForm-'+self.variantId)], true);
+    //             }
+    //         };
+    //         reader.readAsDataURL(files[index]);
+    //     });
+    // }
+    //
+    // init(variants) {
+    //     if (variants.length === 0) {
+    //         console.error('Варианты не найдены');
+    //         return null;
+    //     }
+    //     const self = this;
+    //     variants.forEach(function (variant) {
+    //         const addImage    = variant.querySelector('.js-variantImg'),
+    //             manageButtons = variant.querySelector('.js-variantManage');
+    //
+    //         addImage.addEventListener('click', self.addImage.bind(self));
+    //         manageButtons.addEventListener('click', self.manageVariant.bind(self));
+    //     });
+    // }
 }
 customElements.define('variant-list', VariantsList);
 
