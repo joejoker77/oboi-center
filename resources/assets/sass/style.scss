@@ -2393,7 +2393,7 @@ product-quantity {
                 justify-content: space-between;
                 align-items: center;
                 z-index: 10;
-                top: toRem(125px);
+                top: toRem(140px);
 
                 @include media-breakpoint-up(lg) {
                     position: static;
@@ -2406,7 +2406,7 @@ product-quantity {
             }
 
             aside {
-                padding-top: toRem(30px);
+                padding-top: toRem(45px);
 
                 @include media-breakpoint-up(lg) {
                     padding-top: 0;

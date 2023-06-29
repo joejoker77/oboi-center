@@ -9,6 +9,9 @@
                     <span class="material-symbols-outlined">filter_list</span>
                     Подобрать по параметрам
                 </button>
+                @if(request()->get('attributes') || request()->get('tags') || request()->get('categories') || request()->get('colors') || request()->get('price'))
+                    <a href="{{route('shop.filter')}}" type="button" class="btn btn-danger text-white fs-5 w-100 my-3">Сбросить фильтр</a>
+                @endif
             </div>
             <x-filter :request="$request" :restAttributes="$restAttributes" :restCategories="$restCategories" :restTags="$restTags" position="left" />
             <div class="col-lg-9 mx-auto">
