@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 use App\Entities\Shop\Photo;
 use Illuminate\Http\Request;
 use App\Entities\Shop\Brand;
-use App\Entities\Shop\Variant;
 use App\Entities\Shop\Product;
 use App\Entities\Shop\Category;
 use App\Entities\Shop\Attribute;
@@ -239,20 +238,22 @@ class DailyImportService
             try {
                 $request = new Request($brand);
                 $upLogos = [];
-                foreach ($brand['images'] as $urlImage) {
-                    $info = pathinfo($urlImage);
-                    if (Storage::exists(Brand::IMAGE_PATH.$brand['name']. '/small_'. $info['filename'] . '.webp')) {
-                        continue;
+                if (!empty($brand['images'])) {
+                    foreach ($brand['images'] as $urlImage) {
+                        $info = pathinfo($urlImage);
+                        if (Storage::exists(Brand::IMAGE_PATH.$brand['name']. '/small_'. $info['filename'] . '.webp')) {
+                            continue;
+                        }
+                        $localFile = '/tmp/'.$info['basename'];
+                        copy($urlImage, $localFile);
+                        $upLogos[] = new UploadedFile($localFile, $info['basename']);
                     }
-                    $localFile = '/tmp/'.$info['basename'];
-                    copy($urlImage, $localFile);
-                    $upLogos[] = new UploadedFile($localFile, $info['basename']);
-                }
-                if (!empty($upLogos)) {
-                    if (count($upLogos) == 1) {
-                        $request->files->set('photo', $upLogos[0]);
-                    } else {
-                        $request->files->set('photo', $upLogos);
+                    if (!empty($upLogos)) {
+                        if (count($upLogos) == 1) {
+                            $request->files->set('photo', $upLogos[0]);
+                        } else {
+                            $request->files->set('photo', $upLogos);
+                        }
                     }
                 }
                 if ($br = Brand::where('import_id', $brand['import_id'])->first()) {
@@ -351,12 +352,14 @@ class DailyImportService
                         'description' => 'В данном разделе, компания Обои-центр, представляет обои для стен, фабрики: "' . $brand['name'] . '"'
                     ]
                 ]);
-                foreach ($brand['images'] as $urlImage) {
-                    $info     = pathinfo($urlImage);
-                    $contents = file_get_contents($urlImage);
-                    $file     = '/tmp/'.$info['basename'];
-                    file_put_contents($file, $contents);
-                    $request->files->set('photo', [new UploadedFile($file, $info['basename'])]);
+                if (!empty($brand['images'])) {
+                    foreach ($brand['images'] as $urlImage) {
+                        $info     = pathinfo($urlImage);
+                        $contents = file_get_contents($urlImage);
+                        $file     = '/tmp/'.$info['basename'];
+                        file_put_contents($file, $contents);
+                        $request->files->set('photo', [new UploadedFile($file, $info['basename'])]);
+                    }
                 }
                 app(CategoryController::class)->store($request);
                 echo "Создана брендовая категория ".$brand['name'].PHP_EOL;
@@ -411,6 +414,7 @@ class DailyImportService
             } else {
                 $request->query->remove('description');
                 $request->query->remove('meta');
+                $request->query->remove('parent_id');
                 $request->query->set('published', $currentCategory->published);
                 app(CategoryController::class)->update($request, $currentCategory);
             }
@@ -586,6 +590,19 @@ class DailyImportService
                     if (!empty($currentProduct->description)) {
                         $request->query->remove('description');
                     }
+
+                    if (!$currentProduct->meta) {
+                        if (mb_strripos($currentProduct->name, 'клей') !== false) {
+                            $title = 'Обойный клей '.$currentProduct->name.' от компании "Обои Центр"';
+                            $description = 'Купить или заказать обойный клей '.$currentProduct->name.' в компании "Обои Центр"';
+                        } else {
+                            $title = 'Обои '.$currentProduct->name.' от компании "Обои Центр"';
+                            $description = 'Купить или заказать обои '.$currentProduct->name.' в компании "Обои Центр"';
+                        }
+
+                        $request->query->set('meta', ['title' => $title, 'description' => $description]);
+                    }
+
                     app(ProductController::class)->update($request, $currentProduct);
                 } else {
                     if (!empty($product['images'])) {
@@ -668,6 +685,17 @@ class DailyImportService
                             $request->files->set('photo', $upImages);
                         }
                     }
+
+                    if (mb_strripos($mainCategory->name. ' ' . $product['sku'], 'клей') !== false) {
+                        $title = 'Обойный клей '.$mainCategory->name. ' ' . $product['sku'].' от компании "Обои Центр"';
+                        $description = 'Купить или заказать обойный клей '.$mainCategory->name. ' ' . $product['sku'].' в компании "Обои Центр"';
+                    } else {
+                        $title = 'Обои '.$mainCategory->name. ' ' . $product['sku'].' от компании "Обои Центр"';
+                        $description = 'Купить или заказать обои '.$mainCategory->name. ' ' . $product['sku'].' в компании "Обои Центр"';
+                    }
+
+                    $request->query->set('meta', ['title' => $title, 'description' => $description]);
+
                     app(ProductController::class)->store($request);
                 }
 

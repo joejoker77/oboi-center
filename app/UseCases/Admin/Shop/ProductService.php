@@ -63,6 +63,7 @@ class ProductService
             return $product;
         } catch (\Exception $e) {
             DB::rollBack();
+            report($e);
             throw new \DomainException('Сохранение сущности Product завершилось с ошибкой. Подробности: ' . $e->getMessage());
         }
     }
@@ -137,6 +138,7 @@ class ProductService
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            report($e);
             throw new \DomainException('Сохранение сущности Product завершилось с ошибкой. Подробности: ' . $e->getMessage());
         }
     }
@@ -181,7 +183,7 @@ class ProductService
                     if (!Value::where('attribute_id', $id)->where('product_id', $product->id)->where('value', $options)->first()) {
                         $product->values()->create([
                             'attribute_id' => $id,
-                            'value' => $options
+                            'value' => is_array($options) ? $options[0] : $options
                         ]);
                     }
                 } elseif ($attribute->mode == Attribute::MODE_MULTIPLE) {
