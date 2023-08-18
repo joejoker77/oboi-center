@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Shop;
 
 
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use App\Entities\Shop\Photo;
 use App\Entities\Shop\Category;
@@ -65,18 +66,21 @@ class CategoryController extends Controller
         return view('admin.shop.categories.show', compact('category', 'attributes', 'parentAttributes'));
     }
 
+
     /**
      * @param CategoryRequest $request
-     * @return RedirectResponse
+     * @return Category|RedirectResponse
      */
-    public function store(CategoryRequest $request): RedirectResponse
+    public function store(CategoryRequest $request): Category|RedirectResponse
     {
         try {
             $category = $this->service->create($request);
+            if (app()->runningInConsole()) {
+                return $category;
+            }
         }catch (\DomainException|ValidationException|\Exception|\Throwable $e) {
             return back()->with('error', $e->getMessage());
         }
-
         return redirect()->route('admin.shop.categories.show', compact('category'));
     }
 

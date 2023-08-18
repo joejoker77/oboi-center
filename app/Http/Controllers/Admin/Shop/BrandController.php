@@ -36,10 +36,13 @@ class BrandController extends Controller
     /**
      * @throws Throwable
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|Brand
     {
         try {
             $brand = $this->service->create($request);
+            if (app()->runningInConsole()) {
+                return $brand;
+            }
             return redirect()->route('admin.shop.brands.show', compact('brand'));
         } catch (\Exception $e) {
             return redirect()->refresh()->with('error', $e->getMessage());

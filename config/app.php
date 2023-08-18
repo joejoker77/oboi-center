@@ -200,8 +200,8 @@ return [
         Orchestra\Parser\XmlServiceProvider::class,
         App\Providers\SearchServiceProvider::class,
         App\Providers\CartProvider::class,
-        Torann\GeoIP\GeoIPServiceProvider::class
-
+        Torann\GeoIP\GeoIPServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class
     ],
 
     /*
@@ -219,7 +219,8 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'XmlParser' => \Orchestra\Parser\Xml\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'GeoIP' => Torann\GeoIP\Facades\GeoIP::class
+        'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class
     ])->toArray(),
 
     'surgaz_daily' => env("SURGAZ_LOGIN").":".env("SURGAZ_PASSWORD").'@'.env("SURGAZ_URL_DAILY", ""),
