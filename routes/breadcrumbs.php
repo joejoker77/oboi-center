@@ -33,6 +33,26 @@ Breadcrumbs::for('cabinet.profile.add-delivery-address', function (Generator $ge
     $generator->push('Добавить адрес доставки', route('cabinet.profile.add-delivery-address'));
 });
 
+Breadcrumbs::for('shop.order-payment', function (Generator $generator, Order $order) {
+    $generator->parent('home');
+    $generator->push('Оплата заказа', route('shop.order-payment', $order));
+});
+
+Breadcrumbs::for('shop.payment-result', function (Generator $generator) {
+    $generator->parent('home');
+    $generator->push('Результат оплаты', route('shop.payment-result'));
+});
+
+Breadcrumbs::for('shop.payment-success', function (Generator $generator) {
+    $generator->parent('home');
+    $generator->push('Успешная оплата заказа', route('shop.payment-success'));
+});
+
+Breadcrumbs::for('shop.payment-error', function (Generator $generator) {
+    $generator->parent('home');
+    $generator->push('Ошибка оплаты заказа', route('shop.payment-error'));
+});
+
 Breadcrumbs::for('cart.index', function (Generator $generator) {
     $generator->parent('home');
     $generator->push('Корзина', route('cart.index'));

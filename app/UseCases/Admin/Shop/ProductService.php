@@ -187,10 +187,10 @@ class ProductService
                         ]);
                     }
                 } elseif ($attribute->mode == Attribute::MODE_MULTIPLE) {
-                    if (!Value::where('attribute_id', $id)->where('product_id', $product->id)->where('value', trim(implode(', ', $options), ', '))->first()) {
+                    if (!Value::where('attribute_id', $id)->where('product_id', $product->id)->where('value', is_array($options) ? trim(implode(', ', $options), ', ') : $options)->first()) {
                         $product->values()->create([
                             'attribute_id' => $id,
-                            'value' => trim(implode(', ', $options), ', ')
+                            'value' => is_array($options) ? trim(implode(', ', $options), ', '):$options
                         ]);
                     }
                 }

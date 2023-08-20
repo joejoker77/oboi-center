@@ -1,6 +1,9 @@
 <?php
 /** @var \App\Entities\User\User $user */
+
 use App\Entities\Shop\Product;
+use App\Entities\Shop\Status;
+
 ?>
 @extends('layouts.index')
 
@@ -88,26 +91,29 @@ use App\Entities\Shop\Product;
                                             <form action="{{ route('un-subscribe') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="subscriber" value="{{ $user->email }}">
-                                                <button class="btn btn-blue-dark" type="submit">Отписаться от рассылки</button>
+                                                <button class="btn btn-blue-dark" type="submit">Отписаться от рассылки
+                                                </button>
                                             </form>
                                         @else
                                             <form action="{{ route('subscribe') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="subscriber" value="{{ $user->email }}">
-                                                <button class="btn btn-blue-dark" type="submit">Подписаться на рассылку новостей</button>
+                                                <button class="btn btn-blue-dark" type="submit">Подписаться на рассылку
+                                                    новостей
+                                                </button>
                                             </form>
                                         @endif
                                     </td>
                                 </tr>
                             @endif
-{{--                            <tr>--}}
-{{--                                <th>Двухфакторная аутентификация</th>--}}
-{{--                                <td>@if($user->userProfile->phone_auth)--}}
-{{--                                        Включена--}}
-{{--                                    @else--}}
-{{--                                        Выключена--}}
-{{--                                    @endif</td>--}}
-{{--                            </tr>--}}
+                            {{--                            <tr>--}}
+                            {{--                                <th>Двухфакторная аутентификация</th>--}}
+                            {{--                                <td>@if($user->userProfile->phone_auth)--}}
+                            {{--                                        Включена--}}
+                            {{--                                    @else--}}
+                            {{--                                        Выключена--}}
+                            {{--                                    @endif</td>--}}
+                            {{--                            </tr>--}}
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-end">
@@ -134,28 +140,43 @@ use App\Entities\Shop\Product;
                                         <a href="{{ route('catalog.index',['product_path' => product_path($favorite->category, $favorite)]) }}">
                                             <div class="product-media">
                                                 @if(!$favorite->isCanBuy())
-                                                    <span class="material-symbols-outlined" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" data-bs-title="Доступно только для заказа">info</span>
+                                                    <span class="material-symbols-outlined" data-bs-toggle="tooltip"
+                                                          data-bs-placement="left" data-bs-custom-class="custom-tooltip"
+                                                          data-bs-title="Доступно только для заказа">info</span>
                                                 @else
-                                                    <span class="position-absolute badge rounded-pill bg-primary">{{ $favorite->quantity }}</span>
+                                                    <span
+                                                        class="position-absolute badge rounded-pill bg-primary">{{ $favorite->quantity }}</span>
                                                 @endif
                                                 @if(!$favorite->photos->isEmpty())
-                                                    <img class="position-relative" src="{{ $favorite->photos()->first()->getPhoto('medium') }}" alt="{{ $favorite->photos()->first()->alt_tag }}">
+                                                    <img class="position-relative"
+                                                         src="{{ $favorite->photos()->first()->getPhoto('medium') }}"
+                                                         alt="{{ $favorite->photos()->first()->alt_tag }}">
                                                 @else
                                                     <span class="position-relative material-symbols-outlined">no_photography</span>
                                                 @endif
                                                 @auth
                                                     @if(in_array($favorite->id, $user->favorites->pluck('product_id')->toArray()))
-                                                        <form class="favorite" action="{{ route('shop.remove-favorite', $favorite) }}" method="post">
+                                                        <form class="favorite"
+                                                              action="{{ route('shop.remove-favorite', $favorite) }}"
+                                                              method="post">
                                                             @csrf
                                                             <button type="submit">
-                                                                <span class="material-symbols-outlined selected" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Удалить из избранного">favorite</span>
+                                                                <span class="material-symbols-outlined selected"
+                                                                      data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                      data-bs-custom-class="custom-tooltip"
+                                                                      data-bs-title="Удалить из избранного">favorite</span>
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <form class="favorite" action="{{ route('shop.add-favorite', $favorite) }}" method="post">
+                                                        <form class="favorite"
+                                                              action="{{ route('shop.add-favorite', $favorite) }}"
+                                                              method="post">
                                                             @csrf
                                                             <button type="submit">
-                                                                <span class="material-symbols-outlined" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Добавить в избранное">favorite</span>
+                                                                <span class="material-symbols-outlined"
+                                                                      data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                      data-bs-custom-class="custom-tooltip"
+                                                                      data-bs-title="Добавить в избранное">favorite</span>
                                                             </button>
                                                         </form>
                                                     @endif
@@ -194,12 +215,15 @@ use App\Entities\Shop\Product;
                                         </span>
                                                 @endif
                                                 <product-form>
-                                                    <form action="{{ route('cart.add', $favorite) }}" id="productForm-{{ $favorite->id }}" class="w-100" novalidate>
+                                                    <form action="{{ route('cart.add', $favorite) }}"
+                                                          id="productForm-{{ $favorite->id }}" class="w-100" novalidate>
                                                         @csrf
-                                                        <input type="hidden" name="product_id" value="{{ $favorite->id }}">
+                                                        <input type="hidden" name="product_id"
+                                                               value="{{ $favorite->id }}">
                                                         <input type="hidden" name="product_quantity" value="">
                                                         <product-quantity>
-                                                            <label for="elementQuantity-{{ $favorite->id }}">Укажите количество</label>
+                                                            <label for="elementQuantity-{{ $favorite->id }}">Укажите
+                                                                количество</label>
                                                             <div class="input-group">
                                                                 <button class="minus input-group-text">
                                                                     <i class="material-symbols-outlined">remove</i>
@@ -217,10 +241,14 @@ use App\Entities\Shop\Product;
                                                         </product-quantity>
                                                         @if(!$favorite->isCanBuy())
                                                             <input type="hidden" name="type_order" value="order">
-                                                            <button type="submit" class="btn btn-blue-dark w-100">Создать заказ</button>
+                                                            <button type="submit" class="btn btn-blue-dark w-100">
+                                                                Создать заказ
+                                                            </button>
                                                         @else
                                                             <input type="hidden" name="type_order" value="checkout">
-                                                            <button type="submit" class="btn btn-blue-dark w-100">В корзину</button>
+                                                            <button type="submit" class="btn btn-blue-dark w-100">В
+                                                                корзину
+                                                            </button>
                                                         @endif
                                                     </form>
                                                 </product-form>
@@ -267,7 +295,7 @@ use App\Entities\Shop\Product;
                                                                 <th>Текущий статус:</th>
                                                                 <td>
                                                                     <div
-                                                                        class="{{ get_order_label((int)$order->statuses)['class'] }}">{{ get_order_label((int)$order->statuses)['label'] }}</div>
+                                                                        class="{{ get_order_label((int)$order->current_status)['class'] }}">{{ get_order_label((int)$order->current_status)['label'] }}</div>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -298,6 +326,9 @@ use App\Entities\Shop\Product;
                                                             @endif
                                                             </tbody>
                                                         </table>
+                                                        @if($order->current_status !== Status::PAID && $order->current_status !== Status::CANCELLED && $order->current_status !== Status::CANCELLED_BY_CUSTOMER && $order->payment_url)
+                                                            <a href="{{ $order->payment_url }}" class="btn btn-danger" target="_blank">Оплатить заказ</a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">

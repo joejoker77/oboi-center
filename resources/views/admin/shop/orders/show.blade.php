@@ -1,3 +1,4 @@
+@php use App\Entities\Shop\Order; @endphp
 @php /** @var App\Entities\Shop\Order $order */ @endphp
 @extends('layouts.admin')
 
@@ -5,11 +6,14 @@
     <div class="row">
         <h1 class="my-4">Заказ №{{ $order->id }}</h1>
         <div class="d-flex justify-content-end mb-3">
-            <a href="{{ route('admin.shop.orders.edit', $order) }}" class="btn btn-primary btn-lg d-flex me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Редактировать">
+            <a href="{{ route('admin.shop.orders.edit', $order) }}" class="btn btn-primary btn-lg d-flex me-2"
+               data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Редактировать">
                 <span data-feather="edit"></span>
             </a>
             <div>
-                <form class="btn btn-danger btn-lg" method="POST" action="{{ route('admin.shop.orders.destroy', $order) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Удалить">
+                <form class="btn btn-danger btn-lg" method="POST"
+                      action="{{ route('admin.shop.orders.destroy', $order) }}" data-bs-toggle="tooltip"
+                      data-bs-placement="bottom" data-bs-title="Удалить">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn p-0 text-white d-flex js-confirm" style="line-height: 0">
@@ -24,6 +28,10 @@
                 <tr>
                     <th>ID</th>
                     <td>{{ $order->id }}</td>
+                </tr>
+                <tr>
+                    <th>Дата создания</th>
+                    <td>{{ $order->created_at }}</td>
                 </tr>
                 <tr>
                     <th>Пользователь</th>
@@ -69,6 +77,16 @@
                     <th>Способ оплаты</th>
                     <td>{{ $order::paymentList()[$order->payment_method] }}</td>
                 </tr>
+                @if($order->payment_method === Order::PAYMENT_CARD)
+                    <tr>
+                        <th>Статус оплаты</th>
+                        <td>
+                            <div class="{{ get_order_label($order->current_status)['class'] }}">
+                                {{ get_order_label($order->current_status)['label'] }}
+                            </div>
+                        </td>
+                    </tr>
+                @endif
             </table>
         </div>
         <div class="col-md-3">

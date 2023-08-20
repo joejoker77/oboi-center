@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\User\ProfileController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +37,10 @@ Route::group([
     Route::post('/ajax-search', 'CatalogController@ajaxSearch')->name('ajax-search');
     Route::post('/add-favorite/{product}', 'CatalogController@addFavorite')->name('add-favorite');
     Route::post('/remove-favorite/{product}', 'CatalogController@removeFavorite')->name('remove-favorite');
+    Route::get('/order-payment/{order}', 'PaymentController@paymentOrder')->name('order-payment');
+    Route::get('/payment-result', 'PaymentController@paymentResult')->name('payment-result');
+    Route::get('/payment-success', 'PaymentController@paymentSuccess')->name('payment-success');
+    Route::get('/payment-error', 'PaymentController@paymentError')->name('payment-error');
 });
 
 Route::group([
@@ -85,10 +89,6 @@ Route::group(
             Route::get('/add-delivery-address', 'ProfileController@getAddressForm')->name('add-delivery-address');
             Route::post('/store-delivery-address', 'ProfileController@storeDeliveryAddress')->name('store-delivery-address');
             Route::post('/remove-delivery-address/{address}', 'ProfileController@removeAddress')->name('remove-delivery-address');
-//            Route::post('/phone', 'PhoneController@request');
-//            Route::get('/phone', 'PhoneController@form')->name('phone');
-//            Route::put('/phone', 'PhoneController@verify')->name('phone.verify');
-//            Route::post('/phone/auth', 'PhoneController@auth')->name('phone.auth');
         });
     }
 );

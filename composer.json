@@ -13,6 +13,7 @@
         "alexusmai/laravel-file-manager": "3.0.1",
         "barryvdh/laravel-debugbar": "^3.7",
         "butschster/meta-tags": "^2.3",
+        "davidnadejdin/alfabank-laravel": "dev-upversion",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "elasticsearch/elasticsearch": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
@@ -23,6 +24,7 @@
         "laravel/scout": "^9.6",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.1",
+        "maatwebsite/excel": "^3.1",
         "orchestra/parser": "^7.0",
         "pbmedia/laravel-ffmpeg": "^8.3",
         "php-ffmpeg/php-ffmpeg": "^1.1",
@@ -41,6 +43,12 @@
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0"
     },
+    "repositories": [
+        {
+        "type": "vcs",
+        "url": "https://github.com/joejoker77/alfabank-laravel.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",

@@ -51,10 +51,13 @@ class ProductController extends Controller
         return view('admin.shop.products.create', compact('categories', 'brands', 'tags'));
     }
 
-    public function store(ProductRequest $request):RedirectResponse
+    public function store(ProductRequest $request):RedirectResponse|Product
     {
         try {
             $product = $this->service->create($request);
+            if (app()->runningInConsole()) {
+                return $product;
+            }
             return redirect()->route('admin.shop.products.show', compact('product'))
                 ->with('success', 'Продукт успешно создан');
         } catch (CacheException|Throwable $e) {
