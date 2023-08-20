@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Entities\Shop\Order;
+use App\Entities\Shop\Status;
+use Davidnadejdin\LaravelAlfabank\Alfabank;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Entities\User\Subscriber;

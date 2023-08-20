@@ -31,23 +31,27 @@ class CatalogController extends Controller
 
     public function __construct(SearchService $search, Cart $cart, MetaInterface $meta)
     {
-        $this->search            = $search;
-        $this->cart              = $cart;
-        $this->meta              = $meta;
+        $this->search = $search;
+        $this->cart   = $cart;
+        $this->meta   = $meta;
     }
 
     /**
      * @throws ServerResponseException
      * @throws ClientResponseException
      */
-    public function index(SearchRequest $request, ProductPath $path): View
+    public function index(SearchRequest $request, ProductPath $path): View|RedirectResponse
     {
-        $cartAllItems     = $this->cart->getAllItems();
-        $category         = $path->category;
-        $result           = $this->search->search($category, $request, 20, $request->get('page', 1));
+        $cartAllItems = $this->cart->getAllItems();
+        $category     = $path->category;
+        $result       = $this->search->search($category, $request, 20, $request->get('page', 1));
 
         if ($result->products->isEmpty()) {
             abort(404);
+        }
+
+        if (!$category) {
+            return redirect('/catalog/oboi', 302);
         }
 
         $products         = $result->products;

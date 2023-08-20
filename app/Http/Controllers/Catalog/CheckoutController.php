@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Cart\Cart;
+use App\Entities\Shop\Order;
 use Illuminate\View\View;
 use App\UseCases\Shop\OrderService;
 use Illuminate\Support\Facades\Auth;
@@ -49,10 +50,14 @@ class CheckoutController extends Controller
     {
         $user = Auth::user();
         try {
-            $this->service->checkout($request, $this->cart, $this->registerService);
+            $order = $this->service->checkout($request, $this->cart, $this->registerService);
+
             if (!$user) {
                 return redirect()->route('login')->with('success', 'Ваш заказ создан. Если хотите оплатить заказ онлайн или посмотреть детали заказа, пожалуйста авторизуйтесь. На указанный вами телефон, мы выслали SMS с временным паролем.');
             } else {
+                if ($order->payment_method === Order::PAYMENT_CARD) {
+                    return redirect()->route('shop.order-payment', $order)->with('success', 'Вы выбрали оплату онлайн. Пожалуйста оплатите заказ удобным для вас способом');
+                }
                 return redirect()->route('cabinet.profile.index')->withFragment('#orders-tab-pane')->with('success', 'Ваш заказ успешно создан. Наш менеджер свяжется с вами в ближайшее время, для уточнения деталей заказа.');
             }
 

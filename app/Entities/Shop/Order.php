@@ -24,9 +24,12 @@ use Illuminate\Support\Facades\Event;
  * @property string $delivery_index
  * @property string $delivery_address
  * @property integer $payment_id
+ * @property string $payment_url
  * @property string $delivery_name
  * @property integer $delivery_cost
  * @property string $customer_ip
+ * @property integer $created_at
+ * @property integer $updated_at
  *
  * @property OrderItem[] $orderItems
  * @property User $user
