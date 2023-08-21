@@ -148,7 +148,7 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
                                 <span class="material-symbols-outlined">phone_in_talk</span>
                                 <a href="tel:+74957205965">+7 (495) 720-59-65</a>
                             </div>
-                            <div class="time-work">с 10:00 до 19:00</div>
+                            <div class="time-work">с 10:00 до 20:00</div>
                         </div>
                         <div class="btn-toolbar control-icons ms-auto">
                             @auth
