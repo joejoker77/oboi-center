@@ -28,7 +28,10 @@
                                 @php $valArray = array_map('trim', explode(',', $val->value)) @endphp
                                 @if($val->attribute_id == $attribute->id && in_array($variant, $valArray)) selected @endif
                             @else
-                                @selected($val->attribute_id == $attribute->id && $val->value === $variant)
+                                @php
+                                $valValue = $attribute->unit ? trim(str_replace($attribute->unit, '', $val->value)) : $val->value
+                                @endphp
+                                @selected($val->attribute_id == $attribute->id && $valValue === $variant)
                             @endif
                         @endforeach
                     >
