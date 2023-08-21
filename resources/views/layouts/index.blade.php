@@ -23,7 +23,7 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
 </head>
 <body>
 <div class="page-wrapper">
-    <header @if(Route::current()->getName() === 'home') class="main" @endif>
+    <header class="position-relative @if(Route::current()->getName() === 'home') main @endif">
         <div class="container-fluid">
             <div class="row d-none d-lg-flex align-items-center">
                 <div class="col">Ваш город: {{ $geo->city }}</div>
