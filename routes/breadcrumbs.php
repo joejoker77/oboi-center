@@ -23,6 +23,11 @@ Breadcrumbs::for('password.request', function (Generator $generator) {
     $generator->push('Сброс пароля', route('password.request'));
 });
 
+Breadcrumbs::for('password.reset', function (Generator $generator) {
+    $generator->parent('login');
+    $generator->push('Новый пароль', route('password.reset'));
+});
+
 Breadcrumbs::for('cabinet.profile.index', function (Generator $generator) {
     $generator->parent('home');
     $generator->push('Личный кабинет', route('cabinet.profile.index'));
