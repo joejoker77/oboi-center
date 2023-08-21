@@ -1142,7 +1142,7 @@ if (orderForm) {
                 addressBlock.classList.add('d-none');
             } else {
                 inputs.forEach(function (input) {
-                    if (input.name !== 'house_part') {
+                    if (input.name !== 'house_part' && input.name !== 'flat') {
                         input.setAttribute('required', 'required');
                     }
                 });
