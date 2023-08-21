@@ -5,6 +5,7 @@ use App\Http\Router\PostPath;
 use App\Http\Router\ProductPath;
 use Diglactic\Breadcrumbs\Generator;
 use Diglactic\Breadcrumbs\Breadcrumbs;
+use Illuminate\Http\Request;
 
 Breadcrumbs::for('home', function (Generator $generator) {
     $generator->push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
@@ -23,9 +24,9 @@ Breadcrumbs::for('password.request', function (Generator $generator) {
     $generator->push('Сброс пароля', route('password.request'));
 });
 
-Breadcrumbs::for('password.reset', function (Generator $generator) {
+Breadcrumbs::for('password.reset', function (Generator $generator, $token) {
     $generator->parent('login');
-    $generator->push('Новый пароль', route('password.reset'));
+    $generator->push('Новый пароль', route('password.reset', $token));
 });
 
 Breadcrumbs::for('cabinet.profile.index', function (Generator $generator) {
