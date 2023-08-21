@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @section('content')
-    <div class="container">
+    <div class="container mb-3 mb-xl-5">
         <div class="h1">Сброс пароля</div>
         <form method="POST" action="{{ route('password.request') }}">
             @csrf
@@ -21,7 +21,7 @@
                 <input id="password-confirm" placeholder="Подтверждение пароля" type="password" class="form-control" name="password_confirmation" required>
                 <label for="password-confirm">Потдверждение пароля</label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Сохранить новый пароль</button>
+            <button type="submit" class="btn btn-blue-dark w-100">Сохранить новый пароль</button>
         </form>
     </div>
 @endsection
