@@ -8,7 +8,7 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="yandex-verification" content="d207e43041f67252" />
+    <meta name="yandex-verification" content="6a0318e42b3ce301" />
     <link rel="canonical" href="{{ url()->current() }}">
     {!! Meta::toHtml() !!}
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
