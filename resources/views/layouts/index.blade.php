@@ -264,7 +264,7 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
                             </g>
                         </svg>
                     </a>
-                    <a href="viber://chat?number=%2B79671381956" title="Написать в Viber">
+                    <a href="viber://chat?number=%2B79037205965" title="Написать в Viber">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.000000 286.000000"
                              preserveAspectRatio="xMidYMid meet">
                             <g transform="translate(0.000000,286.000000) scale(0.100000,-0.100000)" fill="#000000"
@@ -290,7 +290,7 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
                         </svg>
                         Написать в Telegram
                     </a>
-                    <a href="https://wa.me/79671381956">
+                    <a href="https://wa.me/79037205965">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000"
                              preserveAspectRatio="xMidYMid meet">
                             <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#000000"
