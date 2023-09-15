@@ -186,7 +186,7 @@
                 <td><a href="{{ route('admin.shop.products.show', $product->slug) }}">{{ $product->name }}</a></td>
                 <td style="white-space: nowrap">{{ $product->sku }}</td>
                 <td><a href="{{ route('admin.shop.categories.show', $product->category) }}">{{ $product->category->title ?? $product->category->name }}</a></td>
-                <td><a href="{{ route('admin.shop.brands.show', $product->brand) }}">{{ $product->brand->name }}</a></td>
+                <td>@if($product->brand) <a href="{{ route('admin.shop.brands.show', $product->brand) }}">{{ $product->brand->name }} @endif</a></td>
                 <td>{{ $product->quantity }} {{ $product->unit }}</td>
                 <td style="white-space: nowrap">{{ $product->price }} руб.</td>
                 <td style="text-align: center;"><span class="badge {{ $product::statusLabel($product->status) }}">{{ $product::statusName($product->status) }}</span></td>
