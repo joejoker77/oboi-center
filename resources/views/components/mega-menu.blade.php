@@ -28,9 +28,11 @@
                                     >
                                         {{$item->link_text ?? $item->title}}
                                     </a>
-                                    <ul>
-                                        <x-nav-item :items="$item->children"/>
-                                    </ul>
+                                    @if($item->children)
+                                        <ul>
+                                            <x-nav-item :items="$item->children"/>
+                                        </ul>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
