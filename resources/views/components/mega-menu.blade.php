@@ -1,4 +1,3 @@
-@dd($navItems)
 <div class="{{ $menu_class }}" id="{{ $menu_id }}">
     <ul class="nav nav-tabs" role="tablist">
         @foreach($navItems as $key => $navItem)

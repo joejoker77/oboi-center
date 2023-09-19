@@ -1,6 +1,6 @@
 @props(['items'])
 @foreach($items as $item)
-    @if($item->item_path)
+    @if(isset($item->item_path))
         @php
             $classes = 'nav-link';
             if (request()->is(trim($item->item_path, '/').'*')) {
