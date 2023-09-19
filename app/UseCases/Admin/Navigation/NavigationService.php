@@ -65,8 +65,6 @@ class NavigationService
      */
     public function update(Menu $menu, Request $request)
     {
-        dd($request);
-
         return DB::transaction(function () use ($menu, $request) {
             $menu->update([
                 'title' => $request->get('title'),
