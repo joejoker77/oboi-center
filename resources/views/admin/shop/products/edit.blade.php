@@ -94,12 +94,12 @@
                         </div>
                     </div>
                 </div>
-                @if(!$product->values->isEmpty())
-                    <div class="p-3 mb-3 bg-light border rounded-3">
-                        <h4 class="my-3 pb-3 border-bottom">Опции продукта</h4>
-                        @include('admin.shop.products.partials.attributes', ['attributes' => $product->category->allAttributes(), 'product' => $product])
-                    </div>
-                @endif
+
+                <div class="p-3 mb-3 bg-light border rounded-3">
+                    <h4 class="my-3 pb-3 border-bottom">Опции продукта</h4>
+                    @include('admin.shop.products.partials.attributes', ['attributes' => $product->category->allAttributes(), 'product' => $product])
+                </div>
+
                 <div class="p-3 mb-3 bg-light border rounded-3">
                     @include('admin.shop.products.partials.variants', ['variants' => $product->variants, 'type' => 'variants'])
                 </div>
