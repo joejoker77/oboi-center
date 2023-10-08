@@ -25,11 +25,23 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" id="price" class="form-control @error('price') is-invalid @enderror"
-                                       name="price" value="{{ old('price', $product) }}" placeholder="Цена продутка">
-                                <label for="price">Цена продукта</label>
-                                @error('price')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" id="price" class="form-control @error('price') is-invalid @enderror"
+                                               name="price" value="{{ old('price', $product) }}" placeholder="Цена продутка">
+                                        <label for="price">Цена продукта</label>
+                                        @error('price')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" id="compareAtPrice" class="form-control @error('compare_at_price') is-invalid @enderror"
+                                               name="compare_at_price" value="{{ old('compare_at_price', $product) }}" placeholder="Цена для сравнения">
+                                        <label for="price">Цена для сравнения</label>
+                                        @error('compare_at_price')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

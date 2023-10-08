@@ -75,7 +75,7 @@ $userFavorites = [];
                     <div class="props-head">Цена:</div>
                     <div class="props-value">
                         @if($product->compare_at_price)
-                            <span>@money($product->compare_at_price, 'RUB')</span>
+                            <span>@money($product->compare_at_price, 'RUB')</span> -
                         @endif
                         @money($product->price, 'RUB')
                     </div>
