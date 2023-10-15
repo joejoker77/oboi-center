@@ -2655,6 +2655,7 @@ product-quantity {
             }
 
             &.favorite {
+                position: absolute;
                 background: transparent;
                 display: block;
                 right: auto;
