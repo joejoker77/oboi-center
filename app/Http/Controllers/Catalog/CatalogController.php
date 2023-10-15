@@ -31,6 +31,9 @@ class CatalogController extends Controller
 
     public function __construct(SearchService $search, Cart $cart, MetaInterface $meta)
     {
+
+        dd($search);
+
         $this->search = $search;
         $this->cart   = $cart;
         $this->meta   = $meta;
