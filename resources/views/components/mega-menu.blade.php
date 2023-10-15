@@ -1,6 +1,7 @@
 <div class="{{ $menu_class }}" id="{{ $menu_id }}">
     <ul class="nav nav-tabs" role="tablist">
         @foreach($navItems as $key => $navItem)
+            @dump()$navItem)
             <li class="nav-item" role="presentation">
                 <button class="nav-link @if($key == 0)active @endif" id="menu-tab-{{$key}}" data-bs-toggle="tab"
                         data-bs-target="#mainMenuTab-{{$key}}" type="button" role="tab"
@@ -10,6 +11,7 @@
             </li>
         @endforeach
     </ul>
+    @dd('stop')
     <div class="tab-content" id="myTabContent">
         @foreach($navItems as $key => $navItem)
             <div class="tab-pane fade @if($key == 0)active show @endif" id="mainMenuTab-{{$key}}" role="tabpanel"
