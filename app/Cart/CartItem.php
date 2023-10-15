@@ -14,11 +14,9 @@ class CartItem
 
     public function __construct(Product $product, $quantity, $type_order)
     {
-        print_r($product->isCanBuy());die;
-
-        if (!$product->isCanBuy() && $type_order == 'checkout') {
-            throw new \DomainException('Не может быть куплен');
-        }
+//        if (!$product->isCanBuy() && $type_order == 'checkout') {
+//            throw new \DomainException('Не может быть куплен');
+//        }
 
         $this->product    = $product;
         $this->quantity   = $quantity;
