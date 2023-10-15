@@ -54,8 +54,6 @@ class NavigationController extends Controller
 
     public function update(Request $request, $id): RedirectResponse
     {
-        dd($request);
-
         try {
             $menu = Menu::find($id);
             $this->service->update($menu, $request);
