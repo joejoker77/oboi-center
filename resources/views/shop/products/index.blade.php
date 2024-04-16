@@ -281,7 +281,7 @@
                                             @php $mat['down'] = $value->value @endphp
                                         @endif
                                     @endforeach
-                                    @if(isset($mat))
+                                    @if(isset($mat['up']) and isset($mat['down']))
                                         <span class="product-materials d-none d-lg-block">
                                             <strong>Материал:</strong>
                                             <span class="prop-value">{{ $mat['up'] }} x {{ $mat['down'] }}</span>
