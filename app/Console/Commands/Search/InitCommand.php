@@ -130,6 +130,7 @@ class InitCommand extends Command
                         ]
                     ],
                     'max_ngram_diff' => 3,
+                    "index.number_of_replicas" => 0,
                 ]
             ]
         ]);
