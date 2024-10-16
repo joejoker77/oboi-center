@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin\Shop;
 
 use App\Entities\Shop\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller

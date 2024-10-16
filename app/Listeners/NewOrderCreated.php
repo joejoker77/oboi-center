@@ -8,7 +8,7 @@ use App\Mail\Shop\NewOrderToAdmin;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewOrderCreated implements ShouldQueue
+class /payment/ implements ShouldQueue
 {
 
     private SmsSender $smsSender;

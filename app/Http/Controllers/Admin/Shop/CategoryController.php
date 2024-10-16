@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Shop;
 
 
-use Illuminate\Support\Facades\Log;
 use Throwable;
 use App\Entities\Shop\Photo;
 use App\Entities\Shop\Category;

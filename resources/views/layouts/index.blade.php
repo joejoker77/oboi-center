@@ -18,8 +18,7 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link href="{{ mix('css/style.css', 'build') }}" rel="stylesheet">
 </head>
 <body>
@@ -86,8 +85,8 @@ $geo = geoip()->getLocation(Illuminate\Support\Facades\Request::ip());
                             </div>
                         </div>
 
-                        <x-menu handler="mainMenu" menuClass="main-menu dropdown-menu w-100"
-                                template="components.mega-menu" menuId="mainMenu"/>
+                        <x-menu handler="mainMenu" menuClass="main-menu dropdown-menu w-100" template="components.mega-menu" menuId="mainMenu"/>
+
                         <search-form class="w-100 d-block">
                             <form action="{{ route('shop.search') }}" class="search-form" method="get" id="searchForm">
                                 @csrf

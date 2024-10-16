@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin\Shop;
 
 use App\Rules\AttributeValue;
-use App\Rules\Boolean;
 use Illuminate\Validation\Rule;
 use App\Entities\Shop\Attribute;
 use Illuminate\Foundation\Http\FormRequest;
