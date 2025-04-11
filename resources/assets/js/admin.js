@@ -429,8 +429,10 @@ function jsConfirmation(jsConfirm, form = null) {
     jsConfirm.forEach(function (button) {
         button.addEventListener('click', function (event) {
             event.preventDefault();
+
             const actionForm = !form ? button.closest('form') : form,
                 self         = this;
+
             Swal.fire({
                 title: self.dataset.confirm === 'multi'? 'Вы уверены что хотите удалить эти записи?' : 'Вы уверены что хотите удалить эту запись?',
                 icon: 'warning',
@@ -444,6 +446,15 @@ function jsConfirmation(jsConfirm, form = null) {
                 if(data.isConfirmed) {
                     if (form) {
                         document.body.appendChild(actionForm);
+                    }
+
+                    if (event.target.getAttribute('name') === 'action' && event.target.getAttribute('value') === 'remove') {
+                        const inputHidden = document.createElement('input');
+                        inputHidden.type  = 'hidden';
+                        inputHidden.name  = 'action';
+                        inputHidden.value = 'remove';
+
+                        actionForm.append(inputHidden);
                     }
                     actionForm.submit();
                 }

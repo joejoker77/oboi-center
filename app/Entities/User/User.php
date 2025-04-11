@@ -2,14 +2,13 @@
 
 namespace App\Entities\User;
 
-use App\Entities\Shop\Order;
 use Carbon\Carbon;
+use App\Entities\Shop\Order;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use function Symfony\Component\String\s;
 
 /**
  * @property int $id

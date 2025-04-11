@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use function Symfony\Component\String\s;
 
 /**
  * @property int $user_id
