@@ -27,8 +27,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         $this->registerPermissions();
-
-        //
     }
 
     private function registerPermissions():void
